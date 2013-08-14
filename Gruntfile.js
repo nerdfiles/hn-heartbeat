@@ -58,7 +58,7 @@ module.exports = function (grunt) {
         sass: {
             development: {
                 files: {
-                    '<%= yeoman.dist %>/styles/sass.css': '<%= yeoman.app %>/styles/main.scss'
+                    '<%= yeoman.dist %>/styles/compass/stylesheets/screen.css': '<%= yeoman.app %>/styles/compass/sass/main.scss'
                 }
             }
         },
