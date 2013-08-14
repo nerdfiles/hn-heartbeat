@@ -8,7 +8,7 @@ require.config
             jquery: '../bower_components/jquery/jquery'
             underscore: '../bower_components/underscore-amd/underscore'
             backbone: '../bower_components/backbone-amd/backbone'
-            bootstrap: '../bower_components/bootstrap/dist/js/bootstrap.min'
+            # bootstrap: '../bower_components/bootstrap/dist/js/bootstrap.min'
 
     shim:
             underscore:
@@ -21,9 +21,9 @@ require.config
                     ]
                     exports: 'Backbone'
 
-            bootstrap:
-                    deps: ['jquery']
-                    exports: 'jquery'
+            # bootstrap:
+                    # deps: ['jquery']
+                    # exports: 'jquery'
 
 
 require [
