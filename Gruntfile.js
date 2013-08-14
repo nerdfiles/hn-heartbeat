@@ -58,10 +58,33 @@ module.exports = function (grunt) {
         sass: {
             development: {
                 files: {
-                    '<%= yeoman.dist %>/styles/compass/stylesheets/screen.css': '<%= yeoman.app %>/styles/compass/sass/main.scss'
+                    '<%= yeoman.dist %>/styles/compass/stylesheets/screen.css': '<%= yeoman.app %>/styles/compass/sass/screen.scss'
                 }
             }
         },
+				compass: {
+					dist: {
+						options: {
+							sassDir: '<%= yeoman.app %>/styles/compass/sass',
+							cssDir: '<%= yeoman.app %>/styles/compass/stylesheets',
+							imagesDir: '<%= yeoman.app %>/styles/compass/images',
+							javascriptsDir: '<%= yeoman.app %>/styles/scripts',
+							fontsDir: '<%= yeoman.app %>/styles/font',
+							// importPath: '<%= yeoman.app %>/components',
+							relativeAssets: true
+						}
+					}
+				},
+				/*
+				 * compass: {
+				 * 		dist: {
+				 * 				options: {
+				 * 						config: '<%= yeoman.dist %>/styles/compass/config.rb', // I made it hidden because other Yeoman configs are hidden, too.
+				 * 						force: true
+				 * 				}
+				 * 		}
+				 * },
+				 */
         coffee: {
             dist: {
                 files: [{
@@ -152,6 +175,7 @@ module.exports = function (grunt) {
         }
     });
 
+		grunt.loadNpmTasks('grunt-contrib-compass');
 		grunt.loadNpmTasks('grunt-sass');
 		// grunt.registerTask('default', ['sass']);
 

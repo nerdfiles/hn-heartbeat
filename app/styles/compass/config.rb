@@ -1,11 +1,19 @@
 # Require any additional compass plugins here.
 
 # Set this to the root of your project when deployed:
+=begin rdoc
 http_path = "/"
 css_dir = "stylesheets"
 sass_dir = "sass"
 images_dir = "images"
 javascripts_dir = "javascripts"
+=end
+
+http_path = "/"
+css_dir = "app/styles/stylesheets"
+sass_dir = "app/styles/sass"
+images_dir = "app/styles/images"
+javascripts_dir = "app/js/javascripts"
 
 # You can select your preferred output style here (can be overridden via the command line):
 # output_style = :expanded or :nested or :compact or :compressed
