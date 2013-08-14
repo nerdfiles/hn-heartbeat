@@ -43,16 +43,18 @@ module.exports = function (grunt) {
             },
             app: ['<%= yeoman.app %>/scripts/**/*.coffee']
         },
-        less: {
-            development: {
-                options: {
-                 // paths: ["assets/css"]
-                },
-                files: {
-                    '<%= yeoman.dist %>/styles/main.css': '<%= yeoman.app %>/styles/bootstrap.less'
-                }
-            }
-        },
+        /*
+         * less: {
+         *     development: {
+         *         options: {
+         *          // paths: ["assets/css"]
+         *         },
+         *         files: {
+         *             '<%= yeoman.dist %>/styles/main.css': '<%= yeoman.app %>/styles/bootstrap.less'
+         *         }
+         *     }
+         * },
+         */
         sass: {
             development: {
                 files: {
@@ -129,11 +131,13 @@ module.exports = function (grunt) {
                     {expand: true, flatten: true, src: ['<%= yeoman.app %>/bower_components/requirejs/require.js'], dest: '<%= yeoman.dist %>/js/vendor/', filter: 'isFile'} // includes files in path
                 ]
             },
-            bootstrap: {
-                files: [
-                    {expand: true, flatten: true, src: ['<%= yeoman.app %>/bower_components/bootstrap/less/*'], dest: '<%= yeoman.app %>/styles/bootstrap/', filter: 'isFile'} // includes files in path
-                ]
-            },
+            /*
+             * bootstrap: {
+             *     files: [
+             *         {expand: true, flatten: true, src: ['<%= yeoman.app %>/bower_components/bootstrap/less/*'], dest: '<%= yeoman.app %>/styles/bootstrap/', filter: 'isFile'} // includes files in path
+             *     ]
+             * },
+             */
             fontawesome: {
                 files: [
                     {expand: true, flatten: true, src: ['<%= yeoman.app %>/bower_components/font-awesome/less/*'], dest: '<%= yeoman.app %>/styles/fontawesome/', filter: 'isFile'}, // includes files in path
@@ -153,7 +157,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('test', [
         'coffee',
-        'less'
+        // 'less'
     ]);
 
     grunt.registerTask('update', [
@@ -164,7 +168,7 @@ module.exports = function (grunt) {
     grunt.registerTask('build', [
         'clean:dist',
         'coffee',
-        'less',
+        // 'less',
     		'sass',
         'requirejs',
         'copy:dist'
