@@ -19,7 +19,7 @@ def home(request):
 
     r = requests.get(call)
     content = r.json()
-    pprint(content)
+    # pprint(content)
 
     cache.set(
         "user_cache",
