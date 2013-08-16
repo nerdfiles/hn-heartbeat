@@ -5,4 +5,7 @@ test/temp
 test/bower_components/
 venv
 *.pyc
+local.py
+
 tags
+.sass-cache

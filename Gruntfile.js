@@ -53,13 +53,30 @@ module.exports = function (grunt) {
                 }
             }
         },
-        sass: {
-            development: {
-                files: {
-                    '<%= yeoman.dist %>/styles/sass.css': '<%= yeoman.app %>/styles/main.scss'
-                }
-            }
-        },
+        /*
+         * sass: {
+         *     development: {
+         *         files: {
+         *             '<%= yeoman.dist %>/styles/compass/stylesheets/screen.css': '<%= yeoman.app %>/styles/compass/sass/screen.scss'
+         *         }
+         *     }
+         * },
+         */
+				/*
+				 * compass: {
+				 * 	dist: {
+				 * 		options: {
+				 * 			sassDir: '<%= yeoman.app %>/styles/compass/sass',
+				 * 			cssDir: '<%= yeoman.app %>/styles/compass/stylesheets',
+				 * 			imagesDir: '<%= yeoman.app %>/styles/compass/images',
+				 * 			javascriptsDir: '<%= yeoman.app %>/styles/scripts',
+				 * 			fontsDir: '<%= yeoman.app %>/styles/font',
+				 * 			// importPath: '<%= yeoman.app %>/components',
+				 * 			relativeAssets: true
+				 * 		}
+				 * 	}
+				 * },
+				 */
         coffee: {
             dist: {
                 files: [{
@@ -148,8 +165,9 @@ module.exports = function (grunt) {
         }
     });
 
-		grunt.loadNpmTasks('grunt-sass');
-		// grunt.registerTask('default', ['sass']);
+		// grunt.loadNpmTasks('grunt-contrib-compass');
+
+		// grunt.loadNpmTasks('grunt-sass');
 
     grunt.registerTask('test', [
         'coffee',
@@ -165,7 +183,7 @@ module.exports = function (grunt) {
         'clean:dist',
         'coffee',
         'less',
-    		'sass',
+    		// 'sass',
         'requirejs',
         'copy:dist'
     ]);

@@ -2,7 +2,20 @@
 
 A 'heartbeat' web application for Hacker News members' karma.
 
+##API Key
+
+    API key: 0334ee90bff64f228d4a02bbec774289
+
+###Examples
+
+See http://hndroidapi.appspot.com/.
+
+    Canonical: http://hndroidapi.appspot.com/news/format/json/page/?appid=&callback=&guid=0334ee90bff64f228d4a02bbec774289
+    Submitted: http://hndroidapi.appspot.com/submitted/format/json/user/qhoxie?appid=&callback=&guid=0334ee90bff64f228d4a02bbec774289
+
 ##Requirements
+
+See ``requirements.txt``.
 
 ###Overview
 

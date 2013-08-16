@@ -1,0 +1,53 @@
+{
+  "name": "HTML",
+  "version": "0.9.3",
+  "main": "dist/HTML.all.min.js",
+  "description": "An intuitive, extensible way to work directly with the DOM.",
+  "keywords": [
+    "HTML",
+    "DOM",
+    "traverse",
+    "append",
+    "emmet",
+    "manipulate",
+    "extend",
+    "native",
+    "voyeur",
+    "element"
+  ],
+  "author": {
+    "name": "ESHA Research",
+    "email": "nathan@esha.com",
+    "url": "http://www.esha.com/"
+  },
+  "homepage": "http://nbubna.github.io/HTML/",
+  "bugs": "https://github.com/nbubna/nbubna/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com:nbubna/HTML.git"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://raw.github.com/nbubna/HTML/master/LICENCE"
+    },
+    {
+      "type": "GPL",
+      "url": "http://www.gnu.org/licenses/gpl.html"
+    }
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ],
+  "_release": "0.9.3",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.9.3",
+    "commit": "0d24dfd7f653ce29d1b60bb783a9f78ee438719e"
+  },
+  "_source": "git://github.com/nbubna/HTML.git",
+  "_target": "~0.9.3",
+  "_direct": true
+}
