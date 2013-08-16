@@ -10,9 +10,6 @@ admin.autodiscover()
 urlpatterns = patterns('',
                        url(r'^$', 'frontend.views.home', name='home'),
                        url(r'^dashboard/', include(admin.site.urls)),
-                       # url(r'^heartbeat/', include('heartbeat.foo.urls')),
-                       # url(r'^dashboard/doc/',
-                       # include('django.contrib.admindocs.urls')),
                        )
 
 urlpatterns += patterns('frontend.views',

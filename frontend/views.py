@@ -56,5 +56,5 @@ def home(request):
         TIMEOUT
     )
 
-    context = {'STRIPE_PUBLIC_KEY': settings.STRIPE_PUBLIC_KEY}
+    context = {'CONTEXT': True}
     return render_response(request, 'base.html', context)

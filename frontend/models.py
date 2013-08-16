@@ -41,12 +41,15 @@ class Hacker(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=128, null=True, blank=True)
     added_at = models.DateTimeField(auto_now_add=True)
 
-    is_staff = models.BooleanField(_('staff status'), default=False,
-                                   help_text=_('Designates whether the user can log into this admin '
-                                               'site.'))
-    is_active = models.BooleanField(_('active'), default=True,
-                                    help_text=_('Designates whether this user should be treated as '
-                                                'active. Unselect this instead of deleting accounts.'))
+    is_staff = models.BooleanField(_('Staff'), default=False,
+                                   help_text=_('Designates whether the \
+                                           user can log into this admin \
+                                           site.'))
+    is_active = models.BooleanField(_('Active'), default=True,
+                                    help_text=_('Designates whether this \
+                                            user should be treated as active. \
+                                            Unselect this instead of deleting \
+                                            accounts.'))
 
     heartbeat = models.OneToOneField('Heartbeat', null=True)
 
@@ -67,6 +70,10 @@ class Hacker(AbstractBaseUser, PermissionsMixin):
     delete.alters_data = True
 
 
+class Items(models.Model):
+    item_type = models.CharField(max_length=10, null=True, blank=True,)
+
+
 class Heartbeat(models.Model):
 
     '''
@@ -74,11 +81,9 @@ class Heartbeat(models.Model):
         Collect all days and karma points per day.
     '''
 
-    # karma_comments
-    # karma_posts
-    # day
+    items = models.ManyToManyField(Items, )
 
-    def create_heartbeat():
+    # def create_heartbeat():
 
     def __unicode__(self):
         if hasattr(self, 'hacker'):
