@@ -27,8 +27,18 @@ class HackerDetail(generics.RetrieveUpdateAPIView):
 
     @csrf_exempt
     def dispatch(self, request, *args, **kwargs):
-        kwargs[self.slug_field] = request.user.username
+        if request.user.is_authenticated():
+            kwargs[self.slug_field] = request.user.username
         return super(HackerDetail, self).dispatch(request, *args, **kwargs)
+
+
+    def pre_save(self, obj):
+        password = self.request.DATA.get('password', None)
+        conf_password = self.request.DATA.get('confirm_password', None)
+        if password and len(password) >= 6 and password == conf_password:
+            obj.set_password(password)
+
+        return super(CustomerDetailUpdate, self).pre_save(obj)
 
 
 class HackerAdd(generics.CreateAPIView):
@@ -40,14 +50,17 @@ class HackerAdd(generics.CreateAPIView):
         serializer = self.get_serializer(
             data=request.DATA, files=request.FILES)
         if serializer.is_valid():
-            password = serializer.init_data.get(
-                'password', None) or Hacker.objects.make_random_password()
+            password = serializer.init_data.get('password', None) or Customer.objects.make_random_password()
             serializer.object.set_password(password)
+
             self.pre_save(serializer.object)
             self.object = serializer.save()
             self.post_save(self.object, created=True)
-            # _user = auth.authenticate(username=self.object.username,)
-            # auth.login(request, _user)
+
+            _user = auth.authenticate(username=self.object.username,
+                                    password=password)
+            auth.login(request, _user)
+
             headers = self.get_success_headers(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED,
                             headers=headers)
@@ -64,22 +77,23 @@ def home(request):
 
     user = 'qhoxie'
     api_key = settings.API_KEY
-    call = 'http://hndroidapi.appspot.com/submitted/format/json/user/%s?appid=hn-heartbeat&callback=&guid=%s' % (
-        user, api_key)
+    call = 'http://hndroidapi.appspot.com/submitted/format/json\
+            /user/%s?appid=hn-heartbeat&callback=&guid=%s' % (user, api_key)
 
     user_cache = cache.get('user_cache')
     if user_cache:
         print user_cache
 
-    r = requests.get(call)
-    content = r.json()
+    # r = requests.get(call)
+    # content = r.json()
     # pprint(content)
-
+    '''
     cache.set(
         "user_cache",
         content,
         TIMEOUT
     )
+    '''
 
     context = {'CONTEXT': True}
     return render_response(request, 'base.html', context)

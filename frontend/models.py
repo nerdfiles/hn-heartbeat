@@ -38,7 +38,7 @@ class HackerManager(BaseUserManager):
 
 
 class Hacker(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length=128, null=True, blank=True)
+    username = models.CharField(max_length=50, unique=True)
     added_at = models.DateTimeField(auto_now_add=True)
 
     is_staff = models.BooleanField(_('Staff'), default=False,
@@ -70,8 +70,13 @@ class Hacker(AbstractBaseUser, PermissionsMixin):
     delete.alters_data = True
 
 
-class Items(models.Model):
-    item_type = models.CharField(max_length=10, null=True, blank=True,)
+class Item(models.Model):
+    title = models.CharField(max_length=100, null=True)
+    type = models.CharField(max_length=10, null=True)
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return unicode(self.id)
 
 
 class Heartbeat(models.Model):
@@ -81,9 +86,23 @@ class Heartbeat(models.Model):
         Collect all days and karma points per day.
     '''
 
-    items = models.ManyToManyField(Items, )
+    ''' JSON POST Example:
 
-    # def create_heartbeat():
+    {
+        "heartbeat": {
+            "items": [
+                {
+                "title": "this title",
+                "type": "comment"
+                }
+            ]
+        }
+    }
+
+    '''
+
+    items = models.ManyToManyField(Item,)
+    added_at = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
         if hasattr(self, 'hacker'):

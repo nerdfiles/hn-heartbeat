@@ -9,7 +9,6 @@ class HeartbeatSerializer(serializers.ModelSerializer):
 
 
 class HackerSerializer(serializers.ModelSerializer):
-
     heartbeat = HeartbeatSerializer()
 
     def _save_heartbeat_data(self):
@@ -20,17 +19,19 @@ class HackerSerializer(serializers.ModelSerializer):
             if hs.is_valid():
                 hs.save()
                 self.object.heartbeat = hs.object
-                hs.object.create_heartbeat()
             else:
                 raise Exception(hs.errors)
 
     def save(self):
         self._save_heartbeat_data()
-
+        password = self.init_data.get('password', None)
+        confirm = self.init_data.get('confirm', None)
+        if password and password == confirm:
+            self.object.set_password(password)
         super(HackerSerializer, self).save()
         return self.object
 
     class Meta:
         model = Hacker
         exclude = ['username', 'last_login', 'is_superuser',
-                   'is_staff', 'is_active', 'user_permissions', 'groups']
+                   'is_staff', 'is_active', 'password', 'user_permissions', 'groups']
