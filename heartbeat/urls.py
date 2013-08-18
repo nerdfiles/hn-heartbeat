@@ -13,6 +13,8 @@ urlpatterns = patterns('',
                        )
 
 urlpatterns += patterns('frontend.views',
+                        # url(r'^api/hacker/$',
+                        #   HackerList.as_view(), name='hacker-list'),
                         url(r'^api/hacker/$',
                             HackerDetail.as_view(), name='hacker-detail'),
                         url(r'^api/hacker/create/$',
