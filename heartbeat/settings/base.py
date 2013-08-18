@@ -133,7 +133,7 @@ INSTALLED_APPS = (
     'frontend',
     'rest_framework',
     'south',
-    # Uncomment the next line to enable admin documentation:
+    'django_extensions',
     # 'django.contrib.admindocs',
 )
 
