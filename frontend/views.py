@@ -1,4 +1,6 @@
-from django.conf import settings
+# -*- coding: utf-8 -*-
+
+# from django.conf import settings
 from django.contrib import auth
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render_to_response
@@ -12,7 +14,7 @@ from rest_framework.response import Response
 from models import Hacker
 from serializers import HackerSerializer
 
-
+# view utils
 def render_response(request, *args, **kwargs):
     kwargs['context_instance'] = RequestContext(request)
     return render_to_response(*args, **kwargs)
@@ -78,31 +80,8 @@ class HackerAdd(generics.CreateAPIView):
 
 
 def HomeView(request):
-    # from pprint import pprint
-    from django.core.cache import cache
-    import requests
-
-    # TIMEOUT = 2880 * 2
-
-    user = 'qhoxie'
-    api_key = settings.API_KEY
-    call = 'http://hndroidapi.appspot.com/submitted/format/json\
-            /user/%s?appid=hn-heartbeat&callback=&guid=%s' % (user, api_key)
-
-    user_cache = cache.get('user_cache')
-    if user_cache:
-        print user_cache
-
-    # r = requests.get(call)
-    # content = r.json()
-    # pprint(content)
     '''
-    cache.set(
-        "user_cache",
-        content,
-        TIMEOUT
-    )
+        Landing page view.
     '''
-
     context = {'CONTEXT': True}
     return render_response(request, 'base.tmpl.haml', context)
