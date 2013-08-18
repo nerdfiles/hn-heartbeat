@@ -18,7 +18,7 @@ class HackerManager(BaseUserManager):
 
     def create_user(self, username, password=None, **extra_fields):
         if not username:
-            raise ValueError('The given username must be set')
+            raise ValueError('The given username must be set.')
         now = timezone.now()
         user = self.model(username=username,
                           last_login=now, added_at=now, **extra_fields)
