@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib import auth
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -38,7 +39,7 @@ class HackerDetail(generics.RetrieveUpdateAPIView):
         if password and len(password) >= 6 and password == conf_password:
             obj.set_password(password)
 
-        return super(CustomerDetailUpdate, self).pre_save(obj)
+        return super(HackerDetail, self).pre_save(obj)
 
 
 class HackerAdd(generics.CreateAPIView):
@@ -50,15 +51,14 @@ class HackerAdd(generics.CreateAPIView):
         serializer = self.get_serializer(
             data=request.DATA, files=request.FILES)
         if serializer.is_valid():
-            password = serializer.init_data.get('password', None) or Customer.objects.make_random_password()
+            password = serializer.init_data.get('password', None) or Hacker.objects.make_random_password()
             serializer.object.set_password(password)
 
             self.pre_save(serializer.object)
             self.object = serializer.save()
             self.post_save(self.object, created=True)
 
-            _user = auth.authenticate(username=self.object.username,
-                                    password=password)
+            _user = auth.authenticate(username=self.object.username, password=password)
             auth.login(request, _user)
 
             headers = self.get_success_headers(serializer.data)
@@ -96,4 +96,4 @@ def home(request):
     '''
 
     context = {'CONTEXT': True}
-    return render_response(request, 'base.html', context)
+    return render_response(request, 'base.tmpl.haml', context)
