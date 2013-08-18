@@ -75,6 +75,7 @@ class Hacker(AbstractBaseUser, PermissionsMixin):
 class Item(models.Model):
     title = models.CharField(max_length=100, null=True)
     type = models.CharField(max_length=10, null=True)
+    posted_date = models.DateTimeField(null=True)
     added_at = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
