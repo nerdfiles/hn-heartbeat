@@ -31,7 +31,7 @@
 
         -# %meta{:name => "apple-mobile-web-app-capable", :content => "yes"}
         -# %meta{:name => "apple-mobile-web-app-status-bar-style", :content => "black"}
-        -# %link{:rel => "apple-touch-startup-image", :href => "/img/touch/startup.png"}
+        -# %link{:rel => "apple-touch-startup-image", :href => "{% static 'images/touch/startup.png' %}"}
 
         -# RSS
         -# ==========================================================================
@@ -41,54 +41,48 @@
         -# Favicon
         -# ==========================================================================
 
-        %link{:href => "/favicon.ico", :rel => "shortcut icon"}
+        %link{:href => "{% static 'images/favicon.ico' %}", :rel => "shortcut icon"}
 
         -# iPad 3 Retina Display
 
-        -# %link{:rel => "apple-touch-icon-precomposed", :sizes => "144x144", :href => "/img/touch/apple-touch-icon-144x144-precomposed.png"}
+        -# %link{:rel => "apple-touch-icon-precomposed", :sizes => "144x144", :href => "{% static 'images/touch/apple-touch-icon-144x144-precomposed.png' %}"}
 
         -# iPhone 4 Retina display
 
-        -# %link{:rel => "apple-touch-icon-precomposed", :sizes => "114x114", :href => "/img/touch/apple-touch-icon-114x114-precomposed.png"}
+        -# %link{:rel => "apple-touch-icon-precomposed", :sizes => "114x114", :href => "{% static 'images/touch/apple-touch-icon-114x114-precomposed.png' %}"}
 
         -# iPad non-Retina display
 
-        -# %link{:rel => "apple-touch-icon-precomposed", :sizes => "72x72", :href => "/img/touch/apple-touch-icon-72x72-precomposed.png"}
+        -# %link{:rel => "apple-touch-icon-precomposed", :sizes => "72x72", :href => "{% static 'images/touch/apple-touch-icon-72x72-precomposed.png' %}"}
 
         -# Non-Retina iPhone, iPod Touch, Android 2.1+
 
-        -# %link{:rel => "apple-touch-icon-precomposed", :href => "/img/touch/apple-touch-icon-57x57-precomposed.png"}
+        -# %link{:rel => "apple-touch-icon-precomposed", :href => "{% static 'images/touch/apple-touch-icon-57x57-precomposed.png' %}"}
 
         -# Nokia
 
-        -# %link{:rel => "shortcut icon", :href => "/img/touch/apple-touch-icon.png"}
+        -# %link{:rel => "shortcut icon", :href => "{% static 'images/touch/apple-touch-icon.png' %}"}
 
         -# CSS
         -# ==========================================================================
 
         %link{:rel => "stylesheet", :href => "{% static 'styles/main.css' %}"}
-        -# %link{:rel => "stylesheet", :media => "only screen and (min-width: 45em)", :href => "/css/widescreen.css"}
+        -# %link{:rel => "stylesheet", :media => "only screen and (min-width: 45em)", :href => "{% static 'styles/css/widescreen.css' %}"}
 
         -# IE Fixes
         -# ==========================================================================
 
-        -#
-        -# Use HTML5 Shim polyfill if not using Modernizr
-        -# Compiled IE stylesheets for legacy IE "Mobile first" support (using SASS)
-        -# nicolasgallagher.com/mobile-first-css-sass-and-ie/
-        -#
-
-        -# /[if (lt IE 9) & (!IEMobile)]
+        /[if (lt IE 9) & (!IEMobile)]
             -# %script{:src => "//html5shim.googlecode.com/svn/trunk/html5.js"}
-            %script{:src => "/js/libs/selectivizr.min.js"}
-            -# %link{:rel => "stylesheet", :href => "/css/oldie.css"}
-            -# %link{:rel => "stylesheet", :href => "/css/ie8.css"}
+            %script{:src => "{% static 'js/vendor/selectivizr.min.js' %}" }
+            -# %link{:rel => "stylesheet", :href => "{% static 'styles/css/oldie.css' %}"}
+            -# %link{:rel => "stylesheet", :href => "{% static 'styles/css/ie8.css' %}"}
 
         -# [if (lt IE 8) & (!IEMobile)]
-            %link{:rel => "stylesheet", :href => "/css/ie7.css"}
+            %link{:rel => "stylesheet", :href => "{% static 'styles/css/ie7.css' %}"}
 
         -# [if IE 6 & (!IEMobile)]
-            %link{:rel => "stylesheet", :href => "/css/ie6.css"}
+            %link{:rel => "stylesheet", :href => "{% static 'styles/css/ie6.css' %}"}
 
         -# JS
         -# ==========================================================================
