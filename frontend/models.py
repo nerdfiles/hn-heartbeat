@@ -92,8 +92,22 @@ class Heartbeat(models.Model):
         "heartbeat": {
             "items": [
                 {
-                "title": "this title",
-                "type": "comment"
+                    "title": "this title",
+                    "type": "comment",
+                    "karma": "4",
+                    "date_posted": "2013-05-01T00:00:00Z"
+                },
+                {
+                    "title": "another title",
+                    "type": "post",
+                    "karma": "30",
+                    "date_posted": "2013-05-01T00:00:00Z"
+                },
+                {
+                    "title": "another title",
+                    "type": "comment",
+                    "karma": "2",
+                    "date_posted": "2013-05-01T00:00:00Z"
                 }
             ]
         }
