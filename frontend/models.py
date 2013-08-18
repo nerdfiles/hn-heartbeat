@@ -117,7 +117,7 @@ class Heartbeat(models.Model):
 
     '''
 
-    items = models.ManyToManyField(Item,)
+    items = models.ForeignKey(Item,)
     added_at = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
