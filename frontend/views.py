@@ -68,7 +68,7 @@ class HackerAdd(generics.CreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-def home(request):
+def HomeView(request):
     # from pprint import pprint
     from django.core.cache import cache
     import requests
@@ -97,3 +97,4 @@ def home(request):
 
     context = {'CONTEXT': True}
     return render_response(request, 'base.tmpl.haml', context)
+

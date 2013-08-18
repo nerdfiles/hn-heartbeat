@@ -8,7 +8,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-                       url(r'^$', 'frontend.views.home', name='home'),
+                       url(r'^$', 'frontend.views.HomeView', name='home'),
                        url(r'^dashboard/', include(admin.site.urls)),
                        )
 
