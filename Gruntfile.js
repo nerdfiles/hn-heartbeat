@@ -104,9 +104,9 @@ module.exports = function (grunt) {
                 options: {
                     // `name` and `out` is set by grunt-usemin
                     name: 'main',
-                    baseUrl: '<%= yeoman.app %>/js',
+                    baseUrl: '<%= yeoman.app %>/scripts',
                     out: '<%= yeoman.dist %>/js/main.js',
-                    mainConfigFile: '<%= yeoman.app %>/js/main.js',
+                    mainConfigFile: '<%= yeoman.app %>/scripts/main.js',
 
                     //baseUrl: '<%= yeoman.app %>/scripts',
                     optimize: 'none',

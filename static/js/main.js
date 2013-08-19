@@ -12419,7 +12419,7 @@ define("bootstrap", ["jquery"], (function (global) {
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define('views/homeView',["jquery", "underscore", "backbone", "bootstrap"], function($, _, Backbone) {
+  define('views/home',["jquery", "underscore", "backbone", "bootstrap"], function($, _, Backbone) {
     var starter, starterView, _ref;
     starter = (function(_super) {
       __extends(starter, _super);
@@ -12445,7 +12445,7 @@ define("bootstrap", ["jquery"], (function (global) {
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define('views/anotherView',["jquery", "underscore", "backbone"], function($, _, Backbone) {
+  define('views/user',["jquery", "underscore", "backbone"], function($, _, Backbone) {
     var starter, starterView, _ref;
     starter = (function(_super) {
       __extends(starter, _super);
@@ -12468,7 +12468,43 @@ define("bootstrap", ["jquery"], (function (global) {
 }).call(this);
 
 (function() {
-  define('app',["jquery", "underscore", "backbone", "views/homeView", "views/anotherView"], function($, _, Backbone, home, another) {});
+  define('router',["jquery", "underscore", "backbone", "views/home", "views/user"], function($, _, Backbone, Session, HomeView, UserView) {
+    var AppRouter, init, initialize;
+    AppRouter = Backbone.Router.extend({
+      routes: {
+        "/user": "showUser",
+        "*actions": "globalAction"
+      }
+    });
+    initialize = function() {
+      var app_router;
+      app_router = new AppRouter;
+      app_router.on("showUser", function() {
+        var userView;
+        userView = new UserView();
+        return userView.render();
+      });
+      return app_router.on("globalAction", function(actions) {
+        return console.log('No route:', actions);
+      });
+    };
+    return init = {
+      initialize: initialize
+    };
+  });
+
+}).call(this);
+
+(function() {
+  define('app',["jquery", "underscore", "backbone", "router"], function($, _, Backbone, Router) {
+    var init, initialize;
+    initialize = function() {
+      return Router.initialize();
+    };
+    return init = {
+      initialize: initialize
+    };
+  });
 
 }).call(this);
 
@@ -12478,6 +12514,7 @@ define("bootstrap", ["jquery"], (function (global) {
       jquery: '../bower_components/jquery/jquery',
       underscore: '../bower_components/underscore-amd/underscore',
       backbone: '../bower_components/backbone-amd/backbone',
+      html: '../bower_components/HTML/dist/HTML',
       bootstrap: '../bower_components/bootstrap/dist/js/bootstrap.min'
     },
     shim: {
