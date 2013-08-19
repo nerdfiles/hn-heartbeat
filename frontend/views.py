@@ -77,11 +77,11 @@ class HackerAdd(generics.CreateAPIView):
 
     __shared_state = {}
 
-    def __init__(self):
-        from pprint import pprint
-        pprint(dir(self))
-        self.__dict__ = self.__shared_state
-        self.lastUpdate = None
+    # def __init__(self):
+        # from pprint import pprint
+        # pprint(dir(self))
+        # self.__dict__ = self.__shared_state
+        # self.lastUpdate = None
 
     # Auth
     def post(self, request, *args, **kwargs):

@@ -5,7 +5,8 @@ from django.contrib.auth.models import BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 from django.utils import timezone
-from utils.utils import DeleteEachQuerySet, cached_attribute
+from utils.utils import DeleteEachQuerySet
+# from utils.utils import cached_attribute
 
 _ = lambda s: s
 
@@ -23,7 +24,9 @@ class HackerManager(BaseUserManager):
             raise ValueError('The given username must be set.')
         now = timezone.now()
         user = self.model(username=username,
-                          last_login=now, added_at=now, **extra_fields)
+                          last_login=now,
+                          added_at=now,
+                          **extra_fields)
 
         user.set_password(password)
         user.save(using=self._db)
@@ -42,7 +45,7 @@ class HackerManager(BaseUserManager):
 
 
 class Hacker(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length=50, unique=True)
+    username = models.CharField(max_length=50, unique=True, blank=False)
     added_at = models.DateTimeField(auto_now_add=True)
 
     is_staff = models.BooleanField(_('Staff'), default=False,
@@ -55,7 +58,7 @@ class Hacker(AbstractBaseUser, PermissionsMixin):
                                             Unselect this instead of deleting \
                                             accounts.'))
 
-    heartbeat = models.OneToOneField('Heartbeat', null=True)
+    heartbeat = models.OneToOneField('Heartbeat', blank=True, null=True)
 
     objects = HackerManager()
 
@@ -75,9 +78,11 @@ class Hacker(AbstractBaseUser, PermissionsMixin):
 
 
 class Item(models.Model):
+
     '''
         Consumes Hacker News API.
     '''
+
     title = models.CharField(max_length=100, null=True)
     type = models.CharField(max_length=10, null=True)
     posted_date = models.DateTimeField(null=True)

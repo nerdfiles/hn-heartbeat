@@ -35,5 +35,7 @@ class HackerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Hacker
-        exclude = ['username', 'last_login', 'is_superuser',
-                   'is_staff', 'is_active', 'password', 'user_permissions', 'groups']
+        exclude = ['heartbeat', 'last_login',
+                   'is_superuser', 'is_staff',
+                   'is_active', 'password',
+                   'user_permissions', 'groups']
