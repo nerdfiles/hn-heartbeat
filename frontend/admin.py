@@ -25,7 +25,7 @@ class HackerAdmin(admin.ModelAdmin):
         (None, {
             'fields': (
                 'username', 'password',
-                'admin', 'heartbeat',)}),
+                'email', 'heartbeat',)}),
         (_('Permissions'), {
             'fields': (
                 'is_active', 'is_staff',
