@@ -26,10 +26,12 @@ class HackerSerializer(serializers.ModelSerializer):
 
     def save(self):
         self._save_heartbeat_data()
+
         password = self.init_data.get('password', None)
         confirm = self.init_data.get('confirm', None)
         if password and password == confirm:
             self.object.set_password(password)
+
         super(HackerSerializer, self).save()
         return self.object
 

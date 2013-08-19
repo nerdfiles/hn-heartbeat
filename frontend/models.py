@@ -45,7 +45,7 @@ class HackerManager(BaseUserManager):
 
 
 class Hacker(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length=50, unique=True, blank=False)
+    username = models.CharField(max_length=50, unique=True)
     added_at = models.DateTimeField(auto_now_add=True)
 
     is_staff = models.BooleanField(_('Staff'), default=False,
@@ -58,7 +58,9 @@ class Hacker(AbstractBaseUser, PermissionsMixin):
                                             Unselect this instead of deleting \
                                             accounts.'))
 
-    heartbeat = models.OneToOneField('Heartbeat', blank=True, null=True)
+    heartbeat = models.OneToOneField('Heartbeat', null=True)
+
+    USERNAME_FIELD = 'username'
 
     objects = HackerManager()
 

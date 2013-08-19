@@ -28,9 +28,9 @@ class HackerDetail(generics.RetrieveUpdateAPIView):
     model = Hacker
     serializer_class = HackerSerializer
 
-    def __init__():
+    # def __init__():
         # from pprint import pprint
-        from django.core.cache import cache
+        # from django.core.cache import cache
         # import requests
         # http://api.thriftdb.com/api.hnsearch.com/items/_search?\
         # q=m1&weights[username]=1.0&filter[fields][create_ts]=\
@@ -42,21 +42,19 @@ class HackerDetail(generics.RetrieveUpdateAPIView):
 
         # call = 'http://hndroidapi.appspot.com/submitted/format/json\
         # /user/%s?appid=hn-heartbeat&callback=&guid=%s' % (user, api_key)
-
-        user_cache = cache.get('user_cache')
-        if user_cache:
-            print user_cache
+        # user_cache = cache.get('user_cache')
+        # if user_cache:
+            # print user_cache
 
         # r = requests.get(call)
         # content = r.json()
         # pprint(content)
-        '''
-        cache.set(
-            "user_cache",
-            content,
-            TIMEOUT
-        )
-        '''
+
+        # cache.set(
+            # "user_cache",
+            # content,
+            # TIMEOUT
+        # )
 
     @csrf_exempt
     def dispatch(self, request, *args, **kwargs):
