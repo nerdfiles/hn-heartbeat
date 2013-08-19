@@ -47,6 +47,7 @@ class HackerManager(BaseUserManager):
 class Hacker(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=50, unique=True)
     added_at = models.DateTimeField(auto_now_add=True)
+    email = models.EmailField(null=True, blank=True)
 
     is_staff = models.BooleanField(_('Staff'), default=False,
                                    help_text=_('Designates whether the \
@@ -66,6 +67,9 @@ class Hacker(AbstractBaseUser, PermissionsMixin):
 
     def __unicode__(self):
         return unicode(self.username)
+
+    def get_short_name(self):
+        return self.username
 
     def save(self, *args, **kwargs):
         self.username = self.username.lower()
