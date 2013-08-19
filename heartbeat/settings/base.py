@@ -126,6 +126,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
     'django.core.context_processors.request',
+    'sekizai.context_processors.sekizai',
 )
 
 AUTHENTICATION_BACKENDS = (
@@ -157,6 +158,7 @@ INSTALLED_APPS = (
     'south',
     'django_extensions',
     'utils',
+    'sekizai',
     # 'django.contrib.admindocs',
 )
 
