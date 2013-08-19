@@ -77,7 +77,7 @@ class HackerAdd(generics.CreateAPIView):
     model = Hacker
     serializer_class = HackerSerializer
 
-    __shared_state = {}
+    # __shared_state = {}
 
     # def __init__(self):
         # from pprint import pprint
@@ -100,7 +100,7 @@ class HackerAdd(generics.CreateAPIView):
 
             _user = auth.authenticate(
                 username=self.object.username, password=password)
-            auth.login(self.request, _user)
+            auth.login(request, _user)
 
             headers = self.get_success_headers(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED,
