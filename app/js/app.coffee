@@ -2,8 +2,11 @@ define [
         "jquery"
         "underscore"
         "backbone"
-        "views/homeView"
-        "views/anotherView"
+        "router"
     ],
-    ($,_,Backbone,home,another) ->
+    ($,_,Backbone,Router) ->
 
+        initialize = () ->
+            Router.initialize()
+
+        init = { initialize: initialize }
