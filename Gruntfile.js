@@ -138,7 +138,8 @@ module.exports = function (grunt) {
                     ]
                 },
                 {expand: true, flatten: true, src: ['<%= yeoman.app %>/bower_components/requirejs/require.js'], dest: '<%= yeoman.dist %>/js/vendor/', filter: 'isFile'},
-                {expand: true, flatten: true, src: ['<%= yeoman.app %>/bower_components/modernizr/modernizr.js'], dest: '<%= yeoman.dist %>/js/vendor/', filter: 'isFile'}
+                {expand: true, flatten: true, src: ['<%= yeoman.app %>/bower_components/modernizr/modernizr.js'], dest: '<%= yeoman.dist %>/js/vendor/', filter: 'isFile'},
+                {expand: true, flatten: true, src: ['<%= yeoman.app %>/bower_components/selectivizr/selectivizr.js'], dest: '<%= yeoman.dist %>/js/vendor/', filter: 'isFile'}
                 ]
             },
             requirejs: {
