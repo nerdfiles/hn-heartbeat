@@ -32,7 +32,9 @@ class HackerDetail(generics.RetrieveUpdateAPIView):
         # from pprint import pprint
         from django.core.cache import cache
         # import requests
-        # http://api.thriftdb.com/api.hnsearch.com/items/_search?q=m1&weights[username]=1.0&filter[fields][create_ts]=[2013-01-01T00:00:00Z%20+%20TO%20+%20*]
+        # http://api.thriftdb.com/api.hnsearch.com/items/_search?\
+        # q=m1&weights[username]=1.0&filter[fields][create_ts]=\
+        # [2013-01-01T00:00:00Z%20+%20TO%20+%20*]
 
         # TIMEOUT = 2880 * 2
         # user = 'qhoxie'
@@ -98,7 +100,7 @@ class HackerAdd(generics.CreateAPIView):
 
             _user = auth.authenticate(
                 username=self.object.username, password=password)
-            auth.login(request, _user)
+            auth.login(self.request, _user)
 
             headers = self.get_success_headers(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED,
