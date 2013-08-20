@@ -9,4 +9,6 @@ define [
         initialize = () ->
             Router.initialize()
 
-        init = { initialize: initialize }
+        init = {
+        		initialize: initialize
+        }

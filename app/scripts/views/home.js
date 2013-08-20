@@ -13,7 +13,7 @@
       }
 
       starter.prototype.initialize = function() {
-        return console.log('home view started...');
+        return console.log('Home!');
       };
 
       return starter;

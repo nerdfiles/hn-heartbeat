@@ -5,7 +5,9 @@
       underscore: '../bower_components/underscore-amd/underscore',
       backbone: '../bower_components/backbone-amd/backbone',
       html: '../bower_components/HTML/dist/HTML',
-      bootstrap: '../bower_components/bootstrap/dist/js/bootstrap.min'
+      bootstrap: '../bower_components/bootstrap/dist/js/bootstrap.min',
+      d3: '../bower_components/d3/d3.min',
+      rickshaw: '../bower_components/rickshaw/tutorial'
     },
     shim: {
       underscore: {

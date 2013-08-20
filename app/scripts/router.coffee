@@ -27,4 +27,6 @@ define [
                 console.log 'No route:', actions
             )
 
-        init = { initialize: initialize }
+        init = {
+        		initialize: initialize
+        }
