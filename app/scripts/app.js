@@ -1,11 +1,9 @@
 (function() {
-  define(["jquery", "underscore", "backbone", "router", "html"], function($, _, Backbone, Router, HTML) {
+  define(["jquery", "underscore", "backbone", "router"], function($, _, Backbone, Router) {
     var init, initialize;
     initialize = function() {
       return Router.initialize();
     };
-    console.log(HTML);
-    console.log('this');
     return init = {
       initialize: initialize
     };
