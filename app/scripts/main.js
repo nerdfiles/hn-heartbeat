@@ -6,7 +6,7 @@
       text: '../bower_components/requirejs-text/text',
       underscore: '../bower_components/underscore-amd/underscore',
       backbone: '../bower_components/backbone-amd/backbone',
-      html: '../bower_components/HTML/dist/HTML.min',
+      html: '../bower_components/HTML/dist/HTML',
       bootstrap: '../bower_components/bootstrap/dist/js/bootstrap.min',
       d3: '../bower_components/d3/d3.min',
       rickshaw: '../bower_components/rickshaw/rickshaw.min'
@@ -35,7 +35,6 @@
 
   require(['app'], function(app) {
     return $(function() {
-      console.log(Backbone);
       return Backbone.history.start({
         pushState: true
       });

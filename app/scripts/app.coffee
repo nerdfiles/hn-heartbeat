@@ -3,8 +3,11 @@ define [
         "underscore"
         "backbone"
         "router"
+        "html"
     ],
-    ($,_,Backbone,Router) ->
+    ($,_,Backbone,Router,HTML) ->
         initialize = () ->
-            Router.initialize()
+        	Router.initialize()
+        console.log HTML
+        console.log 'this'
         init = {initialize: initialize}

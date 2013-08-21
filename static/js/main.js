@@ -12415,10 +12415,6 @@ define("bootstrap", ["jquery"], (function (global) {
     };
 }(this)));
 
-/*! HTML - v0.9.3 - 2013-08-15
-* http://nbubna.github.io/HTML/
-* Copyright (c) 2013 ESHA Research; Licensed MIT, GPL */
-!function(a,b,c){"use strict";var d={version:"0.9.3",slice:Array.prototype.slice,list:function(a){return 1===a.length?d.node(a[0]):(a.each||(a.slice||(a=d.slice.call(a)),d.methods(a)),a)},node:function(a){return a.each||(d.methods(a),d.children(a)),a},methods:function(a){for(var b in d.fn)a[b]=d.fn[b].bind(a)},children:function(a){for(var b=a._children={},c=0,e=a.childNodes.length;e>c;c++){var f=a.childNodes[c],g=d.key(f);(b[g]||(b[g]=[])).push(f),g in a||d.define(a,g)}return b},key:function(a){return a.tagName?a.tagName.toLowerCase():"_other"},define:function(a,b){try{Object.defineProperty(a,b,{get:function(){return a._children||d.children(a),d.list(a._children[b]||[])}})}catch(c){}},mutation:function(a){var b=a.target;delete b[b._internal?"_internal":"_children"]},fn:{each:function(a){var b,c=this.forEach?this:[this];return"string"==typeof a&&(b=[],a=d.field.apply(c,arguments)),c.forEach(function(e,f,g){var h=a.call(c,d.node(e),f,g);b&&void 0!==h&&b.push(h)}),b&&b.length?b:this},find:function(a){for(var b=this.forEach?this:[this],c=[],e=0,f=b.length;f>e;e++)c=c.concat(d.slice.call(b[e].querySelectorAll(a)));return d.list(c)},only:function(a,b){var c=this.forEach?this:[this];return d.list(a>=0||0>a?c.slice(a,b||a+1||void 0):c.filter("function"==typeof a?a:function(b){return b[d.matches](a)}))}},field:function(a){var b=d.slice.call(arguments,1);return a=d.field[a]||a,function(c,e){return d.resolve(a,c,b,e)}},resolve:function(a,b,c,e){var f=a,g=b;if(c=c.length?d.fill(c,e,g):null,f.indexOf(".")>0){for(var h=f.split(".");h.length>1&&(g=g[f=h.shift()]););g=g||b,f=g?h[0]:a}var i=g[f];if(void 0!==i){if("function"==typeof i)return i.apply(g,c);if(!c)return i;g[f]=c[0]}else{if(!c)return g.getAttribute(a);g.setAttribute(a,c[0])}},fill:function(a,b,c){for(var d=[],e=0,f=a.length;f>e;e++){var g=a[e],h=typeof g;d[e]="string"===h?g.replace(/\$\{i\}/g,b):"function"===h?g(c,b,a):g}return d}},e=d.node(b.documentElement);e._=d,e.ify=function(a){return!a||"length"in a?d.list(a||[]):d.node(a)},["webkitM","mozM","msM","m"].forEach(function(a){e[a+"atchesSelector"]&&(d.matches=a+"atchesSelector")}),c?new c(function(a){a.forEach(d.mutation)}).observe(e,{childList:!0,subtree:!0}):b.addEventListener("DOMSubtreeModified",d.mutation),"function"==typeof define&&define.amd?define('html',[],function(){return e}):"undefined"!=typeof module&&module.exports?module.exports=e:a.HTML=e,b.addEventListener("DOMContentLoaded",function(){d.children(e)})}(window,document,window.MutationObserver),function(a,b){"use strict";var c=b.fn.add=function(a,d){var e=[];return this.each(function(b){e=e.concat(c.all(b,a,d))}),b.list(e)};c.all=function(a,b,d){if("string"==typeof b)return c.create(a,b,d);if("length"in b){for(var e=[],f=0,g=b.length;g>f;f++)e.push(c.all(a,b[f],d));return e}return c.insert(a,b,d),b},c.create=function(b,d,e){return c.insert(b,a.createElement(d),e)},c.insert=function(a,d,e){var f=c.find(a,e);return f?a.insertBefore(d,f):a.appendChild(d),b.updated(a),d},c.find=function(a,b){switch(typeof b){case"string":return a[b+"Child"];case"number":return a.children[b];case"object":return b;case"function":return b.call(a,a)}},b.updated=function(a){a._internal=!0,b.children(a)},b.fn.remove=function(a){var c=[];return this.each(function(d){var e=d.parentNode;a&&c.indexOf(e)<0&&c.push(e),e.removeChild(d),b.updated(e)}),a?b.list(c):this}}(document,document.documentElement._);
 define('text',{load: function(id){throw new Error("Dynamic load not allowed: " + id);}});
 define('text!views/../../../templates/views/home.tmpl.haml',[],function () { return '%script{ :type => "text/template", :id => "home-view" }\n  .m--login{:class => ""}\n    .bosom\n      %form{:class => ""}\n        %legend\n          .row\n            %input{:placeholder => "Give us yr Hacker News handle!", :id => "__handle"}\n  .m--overview{:class => ""}\n    .bosom\n      %ul.glob.submissions\n        %li Whatevs\n      %ul.glob.comments\n        %li Whatevs\n      %ul.glob.heartbeats\n        %li Whatevs\n\n';});
 
@@ -12426,7 +12422,7 @@ define('text!views/../../../templates/views/home.tmpl.haml',[],function () { ret
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define('views/home',["jquery", "underscore", "backbone", "bootstrap", "html", "text!../../../templates/views/home.tmpl.haml"], function($, _, Backbone, HTML, HomeViewTemplate) {
+  define('views/home',["jquery", "underscore", "backbone", "bootstrap", "text!../../../templates/views/home.tmpl.haml"], function($, _, Backbone, HTML, HomeViewTemplate) {
     var home_view, _ref;
     return home_view = (function(_super) {
       var homeView;
@@ -12439,7 +12435,7 @@ define('text!views/../../../templates/views/home.tmpl.haml',[],function () { ret
       }
 
       home_view.prototype.initialize = function() {
-        return console.log(HTML);
+        return console.log('home view');
       };
 
       homeView = new home_view;
@@ -12477,23 +12473,23 @@ define("rickshaw", ["d3"], (function (global) {
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define('views/user',["jquery", "underscore", "backbone", "d3", "rickshaw"], function($, _, Backbone) {
-    var starter, starterView, _ref;
-    starter = (function(_super) {
-      __extends(starter, _super);
+    var userView, user_view, _ref;
+    user_view = (function(_super) {
+      __extends(user_view, _super);
 
-      function starter() {
-        _ref = starter.__super__.constructor.apply(this, arguments);
+      function user_view() {
+        _ref = user_view.__super__.constructor.apply(this, arguments);
         return _ref;
       }
 
-      starter.prototype.initialize = function() {
+      user_view.prototype.initialize = function() {
         return console.log('another view started...');
       };
 
-      return starter;
+      return user_view;
 
     })(Backbone.View);
-    return starterView = new starter;
+    return userView = new user_view;
   });
 
 }).call(this);
@@ -12526,12 +12522,236 @@ define("rickshaw", ["d3"], (function (global) {
 
 }).call(this);
 
+/*! HTML - v0.9.3 - 2013-08-15
+* http://nbubna.github.io/HTML/
+* Copyright (c) 2013 ESHA Research; Licensed MIT, GPL */
+(function(window, document, Observer) {
+    "use strict";
+
+    var _ = {
+        version: "0.9.3",
+        slice: Array.prototype.slice,
+        list: function(list) {
+            if (list.length === 1){ return _.node(list[0]); }
+            if (!list.each) {
+                if (!list.slice){ list = _.slice.call(list); }
+                _.methods(list);
+                //TODO: children traversal into first child of list
+            }
+            return list;
+        },
+        node: function(node) {
+            if (!node.each) {
+                _.methods(node);
+                _.children(node);
+            }
+            return node;
+        },
+        methods: function(o) {
+            for (var method in _.fn) {
+                o[method] = _.fn[method].bind(o);
+            }
+        },
+        children: function(node) {
+            var children = node._children = {};
+            for (var i=0, m=node.childNodes.length; i<m; i++) {
+                var child = node.childNodes[i],
+                    key = _.key(child);
+                (children[key]||(children[key]=[])).push(child);
+                if (!(key in node)){ _.define(node, key); }
+            }
+            return children;
+        },
+        key: function(node) {
+            return node.tagName ? node.tagName.toLowerCase() : '_other';
+        },
+        define: function(node, key) {
+            try {
+                Object.defineProperty(node, key, {
+                    get: function() {
+                        if (!node._children){ _.children(node); }
+                        return _.list(node._children[key]||[]);
+                    }
+                });
+            } catch (e) {}
+        },
+        mutation: function(e) {
+            var node = e.target;// only wipe cache for 3rd party changes
+            delete node[node._internal ? '_internal' : '_children'];
+        },
+        fn: {
+            each: function(fn) {
+                var self = this.forEach ? this : [this],
+                    fields;
+                if (typeof fn === "string") {
+                    fields = [];
+                    fn = _.field.apply(self, arguments);
+                }
+                self.forEach(function(el, i, arr) {
+                    var ret = fn.call(self, _.node(el), i, arr);
+                    if (fields && ret !== undefined) {
+                        fields.push(ret);
+                    }
+                });
+                return fields && fields.length ? fields : this;
+            },
+            find: function(selector) {
+                var self = this.forEach ? this : [this];
+                for (var list=[],i=0,m=self.length; i<m; i++) {
+                    list = list.concat(_.slice.call(self[i].querySelectorAll(selector)));
+                }
+                return _.list(list);
+            },
+            only: function(b, e) {
+                var self = this.forEach ? this : [this];
+                return _.list(
+                    b >= 0 || b < 0 ?
+                        self.slice(b, e || (b + 1) || undefined) :
+                        self.filter(
+                            typeof b === "function" ? b :
+                            function(el){ return el[_.matches](b); }
+                        )
+                );
+            }
+        },
+        field: function(key) {
+            var args = _.slice.call(arguments, 1);
+            key = _.field[key] || key;// e.g. _.fn.each['+class'] = 'classList.add';
+            return function(el, i){ return _.resolve(key, el, args, i); };
+        },
+        resolve: function(_key, _el, args, i) {
+            var key = _key, el = _el;// copy prefixed originals so we can recover them if need be
+            args = args.length ? _.fill(args, i, el) : null;
+            if (key.indexOf('.') > 0) {
+                var keys = key.split('.');
+                while (keys.length > 1 && (el = el[key = keys.shift()])){}
+                // if lookup failed, reset to originals
+                el = el || _el;
+                key = el ? keys[0] : _key;
+            }
+            var val = el[key];
+            if (val !== undefined) {
+                if (typeof val === "function") { return val.apply(el, args); }
+                else if (args) { el[key] = args[0]; }
+                else { return val; }
+            }
+            else if (args) { el.setAttribute(_key, args[0]); }
+            else { return el.getAttribute(_key); }
+        },
+        fill: function(args, index, el) {
+            var ret = [];
+            for (var i=0,m=args.length; i<m; i++) {
+                var arg = args[i],
+                    type = typeof arg;
+                ret[i] = type === "string" ? arg.replace(/\$\{i\}/g, index) :
+                         type === "function" ? arg(el, index, args) :
+                         arg;
+            }
+            return ret;
+        }
+    };
+
+    var HTML = _.node(document.documentElement);// early availability
+    HTML._ = _;
+    HTML.ify = function(o) {
+        return !o || 'length' in o ? _.list(o||[]) : _.node(o);
+    };
+    ['webkitM','mozM','msM','m'].forEach(function(prefix) {
+        if (HTML[prefix+'atchesSelector']) {
+            _.matches = prefix+'atchesSelector';
+        }
+    });
+    if (Observer) {
+        new Observer(function(list){ list.forEach(_.mutation); })
+            .observe(HTML, { childList: true, subtree: true });
+    } else {
+        document.addEventListener("DOMSubtreeModified", _.mutation);
+    }
+    if (typeof define === 'function' && define.amd) {
+        define('html',[],function(){ return HTML; });
+    } else if (typeof module !== 'undefined' && module.exports) {
+        module.exports = HTML;
+    } else {
+        window.HTML = HTML;
+    }
+    // eventual consistency
+    document.addEventListener("DOMContentLoaded", function(){ _.children(HTML); });
+
+})(window, document, window.MutationObserver);
+
+(function(document, _) {
+    "use strict";
+
+    var add = _.fn.add = function(arg, ref) {
+        var list = [];
+        this.each(function(node) {
+            list = list.concat(add.all(node, arg, ref));
+        });
+        return _.list(list);
+    };
+    add.all = function(node, arg, ref) {
+        if (typeof arg === "string") {// turn arg into an appendable
+            return add.create(node, arg, ref);
+        }
+        if ('length' in arg) {// array of append-ables
+            var ret = [];
+            for (var i=0,m=arg.length; i<m; i++) {
+                ret.push(add.all(node, arg[i], ref));
+            }
+            return ret;
+        }
+        add.insert(node, arg, ref);// arg is an append-able
+        return arg;
+    };
+    add.create = function(node, tag, ref) {
+        return add.insert(node, document.createElement(tag), ref);
+    };
+    add.insert = function(node, child, ref) {
+        var sibling = add.find(node, ref);
+        if (sibling) {
+            node.insertBefore(child, sibling);
+        } else {
+            node.appendChild(child);
+        }
+        _.updated(node);
+        return child;
+    };
+    add.find = function(node, ref) {
+        switch (typeof ref) {
+            case "string": return node[ref+'Child'];
+            case "number": return node.children[ref];
+            case "object": return ref;
+            case "function": return ref.call(node, node);
+        }
+    };
+
+    _.updated = function(node) {
+        node._internal = true;
+        _.children(node);
+    };
+
+    _.fn.remove = function(noDeadEnd) {
+        var parents = [];
+        this.each(function(node) {
+            var parent = node.parentNode;
+            if (noDeadEnd && parents.indexOf(parent) < 0) {
+                parents.push(parent);
+            }
+            parent.removeChild(node);
+            _.updated(parent);
+        });
+        return noDeadEnd ? _.list(parents) : this;
+    };
+
+})(document, document.documentElement._);
 (function() {
-  define('app',["jquery", "underscore", "backbone", "router"], function($, _, Backbone, Router) {
+  define('app',["jquery", "underscore", "backbone", "router", "html"], function($, _, Backbone, Router, HTML) {
     var init, initialize;
     initialize = function() {
       return Router.initialize();
     };
+    console.log(HTML);
+    console.log('this');
     return init = {
       initialize: initialize
     };
@@ -12547,7 +12767,7 @@ define("rickshaw", ["d3"], (function (global) {
       text: '../bower_components/requirejs-text/text',
       underscore: '../bower_components/underscore-amd/underscore',
       backbone: '../bower_components/backbone-amd/backbone',
-      html: '../bower_components/HTML/dist/HTML.min',
+      html: '../bower_components/HTML/dist/HTML',
       bootstrap: '../bower_components/bootstrap/dist/js/bootstrap.min',
       d3: '../bower_components/d3/d3.min',
       rickshaw: '../bower_components/rickshaw/rickshaw.min'
@@ -12576,7 +12796,6 @@ define("rickshaw", ["d3"], (function (global) {
 
   require(['app'], function(app) {
     return $(function() {
-      console.log(Backbone);
       return Backbone.history.start({
         pushState: true
       });
