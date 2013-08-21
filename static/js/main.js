@@ -12625,7 +12625,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
 })(document, document.documentElement._);
 define('text',{load: function(id){throw new Error("Dynamic load not allowed: " + id);}});
-define('text!views/../../../templates/views/home.tmpl.haml',[],function () { return '%script{ :type => "text/template", :id => "home-view" }\n  .m--login{:class => ""}\n    .bosom\n      %form{:class => ""}\n        %legend\n          .row\n            %input{:placeholder => "Give us yr Hacker News handle!", :id => "__handle"}\n  .m--overview{:class => ""}\n    .bosom\n      %ul.glob.submissions\n        %li Whatevs\n      %ul.glob.comments\n        %li Whatevs\n      %ul.glob.heartbeats\n        %li Whatevs\n\n';});
+define('text!views/../../../templates/views/home.tmpl.html',[],function () { return '<script type="text/template" id="home-view">\n\t<div class="m--login">\n\t\t<div class="bosom">\n\t\t\t<form class="login" action="">\n\t\t\t\t<legend>\n\t\t\t\t\t<div class="row"><input id="__username" type="" placeholder="Give us yr Hacker News handle!" /></div>\n\t\t\t\t</legend>\n\t\t\t</form>\n\t\t</div>\n\t</div>\n\t<div class="m--overview">\n\t\t<div class="bosom">\n\t\t\t<ul class="glob submissions">\n\t\t\t\t<li>Submissions</li>\n\t\t\t</ul>\n\t\t\t<ul class="glob comments">\n\t\t\t\t<li>Comments</li>\n\t\t\t</ul>\n\t\t\t<ul class="glob heartbeats">\n\t\t\t\t<li>Heartbeats</li>\n\t\t\t</ul>\n\t\t</div>\n\t</div>\n';});
 
 /**
 * bootstrap.js v3.0.0 by @fat and @mdo
@@ -12644,7 +12644,7 @@ define("bootstrap", ["jquery"], (function (global) {
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define('views/home',["jquery", "underscore", "backbone", "html", "text!../../../templates/views/home.tmpl.haml", "bootstrap"], function($, _, Backbone, HTML, HomeViewTemplate) {
+  define('views/home',["jquery", "underscore", "backbone", "html", "text!../../../templates/views/home.tmpl.html", "bootstrap"], function($, _, Backbone, HTML, HomeViewTemplate) {
     var home_view, _ref;
     return home_view = (function(_super) {
       var homeView;
@@ -12656,9 +12656,19 @@ define("bootstrap", ["jquery"], (function (global) {
         return _ref;
       }
 
+      home_view.prototype.el = $('.container');
+
+      home_view.prototype.render = function() {
+        var compiledTmpl, data;
+        data = {
+          msg: "I am a cat!"
+        };
+        compiledTmpl = _.template(HomeViewTemplate, data);
+        return this.$el.append(compiledTmpl);
+      };
+
       home_view.prototype.initialize = function() {
-        console.log('home view');
-        return console.log(HTML);
+        return this.render();
       };
 
       homeView = new home_view;
