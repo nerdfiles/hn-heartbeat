@@ -121,6 +121,8 @@ module.exports = function (grunt) {
                     preserveLicenseComments: false,
                     useStrict: true,
                     wrap: true
+                    inlineText: true,
+                    stubModules: ['text']
                     //uglify2: {} // https://github.com/mishoo/UglifyJS2
                 }
             }

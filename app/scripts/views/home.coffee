@@ -5,7 +5,7 @@ define [
         "bootstrap"
         "text!templates/views/home.tmpl.haml"
     ],
-    ($,_,Backbone) ->
+    ($,_,Backbone,HomeViewTemplate) ->
 				class starter extends Backbone.View
 						initialize: () ->
 								console.log 'Home!'
