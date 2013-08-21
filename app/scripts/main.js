@@ -8,13 +8,11 @@
       html: '../bower_components/HTML/dist/HTML',
       bootstrap: '../bower_components/bootstrap/dist/js/bootstrap.min',
       d3: '../bower_components/d3/d3.min',
-      rickshaw: '../bower_components/rickshaw/tutorial'
+      rickshaw: '../bower_components/rickshaw/rickshaw.min'
     },
     shim: {
       underscore: {
-        deps: []({
-          exports: '_'
-        })
+        exports: '_'
       },
       backbone: {
         deps: ['underscore', 'jquery'],

@@ -3,7 +3,6 @@ define [
         "underscore"
         "backbone"
         "bootstrap"
-        "collections/users"
         "text!templates/views/home.tmpl.haml"
     ],
     ($,_,Backbone) ->
