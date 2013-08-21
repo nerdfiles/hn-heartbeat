@@ -3,7 +3,7 @@ define [
         "underscore"
         "backbone"
         "bootstrap"
-        "text!templates/views/home.tmpl.haml"
+        "text!../../../templates/views/home.tmpl.haml"
     ],
     ($,_,Backbone,HomeViewTemplate) ->
 				class starter extends Backbone.View
