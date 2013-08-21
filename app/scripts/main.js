@@ -3,6 +3,7 @@
     enforceDefine: true,
     paths: {
       jquery: '../bower_components/jquery/jquery',
+      text: '../bower_components/requirejs-text/text',
       underscore: '../bower_components/underscore-amd/underscore',
       backbone: '../bower_components/backbone-amd/backbone',
       html: '../bower_components/HTML/dist/HTML',
