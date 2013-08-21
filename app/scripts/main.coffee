@@ -1,6 +1,7 @@
 require.config
 
     ## deps: ["main"]
+    enforceDefine: true
 
     paths:
             jquery: '../bower_components/jquery/jquery'
@@ -13,6 +14,7 @@ require.config
 
     shim:
             underscore:
+            				deps: []
                     exports: '_'
 
             backbone:
@@ -25,6 +27,13 @@ require.config
             bootstrap:
                     deps: ['jquery']
                     exports: 'jquery'
+
+            d3:
+            				exports: 'd3'
+
+            rickshaw:
+            				deps: ['d3']
+            				exports: 'rickshaw'
 
 
 require [

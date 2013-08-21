@@ -2,6 +2,8 @@ define [
         "jquery"
         "underscore"
         "backbone"
+        "d3"
+        "rickshaw"
     ],
     ($,_,Backbone) ->
             class starter extends Backbone.View

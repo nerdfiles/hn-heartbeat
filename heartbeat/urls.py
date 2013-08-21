@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
 from rest_framework.urlpatterns import format_suffix_patterns
-from frontend.views import HackerDetail, HackerAdd
+from frontend.views import HackerDetail, HackerAdd, FrontendView
 
 from django.contrib import admin
 admin.autodiscover()
@@ -15,7 +15,10 @@ urlpatterns = patterns('',
                        )
 
 urlpatterns += patterns('frontend.views',
-                        # url(r'^api/hacker/$',
+                        url(r'^templates/views/(?P<tmpl>.+\.haml)',
+                            FrontendView.as_view(), name='frontend.static-view'),
+
+                        # url(r'^api/list/hackers/$',
                         #   HackerList.as_view(), name='hacker-list'),
                         url(r'^api/hacker/$',
                             HackerDetail.as_view(), name='hacker-detail'),

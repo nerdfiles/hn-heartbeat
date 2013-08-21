@@ -5,8 +5,8 @@ define [
         "bootstrap"
     ],
     ($,_,Backbone) ->
-            class starter extends Backbone.View
-                initialize: () ->
-                    console.log 'Home!'
+				class starter extends Backbone.View
+						initialize: () ->
+								console.log 'Home!'
 
-            starterView = new starter
+				starterView = new starter
