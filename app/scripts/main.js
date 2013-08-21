@@ -1,5 +1,6 @@
 (function() {
   require.config({
+    enforceDefine: true,
     paths: {
       jquery: '../bower_components/jquery/jquery',
       underscore: '../bower_components/underscore-amd/underscore',
@@ -11,7 +12,9 @@
     },
     shim: {
       underscore: {
-        exports: '_'
+        deps: []({
+          exports: '_'
+        })
       },
       backbone: {
         deps: ['underscore', 'jquery'],
@@ -20,6 +23,13 @@
       bootstrap: {
         deps: ['jquery'],
         exports: 'jquery'
+      },
+      d3: {
+        exports: 'd3'
+      },
+      rickshaw: {
+        deps: ['d3'],
+        exports: 'rickshaw'
       }
     }
   });
