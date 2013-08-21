@@ -6,7 +6,7 @@ define [
         "rickshaw"
     ],
     ($,_,Backbone) ->
-            class starter extends Backbone.View
-                initialize: ->
+            class user_view extends Backbone.View
+                initialize: () ->
                     console.log('another view started...');
-            starterView = new starter
+            userView = new user_view

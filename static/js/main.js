@@ -12415,6 +12415,10 @@ define("bootstrap", ["jquery"], (function (global) {
     };
 }(this)));
 
+/*! HTML - v0.9.3 - 2013-08-15
+* http://nbubna.github.io/HTML/
+* Copyright (c) 2013 ESHA Research; Licensed MIT, GPL */
+!function(a,b,c){"use strict";var d={version:"0.9.3",slice:Array.prototype.slice,list:function(a){return 1===a.length?d.node(a[0]):(a.each||(a.slice||(a=d.slice.call(a)),d.methods(a)),a)},node:function(a){return a.each||(d.methods(a),d.children(a)),a},methods:function(a){for(var b in d.fn)a[b]=d.fn[b].bind(a)},children:function(a){for(var b=a._children={},c=0,e=a.childNodes.length;e>c;c++){var f=a.childNodes[c],g=d.key(f);(b[g]||(b[g]=[])).push(f),g in a||d.define(a,g)}return b},key:function(a){return a.tagName?a.tagName.toLowerCase():"_other"},define:function(a,b){try{Object.defineProperty(a,b,{get:function(){return a._children||d.children(a),d.list(a._children[b]||[])}})}catch(c){}},mutation:function(a){var b=a.target;delete b[b._internal?"_internal":"_children"]},fn:{each:function(a){var b,c=this.forEach?this:[this];return"string"==typeof a&&(b=[],a=d.field.apply(c,arguments)),c.forEach(function(e,f,g){var h=a.call(c,d.node(e),f,g);b&&void 0!==h&&b.push(h)}),b&&b.length?b:this},find:function(a){for(var b=this.forEach?this:[this],c=[],e=0,f=b.length;f>e;e++)c=c.concat(d.slice.call(b[e].querySelectorAll(a)));return d.list(c)},only:function(a,b){var c=this.forEach?this:[this];return d.list(a>=0||0>a?c.slice(a,b||a+1||void 0):c.filter("function"==typeof a?a:function(b){return b[d.matches](a)}))}},field:function(a){var b=d.slice.call(arguments,1);return a=d.field[a]||a,function(c,e){return d.resolve(a,c,b,e)}},resolve:function(a,b,c,e){var f=a,g=b;if(c=c.length?d.fill(c,e,g):null,f.indexOf(".")>0){for(var h=f.split(".");h.length>1&&(g=g[f=h.shift()]););g=g||b,f=g?h[0]:a}var i=g[f];if(void 0!==i){if("function"==typeof i)return i.apply(g,c);if(!c)return i;g[f]=c[0]}else{if(!c)return g.getAttribute(a);g.setAttribute(a,c[0])}},fill:function(a,b,c){for(var d=[],e=0,f=a.length;f>e;e++){var g=a[e],h=typeof g;d[e]="string"===h?g.replace(/\$\{i\}/g,b):"function"===h?g(c,b,a):g}return d}},e=d.node(b.documentElement);e._=d,e.ify=function(a){return!a||"length"in a?d.list(a||[]):d.node(a)},["webkitM","mozM","msM","m"].forEach(function(a){e[a+"atchesSelector"]&&(d.matches=a+"atchesSelector")}),c?new c(function(a){a.forEach(d.mutation)}).observe(e,{childList:!0,subtree:!0}):b.addEventListener("DOMSubtreeModified",d.mutation),"function"==typeof define&&define.amd?define('html',[],function(){return e}):"undefined"!=typeof module&&module.exports?module.exports=e:a.HTML=e,b.addEventListener("DOMContentLoaded",function(){d.children(e)})}(window,document,window.MutationObserver),function(a,b){"use strict";var c=b.fn.add=function(a,d){var e=[];return this.each(function(b){e=e.concat(c.all(b,a,d))}),b.list(e)};c.all=function(a,b,d){if("string"==typeof b)return c.create(a,b,d);if("length"in b){for(var e=[],f=0,g=b.length;g>f;f++)e.push(c.all(a,b[f],d));return e}return c.insert(a,b,d),b},c.create=function(b,d,e){return c.insert(b,a.createElement(d),e)},c.insert=function(a,d,e){var f=c.find(a,e);return f?a.insertBefore(d,f):a.appendChild(d),b.updated(a),d},c.find=function(a,b){switch(typeof b){case"string":return a[b+"Child"];case"number":return a.children[b];case"object":return b;case"function":return b.call(a,a)}},b.updated=function(a){a._internal=!0,b.children(a)},b.fn.remove=function(a){var c=[];return this.each(function(d){var e=d.parentNode;a&&c.indexOf(e)<0&&c.push(e),e.removeChild(d),b.updated(e)}),a?b.list(c):this}}(document,document.documentElement._);
 define('text',{load: function(id){throw new Error("Dynamic load not allowed: " + id);}});
 define('text!views/../../../templates/views/home.tmpl.haml',[],function () { return '%script{ :type => "text/template", :id => "home-view" }\n  .m--login{:class => ""}\n    .bosom\n      %form{:class => ""}\n        %legend\n          .row\n            %input{:placeholder => "Give us yr Hacker News handle!", :id => "__handle"}\n  .m--overview{:class => ""}\n    .bosom\n      %ul.glob.submissions\n        %li Whatevs\n      %ul.glob.comments\n        %li Whatevs\n      %ul.glob.heartbeats\n        %li Whatevs\n\n';});
 
@@ -12422,7 +12426,7 @@ define('text!views/../../../templates/views/home.tmpl.haml',[],function () { ret
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define('views/home',["jquery", "underscore", "backbone", "bootstrap", "text!../../../templates/views/home.tmpl.haml"], function($, _, Backbone, HomeViewTemplate) {
+  define('views/home',["jquery", "underscore", "backbone", "bootstrap", "html", "text!../../../templates/views/home.tmpl.haml"], function($, _, Backbone, HTML, HomeViewTemplate) {
     var home_view, _ref;
     return home_view = (function(_super) {
       var homeView;
@@ -12435,8 +12439,7 @@ define('text!views/../../../templates/views/home.tmpl.haml',[],function () { ret
       }
 
       home_view.prototype.initialize = function() {
-        console.log('cats');
-        return console.log('Home!');
+        return console.log(HTML);
       };
 
       homeView = new home_view;
@@ -12544,7 +12547,7 @@ define("rickshaw", ["d3"], (function (global) {
       text: '../bower_components/requirejs-text/text',
       underscore: '../bower_components/underscore-amd/underscore',
       backbone: '../bower_components/backbone-amd/backbone',
-      html: '../bower_components/HTML/dist/HTML',
+      html: '../bower_components/HTML/dist/HTML.min',
       bootstrap: '../bower_components/bootstrap/dist/js/bootstrap.min',
       d3: '../bower_components/d3/d3.min',
       rickshaw: '../bower_components/rickshaw/rickshaw.min'

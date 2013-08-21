@@ -3,10 +3,11 @@ define [
         "underscore"
         "backbone"
         "bootstrap"
+        "html"
         "text!../../../templates/views/home.tmpl.haml"
     ],
-    ($,_,Backbone,HomeViewTemplate) ->
+    ($,_,Backbone,HTML,HomeViewTemplate) ->
       class home_view extends Backbone.View
         initialize: () ->
-        	console.log html
+        	console.log HTML
         homeView = new home_view
