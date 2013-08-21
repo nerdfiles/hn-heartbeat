@@ -15,9 +15,6 @@ urlpatterns = patterns('',
                        )
 
 urlpatterns += patterns('frontend.views',
-                        url(r'^templates/views/(?P<tmpl>.+\.html)',
-                            FrontendView.as_view(), name='frontend-static-view'),
-
                         # url(r'^api/list/hackers/$',
                         #   HackerList.as_view(), name='hacker-list'),
                         url(r'^api/hacker/$',

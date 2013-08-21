@@ -5,9 +5,9 @@ from django.contrib import auth
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.views.generic import TemplateView
-from django.http import Http404
-from django.template import TemplateDoesNotExist
+# from django.views.generic import TemplateView
+# from django.http import Http404
+# from django.template import TemplateDoesNotExist
 
 from rest_framework import generics, status
 from rest_framework.authentication import SessionAuthentication
@@ -109,27 +109,6 @@ class HackerAdd(generics.CreateAPIView):
                             headers=headers)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class FrontendView(TemplateView):
-
-    """
-        Static View for Underscore.js templates
-
-        Purpose: Leverage Django TEMPLATE_CONTEXT_PROCESSORS to process
-        HAML+Underscore templates first to parse HAML tags, then pass into
-        Underscore from Backbone for template processing on the frontend.
-
-        @note Probably unnecessary..
-    """
-
-    def get(self, request, tmpl, *args, **kwargs):
-        self.template_name = tmpl
-        response = super(FrontendView, self).get(request, *args, **kwargs)
-        try:
-            return response.render()
-        except TemplateDoesNotExist:
-            raise Http404()
 
 
 def HomeView(request):
