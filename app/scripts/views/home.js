@@ -21,7 +21,8 @@
         data = {
           msg: "I am a cat!"
         };
-        compiledTmpl = _.template(HomeViewTemplate, data);
+        compiledTmpl = _.template($(HomeViewTemplate).html(), data);
+        console.log(compiledTmpl);
         return this.$el.append(compiledTmpl);
       };
 

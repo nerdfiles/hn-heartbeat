@@ -119,6 +119,8 @@ class FrontendView(TemplateView):
         Purpose: Leverage Django TEMPLATE_CONTEXT_PROCESSORS to process
         HAML+Underscore templates first to parse HAML tags, then pass into
         Underscore from Backbone for template processing on the frontend.
+
+        @note Probably unnecessary..
     """
 
     def get(self, request, tmpl, *args, **kwargs):
