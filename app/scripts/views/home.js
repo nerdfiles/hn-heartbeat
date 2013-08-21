@@ -1,26 +1,29 @@
 (function() {
-  var starter, starterView, _ref,
-    __hasProp = {}.hasOwnProperty,
+  var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(["jquery", "underscore", "backbone", "bootstrap", "text!../../../templates/views/home.tmpl.haml"], function($, _, Backbone, HomeViewTemplate) {});
+  define(["jquery", "underscore", "backbone", "bootstrap", "text!../../../templates/views/home.tmpl.haml"], function($, _, Backbone, HomeViewTemplate) {
+    var home_view, _ref;
+    return home_view = (function(_super) {
+      var homeView;
 
-  starter = (function(_super) {
-    __extends(starter, _super);
+      __extends(home_view, _super);
 
-    function starter() {
-      _ref = starter.__super__.constructor.apply(this, arguments);
-      return _ref;
-    }
+      function home_view() {
+        _ref = home_view.__super__.constructor.apply(this, arguments);
+        return _ref;
+      }
 
-    starter.prototype.initialize = function() {
-      return console.log('Home!');
-    };
+      home_view.prototype.initialize = function() {
+        console.log('cats');
+        return console.log('Home!');
+      };
 
-    return starter;
+      homeView = new home_view;
 
-  })(Backbone.View);
+      return home_view;
 
-  starterView = new starter;
+    })(Backbone.View);
+  });
 
 }).call(this);

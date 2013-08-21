@@ -15,9 +15,7 @@ define [
         })
 
         initialize = () ->
-
             app_router = new AppRouter
-
             app_router.on("showUser", () ->
                 userView = new UserView()
                 userView.render()
@@ -27,6 +25,4 @@ define [
                 console.log 'No route:', actions
             )
 
-        init = {
-        		initialize: initialize
-        }
+        init = {initialize: initialize}

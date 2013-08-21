@@ -12419,29 +12419,32 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
 define('text!views/../../../templates/views/home.tmpl.haml',[],function () { return '%script{ :type => "text/template", :id => "home-view" }\n  .m--login{:class => ""}\n    .bosom\n      %form{:class => ""}\n        %legend\n          .row\n            %input{:placeholder => "Give us yr Hacker News handle!", :id => "__handle"}\n  .m--overview{:class => ""}\n    .bosom\n      %ul.glob.submissions\n        %li Whatevs\n      %ul.glob.comments\n        %li Whatevs\n      %ul.glob.heartbeats\n        %li Whatevs\n\n';});
 
 (function() {
-  var starter, starterView, _ref,
-    __hasProp = {}.hasOwnProperty,
+  var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define('views/home',["jquery", "underscore", "backbone", "bootstrap", "text!../../../templates/views/home.tmpl.haml"], function($, _, Backbone, HomeViewTemplate) {});
+  define('views/home',["jquery", "underscore", "backbone", "bootstrap", "text!../../../templates/views/home.tmpl.haml"], function($, _, Backbone, HomeViewTemplate) {
+    var home_view, _ref;
+    return home_view = (function(_super) {
+      var homeView;
 
-  starter = (function(_super) {
-    __extends(starter, _super);
+      __extends(home_view, _super);
 
-    function starter() {
-      _ref = starter.__super__.constructor.apply(this, arguments);
-      return _ref;
-    }
+      function home_view() {
+        _ref = home_view.__super__.constructor.apply(this, arguments);
+        return _ref;
+      }
 
-    starter.prototype.initialize = function() {
-      return console.log('Home!');
-    };
+      home_view.prototype.initialize = function() {
+        console.log('cats');
+        return console.log('Home!');
+      };
 
-    return starter;
+      homeView = new home_view;
 
-  })(Backbone.View);
+      return home_view;
 
-  starterView = new starter;
+    })(Backbone.View);
+  });
 
 }).call(this);
 
@@ -12570,6 +12573,7 @@ define("rickshaw", ["d3"], (function (global) {
 
   require(['app'], function(app) {
     return $(function() {
+      console.log(Backbone);
       return Backbone.history.start({
         pushState: true
       });

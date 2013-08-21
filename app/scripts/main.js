@@ -35,6 +35,7 @@
 
   require(['app'], function(app) {
     return $(function() {
+      console.log(Backbone);
       return Backbone.history.start({
         pushState: true
       });
