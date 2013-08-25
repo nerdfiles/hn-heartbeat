@@ -8,13 +8,9 @@
       }
     });
     initialize = function() {
-      var app_router;
+      var app_router, userView;
       app_router = new AppRouter;
-      app_router.on("showUser", function() {
-        var userView;
-        userView = new UserView();
-        return userView.render();
-      });
+      app_router.on("showUser", function() {}, userView = new UserView(), userView.render());
       return app_router.on("globalAction", function(actions) {
         return console.log('No route:', actions);
       });
