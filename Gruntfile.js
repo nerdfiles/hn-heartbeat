@@ -175,8 +175,12 @@ module.exports = function (grunt) {
         watch: {
           src: {
             files: ['<%= yeoman.app %>/scripts/**/*.coffee', '<%= yeoman.app %>/styles/**/*.less'],
-            // tasks: ['coffee', 'less', 'recess'],
-            tasks: ['coffee', 'less']
+            tasks: [
+                'clean:dist',
+                'coffee',
+                'less',
+                'requirejs',
+                'copy:dist']
           }
         },
         bower: {

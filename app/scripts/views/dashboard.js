@@ -3,23 +3,23 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define(["jquery", "underscore", "backbone", "rickshaw"], function($, _, Backbone, Rickshaw) {
-    var userView, user_view, _ref;
-    user_view = (function(_super) {
-      __extends(user_view, _super);
+    var dashboardView, dashboard_view, _ref;
+    dashboard_view = (function(_super) {
+      __extends(dashboard_view, _super);
 
-      function user_view() {
-        _ref = user_view.__super__.constructor.apply(this, arguments);
+      function dashboard_view() {
+        _ref = dashboard_view.__super__.constructor.apply(this, arguments);
         return _ref;
       }
 
-      user_view.prototype.initialize = function() {
+      dashboard_view.prototype.initialize = function() {
         return console.log('another view started...');
       };
 
-      return user_view;
+      return dashboard_view;
 
     })(Backbone.View);
-    return userView = new user_view;
+    return dashboardView = new dashboard_view;
   });
 
 }).call(this);

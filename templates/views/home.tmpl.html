@@ -2,16 +2,23 @@
   <div class="m--login">
     <div class="bosom">
       <h1><%= msg %></h1>
-      <form id="login" class="login" action="">
-        <legend>
+      <form 
+        id="login" 
+        class="login" 
+        method="post" 
+        action="">
+
+        <fieldset>
+          <legend>Login</legend>
           <div class="form-row">
             <input 
-              id="__username" 
+              id="__username__" 
               name="username" 
               type="text" 
               placeholder="Give us yr Hacker News handle!" />
           </div>
-        </legend>
+        </fieldset>
+
       </form>
     </div>
   </div>

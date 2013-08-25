@@ -14,13 +14,22 @@
 
       home_view.prototype.el = $('.app');
 
+      home_view.prototype.events = function() {
+        return {
+          "blur input#__username__": "__save__"
+        };
+      };
+
+      home_view.prototype.__save__ = function(e) {
+        return console.log(this.$el);
+      };
+
       home_view.prototype.render = function() {
         var compiledTmpl, data;
         data = {
           msg: "I am a cat!"
         };
         compiledTmpl = _.template($(HomeViewTemplate).html(), data);
-        console.log(compiledTmpl);
         return this.$el.append(compiledTmpl);
       };
 

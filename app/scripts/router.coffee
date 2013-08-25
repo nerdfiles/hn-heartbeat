@@ -3,9 +3,9 @@ define [
     "underscore"
     "backbone"
     "views/home"
-    "views/user"
+    "views/dashboard"
   ],
-  ($,_,Backbone,HomeView,UserView) ->
+  ($,_,Backbone,HomeView,DashboardView) ->
     AppRouter = Backbone.Router.extend({
       routes: {
         "/user": "showUser"
@@ -16,8 +16,8 @@ define [
     initialize = () ->
       app_router = new AppRouter
       app_router.on("showUser", () ->
-        userView = new UserView()
-        userView.render()
+        dashboardView = new DashboardView()
+        dashboardView.render()
       )
       app_router.on("globalAction", (actions) ->
         console.log 'No route:', actions

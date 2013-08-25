@@ -12625,7 +12625,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
 })(document, document.documentElement._);
 define('text',{load: function(id){throw new Error("Dynamic load not allowed: " + id);}});
-define('text!views/../../../templates/views/home.tmpl.html',[],function () { return '<script type="text/template" id="home-view">\n  <div class="m--login">\n    <div class="bosom">\n      <h1><%= msg %></h1>\n      <form id="login" class="login" action="">\n        <legend>\n          <div class="form-row">\n            <input id="__username" name="username" type="text" placeholder="Give us yr Hacker News handle!" />\n          </div>\n        </legend>\n      </form>\n    </div>\n  </div>\n  <div class="m--overview">\n    <div class="bosom">\n      <ul class="glob submissions">\n        <li>Submissions</li>\n      </ul>\n      <ul class="glob comments">\n        <li>Comments</li>\n      </ul>\n      <ul class="glob heartbeats">\n        <li>Heartbeats</li>\n      </ul>\n    </div>\n  </div>\n</script>\n';});
+define('text!views/../../../templates/views/home.tmpl.html',[],function () { return '<script type="text/template" id="home-view">\n  <div class="m--login">\n    <div class="bosom">\n      <h1><%= msg %></h1>\n      <form \n        id="login" \n        class="login" \n        method="post" \n        action="">\n\n        <fieldset>\n          <legend>Login</legend>\n          <div class="form-row">\n            <input \n              id="__username__" \n              name="username" \n              type="text" \n              placeholder="Give us yr Hacker News handle!" />\n          </div>\n        </fieldset>\n\n      </form>\n    </div>\n  </div>\n  <div class="m--overview">\n    <div class="bosom">\n      <ul class="glob submissions">\n        <li>Submissions</li>\n      </ul>\n      <ul class="glob comments">\n        <li>Comments</li>\n      </ul>\n      <ul class="glob heartbeats">\n        <li>Heartbeats</li>\n      </ul>\n    </div>\n  </div>\n</script>\n';});
 
 /**
 * bootstrap.js v3.0.0 by @fat and @mdo
@@ -12656,13 +12656,22 @@ define("bootstrap", ["jquery"], (function (global) {
 
       home_view.prototype.el = $('.app');
 
+      home_view.prototype.events = function() {
+        return {
+          "blur input#__username__": "__save__"
+        };
+      };
+
+      home_view.prototype.__save__ = function(e) {
+        return console.log(this.$el);
+      };
+
       home_view.prototype.render = function() {
         var compiledTmpl, data;
         data = {
           msg: "I am a cat!"
         };
         compiledTmpl = _.template($(HomeViewTemplate).html(), data);
-        console.log(compiledTmpl);
         return this.$el.append(compiledTmpl);
       };
 
@@ -12691,30 +12700,30 @@ define("rickshaw", (function (global) {
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define('views/user',["jquery", "underscore", "backbone", "rickshaw"], function($, _, Backbone, Rickshaw) {
-    var userView, user_view, _ref;
-    user_view = (function(_super) {
-      __extends(user_view, _super);
+  define('views/dashboard',["jquery", "underscore", "backbone", "rickshaw"], function($, _, Backbone, Rickshaw) {
+    var dashboardView, dashboard_view, _ref;
+    dashboard_view = (function(_super) {
+      __extends(dashboard_view, _super);
 
-      function user_view() {
-        _ref = user_view.__super__.constructor.apply(this, arguments);
+      function dashboard_view() {
+        _ref = dashboard_view.__super__.constructor.apply(this, arguments);
         return _ref;
       }
 
-      user_view.prototype.initialize = function() {
+      dashboard_view.prototype.initialize = function() {
         return console.log('another view started...');
       };
 
-      return user_view;
+      return dashboard_view;
 
     })(Backbone.View);
-    return userView = new user_view;
+    return dashboardView = new dashboard_view;
   });
 
 }).call(this);
 
 (function() {
-  define('router',["jquery", "underscore", "backbone", "views/home", "views/user"], function($, _, Backbone, HomeView, UserView) {
+  define('router',["jquery", "underscore", "backbone", "views/home", "views/dashboard"], function($, _, Backbone, HomeView, DashboardView) {
     var AppRouter, init, initialize;
     AppRouter = Backbone.Router.extend({
       routes: {
@@ -12726,9 +12735,9 @@ define("rickshaw", (function (global) {
       var app_router;
       app_router = new AppRouter;
       app_router.on("showUser", function() {
-        var userView;
-        userView = new UserView();
-        return userView.render();
+        var dashboardView;
+        dashboardView = new DashboardView();
+        return dashboardView.render();
       });
       return app_router.on("globalAction", function(actions) {
         return console.log('No route:', actions);
