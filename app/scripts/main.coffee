@@ -32,12 +32,11 @@ require.config
         exports: 'd3'
 
       rickshaw:
-        deps: ['d3']
-        exports: 'rickshaw'
+        exports: 'Rickshaw'
 
 
 require [
-      'app'
-    ], (app) ->
-      $ () ->
-        Backbone.history.start pushState: true
+    'app'
+  ], (app) ->
+    $ () ->
+      Backbone.history.start pushState: true

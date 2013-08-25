@@ -5,6 +5,6 @@ define [
         "router"
     ],
     ($,_,Backbone,Router) ->
-        initialize = () ->
-        	Router.initialize()
-        init = {initialize: initialize}
+      initialize = () ->
+        Router.initialize()
+      init = {initialize: initialize}

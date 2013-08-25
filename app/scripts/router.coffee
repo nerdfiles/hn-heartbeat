@@ -22,4 +22,5 @@ define [
 				app_router.on("globalAction", (actions) ->
 					console.log 'No route:', actions
 				)
-				init = {initialize: initialize}
+
+			init = {initialize: initialize}

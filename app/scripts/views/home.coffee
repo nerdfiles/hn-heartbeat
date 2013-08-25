@@ -17,4 +17,4 @@ define [
       		@$el.append compiledTmpl
       	initialize: () ->
       		@render()
-      	homeView = new home_view
+      homeView = new home_view

@@ -27,8 +27,7 @@
         exports: 'd3'
       },
       rickshaw: {
-        deps: ['d3'],
-        exports: 'rickshaw'
+        exports: 'Rickshaw'
       }
     }
   });

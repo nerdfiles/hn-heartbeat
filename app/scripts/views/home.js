@@ -3,10 +3,8 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define(["jquery", "underscore", "backbone", "html", "text!../../../templates/views/home.tmpl.html", "bootstrap"], function($, _, Backbone, HTML, HomeViewTemplate) {
-    var home_view, _ref;
-    return home_view = (function(_super) {
-      var homeView;
-
+    var homeView, home_view, _ref;
+    home_view = (function(_super) {
       __extends(home_view, _super);
 
       function home_view() {
@@ -30,11 +28,10 @@
         return this.render();
       };
 
-      homeView = new home_view;
-
       return home_view;
 
     })(Backbone.View);
+    return homeView = new home_view;
   });
 
 }).call(this);
