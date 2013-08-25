@@ -8,7 +8,7 @@ define [
     ],
     ($,_,Backbone,HTML,HomeViewTemplate) ->
       class home_view extends Backbone.View
-        el: $ '.container'
+        el: $ '.app'
         render: () ->
           data =
             msg: "I am a cat!"

@@ -12,7 +12,7 @@
         return _ref;
       }
 
-      home_view.prototype.el = $('.container');
+      home_view.prototype.el = $('.app');
 
       home_view.prototype.render = function() {
         var compiledTmpl, data;

@@ -6795,3 +6795,43 @@ a .icon-flip-vertical:before {
     width: 100%;
   }
 }
+.app .m--overview {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+.app .m--overview:before,
+.app .m--overview:after {
+  content: " ";
+  /* 1 */
+
+  display: table;
+  /* 2 */
+
+}
+.app .m--overview:after {
+  clear: both;
+}
+.app .m--overview:before,
+.app .m--overview:after {
+  content: " ";
+  /* 1 */
+
+  display: table;
+  /* 2 */
+
+}
+.app .m--overview:after {
+  clear: both;
+}
+.app .m--overview .bosom {
+  position: relative;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+@media (min-width: 1200px) {
+  .app .m--overview .bosom {
+    float: left;
+    width: 100%;
+  }
+}
