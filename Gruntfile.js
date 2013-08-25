@@ -161,10 +161,22 @@ module.exports = function (grunt) {
                 ]
             }
         },
+        recess: {
+            dist: {
+                src: [
+                    '<%= yeoman.app %>/styles/base/init.less',
+                ],
+                // dest: 'dist/combined.css',
+                options: {
+                    compile: true
+                }
+            }
+        },
         watch: {
           src: {
             files: ['<%= yeoman.app %>/scripts/**/*.coffee', '<%= yeoman.app %>/styles/**/*.less'],
-            tasks: ['coffee', 'less'],
+            // tasks: ['coffee', 'less', 'recess'],
+            tasks: ['coffee', 'less']
           }
         },
         bower: {
@@ -174,11 +186,11 @@ module.exports = function (grunt) {
         }
     });
 
-		grunt.loadNpmTasks('grunt-contrib-compass');
-
+		// grunt.loadNpmTasks('grunt-contrib-compass');
 		// grunt.loadNpmTasks('grunt-sass');
 
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-recess');
 
     grunt.registerTask('test', [
         'coffee',
@@ -194,6 +206,7 @@ module.exports = function (grunt) {
         'clean:dist',
         'coffee',
         'less',
+        // 'recess',
     		// 'sass',
         'requirejs',
         'copy:dist'
