@@ -163,7 +163,7 @@ module.exports = function (grunt) {
         },
         watch: {
           src: {
-            files: ['<%= yeoman.app %>/scripts/**/*.coffee', '<%= yeoman.app %>/styles/bootstrap.less'],
+            files: ['<%= yeoman.app %>/scripts/**/*.coffee', '<%= yeoman.app %>/styles/**/*.less'],
             tasks: ['coffee', 'less'],
           }
         },
