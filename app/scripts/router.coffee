@@ -16,10 +16,12 @@ define [
 
     initialize = () ->
       app_router = new AppRouter
+
       app_router.on("showUser", () ->
         dashboardView = new DashboardView()
         dashboardView.render()
       )
+
       app_router.on("globalAction", (actions) ->
         console.log 'No route:', actions
       )

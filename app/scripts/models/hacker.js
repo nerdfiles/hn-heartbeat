@@ -16,6 +16,18 @@
         username: "None"
       };
 
+      hacker_model.prototype.url = function() {
+        return '/api/hacker/';
+      };
+
+      hacker_model.prototype.initialize = function() {
+        return this.bind('change', this.update);
+      };
+
+      hacker_model.prototype.update = function() {
+        return console.log(this);
+      };
+
       return hacker_model;
 
     })(Backbone.Model);
