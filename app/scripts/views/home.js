@@ -2,7 +2,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(["jquery", "underscore", "backbone", "html", "collections/hackers", "text!../../../templates/views/home.tmpl.html", "bootstrap"], function($, _, Backbone, HTML, HomeViewTemplate) {
+  define(["jquery", "underscore", "backbone", "html", "collections/hackers", "text!../../../templates/views/home.tmpl.html", "bootstrap"], function($, _, Backbone, HTML, HackersCollection, HomeViewTemplate) {
     var homeView, home_view, _ref;
     home_view = (function(_super) {
       __extends(home_view, _super);
@@ -21,13 +21,17 @@
       };
 
       home_view.prototype.__save__ = function(e) {
-        return console.log(this.$el);
+        console.log(this.$el);
+        this.collection = new HackersCollection;
+        return this.collection.add({
+          username: 'wittysense'
+        });
       };
 
       home_view.prototype.render = function() {
         var compiledTmpl, data;
         data = {
-          msg: "I am a cat!"
+          hackers: this.collection.models
         };
         compiledTmpl = _.template($(HomeViewTemplate).html(), data);
         return this.$el.append(compiledTmpl);

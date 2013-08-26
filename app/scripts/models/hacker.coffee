@@ -7,4 +7,13 @@ define [
     defaults:
       username: "None"
 
+    url: () ->
+      '/api/hacker/'
+
+    initialize: () ->
+      @bind 'change', @update
+
+    update: () ->
+      console.log @
+
   hackerModel = new hacker_model
