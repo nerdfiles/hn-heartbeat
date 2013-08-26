@@ -1,3 +1,4 @@
+# Filename: app.coffee
 define [
     "jquery"
     "underscore"

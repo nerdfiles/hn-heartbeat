@@ -1,3 +1,4 @@
+# Filename: views/dashboard.coffee
 define [
     "jquery"
     "underscore"

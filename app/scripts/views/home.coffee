@@ -1,3 +1,4 @@
+# Filename: views/home.coffee
 define [
     "jquery"
     "underscore"
