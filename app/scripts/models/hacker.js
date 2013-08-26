@@ -13,7 +13,7 @@
       }
 
       hacker_model.prototype.defaults = {
-        name: "Harry Potter"
+        username: "None"
       };
 
       return hacker_model;

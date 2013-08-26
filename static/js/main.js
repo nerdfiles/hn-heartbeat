@@ -12624,6 +12624,56 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     };
 
 })(document, document.documentElement._);
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  define('models/hacker',['underscore', 'backbone'], function(_, Backbone) {
+    var hackerModel, hacker_model, _ref;
+    hacker_model = (function(_super) {
+      __extends(hacker_model, _super);
+
+      function hacker_model() {
+        _ref = hacker_model.__super__.constructor.apply(this, arguments);
+        return _ref;
+      }
+
+      hacker_model.prototype.defaults = {
+        username: "None"
+      };
+
+      return hacker_model;
+
+    })(Backbone.Model);
+    return hackerModel = new hacker_model;
+  });
+
+}).call(this);
+
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  define('collections/hackers',['underscore', 'backbone', 'models/hacker'], function(_, Backbone, HackerModel) {
+    var HackerCollection, hacker_collection, _ref;
+    hacker_collection = (function(_super) {
+      __extends(hacker_collection, _super);
+
+      function hacker_collection() {
+        _ref = hacker_collection.__super__.constructor.apply(this, arguments);
+        return _ref;
+      }
+
+      hacker_collection.prototype.model = ProjectModel;
+
+      return hacker_collection;
+
+    })(Backbone.Collection);
+    return HackerCollection = new hacker_collection;
+  });
+
+}).call(this);
+
 define('text',{load: function(id){throw new Error("Dynamic load not allowed: " + id);}});
 define('text!views/../../../templates/views/home.tmpl.html',[],function () { return '<script type="text/template" id="home-view">\n  <div class="m--login">\n    <div class="bosom">\n      <h1><%= msg %></h1>\n      <form \n        id="login" \n        class="login" \n        method="post" \n        action="">\n\n        <fieldset>\n          <legend>Login</legend>\n          <div class="form-row">\n            <input \n              id="__username__" \n              name="username" \n              type="text" \n              placeholder="Give us yr Hacker News handle!" />\n          </div>\n        </fieldset>\n\n      </form>\n    </div>\n  </div>\n  <div class="m--overview">\n    <div class="bosom">\n      <ul class="glob submissions">\n        <li>Submissions</li>\n      </ul>\n      <ul class="glob comments">\n        <li>Comments</li>\n      </ul>\n      <ul class="glob heartbeats">\n        <li>Heartbeats</li>\n      </ul>\n    </div>\n  </div>\n</script>\n';});
 
@@ -12644,7 +12694,7 @@ define("bootstrap", ["jquery"], (function (global) {
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define('views/home',["jquery", "underscore", "backbone", "html", "text!../../../templates/views/home.tmpl.html", "bootstrap"], function($, _, Backbone, HTML, HomeViewTemplate) {
+  define('views/home',["jquery", "underscore", "backbone", "html", "collections/hackers", "text!../../../templates/views/home.tmpl.html", "bootstrap"], function($, _, Backbone, HTML, HomeViewTemplate) {
     var homeView, home_view, _ref;
     home_view = (function(_super) {
       __extends(home_view, _super);
@@ -12696,11 +12746,13 @@ define("rickshaw", (function (global) {
     };
 }(this)));
 
+define('text!views/../../../templates/views/dashboard.tmpl.html',[],function () { return '<script type="text/template" id="user-view">\n\n</script>\n';});
+
 (function() {
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define('views/dashboard',["jquery", "underscore", "backbone", "rickshaw"], function($, _, Backbone, Rickshaw) {
+  define('views/dashboard',["jquery", "underscore", "backbone", "rickshaw", "collections/hackers", "text!../../../templates/views/dashboard.tmpl.html"], function($, _, Backbone, Rickshaw) {
     var dashboardView, dashboard_view, _ref;
     dashboard_view = (function(_super) {
       __extends(dashboard_view, _super);

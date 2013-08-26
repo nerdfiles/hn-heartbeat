@@ -4,8 +4,7 @@ define [
   'backbone'
 ], (_, Backbone) ->
   class hacker_model extends Backbone.Model
-    defaults: {
-      name: "Harry Potter"
-    }
+    defaults:
+      username: "None"
 
   hackerModel = new hacker_model

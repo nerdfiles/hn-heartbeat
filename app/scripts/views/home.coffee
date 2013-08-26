@@ -4,6 +4,7 @@ define [
     "underscore"
     "backbone"
     "html"
+    "collections/hackers"
     "text!../../../templates/views/home.tmpl.html"
     "bootstrap"
   ],

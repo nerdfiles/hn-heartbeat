@@ -4,6 +4,8 @@ define [
     "underscore"
     "backbone"
     "rickshaw"
+    "collections/hackers"
+    "text!../../../templates/views/dashboard.tmpl.html"
   ],
   ($,_,Backbone,Rickshaw) ->
     class dashboard_view extends Backbone.View
