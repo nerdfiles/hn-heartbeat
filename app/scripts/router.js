@@ -1,5 +1,5 @@
 (function() {
-  define(["jquery", "underscore", "backbone", "views/home", "views/user"], function($, _, Backbone, HomeView, UserView) {
+  define(["jquery", "underscore", "backbone", "views/home", "views/dashboard"], function($, _, Backbone, HomeView, DashboardView) {
     var AppRouter, init, initialize;
     AppRouter = Backbone.Router.extend({
       routes: {
@@ -11,9 +11,9 @@
       var app_router;
       app_router = new AppRouter;
       app_router.on("showUser", function() {
-        var userView;
-        userView = new UserView();
-        return userView.render();
+        var dashboardView;
+        dashboardView = new DashboardView();
+        return dashboardView.render();
       });
       return app_router.on("globalAction", function(actions) {
         return console.log('No route:', actions);

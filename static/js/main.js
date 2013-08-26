@@ -12624,8 +12624,58 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     };
 
 })(document, document.documentElement._);
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  define('models/hacker',['underscore', 'backbone'], function(_, Backbone) {
+    var hackerModel, hacker_model, _ref;
+    hacker_model = (function(_super) {
+      __extends(hacker_model, _super);
+
+      function hacker_model() {
+        _ref = hacker_model.__super__.constructor.apply(this, arguments);
+        return _ref;
+      }
+
+      hacker_model.prototype.defaults = {
+        username: "None"
+      };
+
+      return hacker_model;
+
+    })(Backbone.Model);
+    return hackerModel = new hacker_model;
+  });
+
+}).call(this);
+
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  define('collections/hackers',['underscore', 'backbone', 'models/hacker'], function(_, Backbone, HackerModel) {
+    var HackerCollection, hacker_collection, _ref;
+    hacker_collection = (function(_super) {
+      __extends(hacker_collection, _super);
+
+      function hacker_collection() {
+        _ref = hacker_collection.__super__.constructor.apply(this, arguments);
+        return _ref;
+      }
+
+      hacker_collection.prototype.model = ProjectModel;
+
+      return hacker_collection;
+
+    })(Backbone.Collection);
+    return HackerCollection = new hacker_collection;
+  });
+
+}).call(this);
+
 define('text',{load: function(id){throw new Error("Dynamic load not allowed: " + id);}});
-define('text!views/../../../templates/views/home.tmpl.html',[],function () { return '<script type="text/template" id="home-view">\n\t<div class="m--login">\n\t\t<div class="bosom">\n\t\t  <h1><%= msg %></h1>\n\t\t\t<form class="login" action="">\n\t\t\t\t<legend>\n\t\t\t\t\t<div class="row">\n            <input id="__username" type="text" placeholder="Give us yr Hacker News handle!" />\n          </div>\n\t\t\t\t</legend>\n\t\t\t</form>\n\t\t</div>\n\t</div>\n\t<div class="m--overview">\n\t\t<div class="bosom">\n\t\t\t<ul class="glob submissions">\n\t\t\t\t<li>Submissions</li>\n\t\t\t</ul>\n\t\t\t<ul class="glob comments">\n\t\t\t\t<li>Comments</li>\n\t\t\t</ul>\n\t\t\t<ul class="glob heartbeats">\n\t\t\t\t<li>Heartbeats</li>\n\t\t\t</ul>\n\t\t</div>\n\t</div>\n\n</script>\n';});
+define('text!views/../../../templates/views/home.tmpl.html',[],function () { return '<script type="text/template" id="home-view">\n  <div class="m--login">\n    <div class="bosom">\n      <h1><%= msg %></h1>\n      <form \n        id="login" \n        class="login" \n        method="post" \n        action="">\n\n        <fieldset>\n          <legend>Login</legend>\n          <div class="form-row">\n            <input \n              id="__username__" \n              name="username" \n              type="text" \n              placeholder="Give us yr Hacker News handle!" />\n          </div>\n        </fieldset>\n\n      </form>\n    </div>\n  </div>\n  <div class="m--overview">\n    <div class="bosom">\n      <ul class="glob submissions">\n        <li>Submissions</li>\n      </ul>\n      <ul class="glob comments">\n        <li>Comments</li>\n      </ul>\n      <ul class="glob heartbeats">\n        <li>Heartbeats</li>\n      </ul>\n    </div>\n  </div>\n</script>\n';});
 
 /**
 * bootstrap.js v3.0.0 by @fat and @mdo
@@ -12644,7 +12694,7 @@ define("bootstrap", ["jquery"], (function (global) {
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define('views/home',["jquery", "underscore", "backbone", "html", "text!../../../templates/views/home.tmpl.html", "bootstrap"], function($, _, Backbone, HTML, HomeViewTemplate) {
+  define('views/home',["jquery", "underscore", "backbone", "html", "collections/hackers", "text!../../../templates/views/home.tmpl.html", "bootstrap"], function($, _, Backbone, HTML, HomeViewTemplate) {
     var homeView, home_view, _ref;
     home_view = (function(_super) {
       __extends(home_view, _super);
@@ -12654,7 +12704,17 @@ define("bootstrap", ["jquery"], (function (global) {
         return _ref;
       }
 
-      home_view.prototype.el = $('.container');
+      home_view.prototype.el = $('.app');
+
+      home_view.prototype.events = function() {
+        return {
+          "blur input#__username__": "__save__"
+        };
+      };
+
+      home_view.prototype.__save__ = function(e) {
+        return console.log(this.$el);
+      };
 
       home_view.prototype.render = function() {
         var compiledTmpl, data;
@@ -12662,7 +12722,6 @@ define("bootstrap", ["jquery"], (function (global) {
           msg: "I am a cat!"
         };
         compiledTmpl = _.template($(HomeViewTemplate).html(), data);
-        console.log(compiledTmpl);
         return this.$el.append(compiledTmpl);
       };
 
@@ -12687,34 +12746,36 @@ define("rickshaw", (function (global) {
     };
 }(this)));
 
+define('text!views/../../../templates/views/dashboard.tmpl.html',[],function () { return '<script type="text/template" id="user-view">\n\n</script>\n';});
+
 (function() {
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define('views/user',["jquery", "underscore", "backbone", "rickshaw"], function($, _, Backbone, Rickshaw) {
-    var userView, user_view, _ref;
-    user_view = (function(_super) {
-      __extends(user_view, _super);
+  define('views/dashboard',["jquery", "underscore", "backbone", "rickshaw", "collections/hackers", "text!../../../templates/views/dashboard.tmpl.html"], function($, _, Backbone, Rickshaw) {
+    var dashboardView, dashboard_view, _ref;
+    dashboard_view = (function(_super) {
+      __extends(dashboard_view, _super);
 
-      function user_view() {
-        _ref = user_view.__super__.constructor.apply(this, arguments);
+      function dashboard_view() {
+        _ref = dashboard_view.__super__.constructor.apply(this, arguments);
         return _ref;
       }
 
-      user_view.prototype.initialize = function() {
+      dashboard_view.prototype.initialize = function() {
         return console.log('another view started...');
       };
 
-      return user_view;
+      return dashboard_view;
 
     })(Backbone.View);
-    return userView = new user_view;
+    return dashboardView = new dashboard_view;
   });
 
 }).call(this);
 
 (function() {
-  define('router',["jquery", "underscore", "backbone", "views/home", "views/user"], function($, _, Backbone, HomeView, UserView) {
+  define('router',["jquery", "underscore", "backbone", "views/home", "views/dashboard"], function($, _, Backbone, HomeView, DashboardView) {
     var AppRouter, init, initialize;
     AppRouter = Backbone.Router.extend({
       routes: {
@@ -12726,9 +12787,9 @@ define("rickshaw", (function (global) {
       var app_router;
       app_router = new AppRouter;
       app_router.on("showUser", function() {
-        var userView;
-        userView = new UserView();
-        return userView.render();
+        var dashboardView;
+        dashboardView = new DashboardView();
+        return dashboardView.render();
       });
       return app_router.on("globalAction", function(actions) {
         return console.log('No route:', actions);
