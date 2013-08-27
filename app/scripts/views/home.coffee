@@ -14,32 +14,43 @@ define [
       el: $ '.app'
 
       events: () ->
-        "blur input#__username__": "__save__"
+        "blur input#__username__": "__load__"
 
-      __save__: (e) ->
-        console.log @$el
-        
-        # Make GET request here to internal API
-        # at /api/hacker/ which should return JSON
-        # for the desired hacker from hacker news.
-        # 
-        # nerdfiles, sd:25 08 2013.19.39.51
+      __load__: (e) ->
 
-				# Mock some data here
-        @collection = new HackersCollection
-        @collection.add {
-        	username: 'wittysense'
+        __username__ = @$el.find('#__username__').val()
+
+        @collection.reset {
+        	username: __username__
         }
 
+        @collection.fetch {
+        	success: (response, data) ->
+        		console.log @
+        	error: (model, xhr, options) ->
+        		console.log @
+        }
+        
       render: () ->
         data =
           hackers: @collection.models
 
+        # console.log data
         compiledTmpl = _.template $(HomeViewTemplate).html(), data
 
         @$el.append compiledTmpl
 
       initialize: () ->
+
+        # Make GET request here to internal API
+        # at /api/hacker/ which should return JSON
+        # for the desired hacker from hacker news.
+        # 
+        # nerdfiles, sd:25 08 2013.19.39.51
+        
+        # Mock some data here
+        @collection = new HackersCollection
+        
         @render()
 
     homeView = new home_view

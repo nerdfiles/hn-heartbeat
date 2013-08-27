@@ -3,7 +3,7 @@ define [
   'underscore',
   'backbone'
 ], (_, Backbone) ->
-  class hacker_model extends Backbone.Model
+  class HackerModel extends Backbone.Model
     defaults:
       username: "None"
 
@@ -15,5 +15,3 @@ define [
 
     update: () ->
       console.log @
-
-  hackerModel = new hacker_model

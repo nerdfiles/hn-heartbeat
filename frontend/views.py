@@ -62,8 +62,9 @@ class HackerDetail(generics.RetrieveUpdateAPIView):
 
     @csrf_exempt
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated():
-            kwargs[self.slug_field] = request.user.username
+        # if request.user.is_authenticated():
+            # kwargs[self.slug_field] = request.user.username
+        kwargs[self.slug_field] = request.GET.get('username')
         return super(HackerDetail, self).dispatch(request, *args, **kwargs)
 
     def pre_save(self, obj):

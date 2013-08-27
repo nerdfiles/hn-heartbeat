@@ -12629,35 +12629,34 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define('models/hacker',['underscore', 'backbone'], function(_, Backbone) {
-    var hackerModel, hacker_model, _ref;
-    hacker_model = (function(_super) {
-      __extends(hacker_model, _super);
+    var HackerModel, _ref;
+    return HackerModel = (function(_super) {
+      __extends(HackerModel, _super);
 
-      function hacker_model() {
-        _ref = hacker_model.__super__.constructor.apply(this, arguments);
+      function HackerModel() {
+        _ref = HackerModel.__super__.constructor.apply(this, arguments);
         return _ref;
       }
 
-      hacker_model.prototype.defaults = {
+      HackerModel.prototype.defaults = {
         username: "None"
       };
 
-      hacker_model.prototype.url = function() {
+      HackerModel.prototype.url = function() {
         return '/api/hacker/';
       };
 
-      hacker_model.prototype.initialize = function() {
+      HackerModel.prototype.initialize = function() {
         return this.bind('change', this.update);
       };
 
-      hacker_model.prototype.update = function() {
+      HackerModel.prototype.update = function() {
         return console.log(this);
       };
 
-      return hacker_model;
+      return HackerModel;
 
     })(Backbone.Model);
-    return hackerModel = new hacker_model;
   });
 
 }).call(this);
@@ -12667,27 +12666,30 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define('collections/hackers',['underscore', 'backbone', 'models/hacker'], function(_, Backbone, HackerModel) {
-    var HackerCollection, hacker_collection, _ref;
-    hacker_collection = (function(_super) {
-      __extends(hacker_collection, _super);
+    var HackersCollection, _ref;
+    return HackersCollection = (function(_super) {
+      __extends(HackersCollection, _super);
 
-      function hacker_collection() {
-        _ref = hacker_collection.__super__.constructor.apply(this, arguments);
+      function HackersCollection() {
+        _ref = HackersCollection.__super__.constructor.apply(this, arguments);
         return _ref;
       }
 
-      hacker_collection.prototype.model = ProjectModel;
+      HackersCollection.prototype.model = HackerModel;
 
-      return hacker_collection;
+      HackersCollection.prototype.url = function() {
+        return '/api/hacker/';
+      };
+
+      return HackersCollection;
 
     })(Backbone.Collection);
-    return HackerCollection = new hacker_collection;
   });
 
 }).call(this);
 
 define('text',{load: function(id){throw new Error("Dynamic load not allowed: " + id);}});
-define('text!views/../../../templates/views/home.tmpl.html',[],function () { return '<script type="text/template" id="home-view">\n  <div class="m--login">\n    <div class="bosom">\n      <h1><%= msg %></h1>\n      <form \n        id="login" \n        class="login" \n        method="post" \n        action="">\n\n        <fieldset>\n          <legend>Login</legend>\n          <div class="form-row">\n            <input \n              id="__username__" \n              name="username" \n              type="text" \n              placeholder="Give us yr Hacker News handle!" />\n          </div>\n        </fieldset>\n\n      </form>\n    </div>\n  </div>\n  <div class="m--overview">\n    <div class="bosom">\n      <ul class="glob submissions">\n        <li>Submissions</li>\n      </ul>\n      <ul class="glob comments">\n        <li>Comments</li>\n      </ul>\n      <ul class="glob heartbeats">\n        <li>Heartbeats</li>\n      </ul>\n    </div>\n  </div>\n</script>\n';});
+define('text!views/../../../templates/views/home.tmpl.html',[],function () { return '<script type="text/template" id="home-view">\n  <div class="m--login">\n    <div class="bosom">\n      <h1>Hacker News Heartbeat</h1>\n      <form \n        id="login" \n        class="login" \n        method="post" \n        action="">\n\n        <fieldset>\n          <legend>Login</legend>\n          <div class="form-row">\n            <input \n              id="__username__" \n              name="username" \n              type="text" \n              placeholder="Give us yr Hacker News handle!" />\n          </div>\n        </fieldset>\n\n      </form>\n    </div>\n  </div>\n  <div class="m--overview">\n    <div class="bosom">\n      <ul class="glob submissions">\n        <li>Submissions</li>\n      </ul>\n      <ul class="glob comments">\n        <li>Comments</li>\n      </ul>\n      <ul class="glob heartbeats">\n        <li>Heartbeats</li>\n      </ul>\n    </div>\n  </div>\n</script>\n';});
 
 /**
 * bootstrap.js v3.0.0 by @fat and @mdo
@@ -12720,15 +12722,23 @@ define("bootstrap", ["jquery"], (function (global) {
 
       home_view.prototype.events = function() {
         return {
-          "blur input#__username__": "__save__"
+          "blur input#__username__": "__load__"
         };
       };
 
-      home_view.prototype.__save__ = function(e) {
-        console.log(this.$el);
-        this.collection = new HackersCollection;
-        return this.collection.add({
-          username: 'wittysense'
+      home_view.prototype.__load__ = function(e) {
+        var __username__;
+        __username__ = this.$el.find('#__username__').val();
+        this.collection.reset({
+          username: __username__
+        });
+        return this.collection.fetch({
+          success: function(response, data) {
+            return console.log(this);
+          },
+          error: function(model, xhr, options) {
+            return console.log(this);
+          }
         });
       };
 
@@ -12742,6 +12752,7 @@ define("bootstrap", ["jquery"], (function (global) {
       };
 
       home_view.prototype.initialize = function() {
+        this.collection = new HackersCollection;
         return this.render();
       };
 
@@ -12762,7 +12773,7 @@ define("rickshaw", (function (global) {
     };
 }(this)));
 
-define('text!views/../../../templates/views/dashboard.tmpl.html',[],function () { return '<script type="text/template" id="user-view">\n\n</script>\n';});
+define('text!views/../../../templates/views/dashboard.tmpl.html',[],function () { return '<script type="text/template" id="dashboard-view">\n\n</script>\n';});
 
 (function() {
   var __hasProp = {}.hasOwnProperty,

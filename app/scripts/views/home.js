@@ -16,15 +16,23 @@
 
       home_view.prototype.events = function() {
         return {
-          "blur input#__username__": "__save__"
+          "blur input#__username__": "__load__"
         };
       };
 
-      home_view.prototype.__save__ = function(e) {
-        console.log(this.$el);
-        this.collection = new HackersCollection;
-        return this.collection.add({
-          username: 'wittysense'
+      home_view.prototype.__load__ = function(e) {
+        var __username__;
+        __username__ = this.$el.find('#__username__').val();
+        this.collection.reset({
+          username: __username__
+        });
+        return this.collection.fetch({
+          success: function(response, data) {
+            return console.log(this);
+          },
+          error: function(model, xhr, options) {
+            return console.log(this);
+          }
         });
       };
 
@@ -38,6 +46,7 @@
       };
 
       home_view.prototype.initialize = function() {
+        this.collection = new HackersCollection;
         return this.render();
       };
 

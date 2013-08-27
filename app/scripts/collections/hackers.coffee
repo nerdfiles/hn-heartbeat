@@ -5,7 +5,9 @@ define [
   'models/hacker'
 ], (_, Backbone, HackerModel) ->
 
-  class hacker_collection extends Backbone.Collection
-    model: ProjectModel
+  class HackersCollection extends Backbone.Collection
 
-  HackerCollection = new hacker_collection
+    model: HackerModel
+
+    url: () ->
+      '/api/hacker/'
