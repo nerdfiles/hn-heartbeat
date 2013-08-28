@@ -16,8 +16,8 @@
         username: "None"
       };
 
-      HackerModel.prototype.url = function() {
-        return '/api/hacker/';
+      HackerModel.prototype.urlRoot = function() {
+        return '/api/hacker';
       };
 
       HackerModel.prototype.initialize = function() {

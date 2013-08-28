@@ -1,5 +1,6 @@
 (function() {
   define(["jquery", "underscore", "backbone", "views/home", "views/dashboard"], function($, _, Backbone, HomeView, DashboardView) {
+    "use strict";
     var AppRouter, init, initialize;
     AppRouter = Backbone.Router.extend({
       routes: {

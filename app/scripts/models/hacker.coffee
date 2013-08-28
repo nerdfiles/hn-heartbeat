@@ -7,8 +7,8 @@ define [
     defaults:
       username: "None"
 
-    url: () ->
-      '/api/hacker/'
+    urlRoot: () ->
+      '/api/hacker'
 
     initialize: () ->
       @bind 'change', @update

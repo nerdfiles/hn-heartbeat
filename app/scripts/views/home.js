@@ -16,11 +16,11 @@
 
       home_view.prototype.events = function() {
         return {
-          "blur input#__username__": "__load__"
+          "blur input#__username__": "__login__"
         };
       };
 
-      home_view.prototype.__load__ = function(e) {
+      home_view.prototype.__login__ = function(e) {
         var __username__;
         __username__ = this.$el.find('#__username__').val();
         this.collection.reset({

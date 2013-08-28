@@ -7,6 +7,8 @@ define [
     "views/dashboard"
   ],
   ($,_,Backbone,HomeView,DashboardView) ->
+    "use strict"
+
     AppRouter = Backbone.Router.extend({
       routes: {
         "/user": "showUser"

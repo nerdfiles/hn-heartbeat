@@ -14,22 +14,22 @@ define [
       el: $ '.app'
 
       events: () ->
-        "blur input#__username__": "__load__"
+        "blur input#__username__": "__login__"
 
-      __load__: (e) ->
+      __login__: (e) ->
 
         __username__ = @$el.find('#__username__').val()
 
-        @collection.reset {
+        @collection.reset({
         	username: __username__
-        }
-
-        @collection.fetch {
-        	success: (response, data) ->
-        		console.log @
-        	error: (model, xhr, options) ->
-        		console.log @
-        }
+        })
+        
+        @collection.fetch({
+          success: (response, data) ->
+            console.log @
+          error: (model, xhr, options) ->
+            console.log @
+        })
         
       render: () ->
         data =

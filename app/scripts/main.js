@@ -6,6 +6,7 @@
       text: '../bower_components/requirejs-text/text',
       underscore: '../bower_components/underscore-amd/underscore',
       backbone: '../bower_components/backbone-amd/backbone',
+      marionette: '../bower_components/backbone.marionette/lib/backbone.marionette',
       html: '../bower_components/HTML/dist/HTML',
       bootstrap: '../bower_components/bootstrap/dist/js/bootstrap.min',
       d3: '../bower_components/d3/d3.min',
@@ -19,6 +20,10 @@
         deps: ['underscore', 'jquery'],
         exports: 'Backbone'
       },
+      marionette: {
+        deps: ['jquery', 'underscore', 'backbone'],
+        exports: 'Marionette'
+      },
       bootstrap: {
         deps: ['jquery'],
         exports: 'jquery'
@@ -28,6 +33,9 @@
       },
       rickshaw: {
         exports: 'Rickshaw'
+      },
+      app: {
+        deps: ['backbone']
       }
     }
   });
