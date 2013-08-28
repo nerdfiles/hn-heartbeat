@@ -12,9 +12,10 @@
     "HTML": "~0.9.4",
     "d3": "~3.2.8",
     "rickshaw": "~1.4.3",
-    "selectivizr": "keithclark/selectivizr#~1.0.2"
-  },
-  "devDependencies": {
-    "backbone.marionette": "~1.1.0"
+    "selectivizr": "keithclark/selectivizr#~1.0.2",
+    "backbone.marionette": "~1.1.0",
+    "backbone.babysitter": "~0.0.6",
+    "backbone.wreqr": "~0.2.0",
+    "backbone.eventbinder": "~1.0.2"
   }
 }

@@ -1,38 +1,36 @@
-<script type="text/template" id="home-view">
-  <div class="m--login">
-    <div class="bosom">
-      <h1>Hacker News Heartbeat</h1>
-      <form 
-        id="login" 
-        class="login" 
-        method="post" 
-        action="">
+<div class="m--login" id="login">
+	<div class="bosom">
+		<h1>Hacker News Heartbeat</h1>
+		<form 
+			id="login" 
+			class="login" 
+			method="post" 
+			action="">
 
-        <fieldset>
-          <legend>Login</legend>
-          <div class="form-row">
-            <input 
-              id="__username__" 
-              name="username" 
-              type="text" 
-              placeholder="Give us yr Hacker News handle!" />
-          </div>
-        </fieldset>
+			<fieldset>
+				<legend>Login</legend>
+				<div class="form-row">
+					<input 
+						id="__username__" 
+						name="username" 
+						type="text" 
+						placeholder="Give us yr Hacker News handle!" />
+				</div>
+			</fieldset>
 
-      </form>
-    </div>
-  </div>
-  <div class="m--overview">
-    <div class="bosom">
-      <ul class="glob submissions">
-        <li>Submissions</li>
-      </ul>
-      <ul class="glob comments">
-        <li>Comments</li>
-      </ul>
-      <ul class="glob heartbeats">
-        <li>Heartbeats</li>
-      </ul>
-    </div>
-  </div>
-</script>
+		</form>
+	</div>
+</div>
+<div class="m--overview" id="content">
+	<div class="bosom">
+		<ul class="glob submissions">
+			<li>Submissions</li>
+		</ul>
+		<ul class="glob comments">
+			<li>Comments</li>
+		</ul>
+		<ul class="glob heartbeats">
+			<li>Heartbeats</li>
+		</ul>
+	</div>
+</div>

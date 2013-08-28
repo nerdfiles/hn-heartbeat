@@ -4,9 +4,12 @@
     paths: {
       jquery: '../bower_components/jquery/jquery',
       text: '../bower_components/requirejs-text/text',
-      underscore: '../bower_components/underscore-amd/underscore',
+      underscore: '../bower_components/backbone.marionette/public/javascripts/underscore',
       backbone: '../bower_components/backbone-amd/backbone',
-      marionette: '../bower_components/backbone.marionette/lib/backbone.marionette',
+      'backbone.wreqr': '../bower_components/backbone.wreqr/lib/amd/backbone.wreqr',
+      'backbone.eventbinder': '../bower_components/backbone.eventbinder/lib/amd/backbone.eventbinder',
+      'backbone.babysitter': '../bower_components/backbone.babysitter/lib/amd/backbone.babysitter',
+      marionette: '../bower_components/backbone.marionette/lib/core/amd/backbone.marionette',
       html: '../bower_components/HTML/dist/HTML',
       bootstrap: '../bower_components/bootstrap/dist/js/bootstrap.min',
       d3: '../bower_components/d3/d3.min',
@@ -21,7 +24,7 @@
         exports: 'Backbone'
       },
       marionette: {
-        deps: ['jquery', 'underscore', 'backbone'],
+        deps: ['backbone'],
         exports: 'Marionette'
       },
       bootstrap: {
@@ -34,18 +37,17 @@
       rickshaw: {
         exports: 'Rickshaw'
       },
-      app: {
-        deps: ['backbone']
+      text: {
+        deps: ['require']
+      },
+      common: {
+        deps: ['marionette']
       }
     }
   });
 
-  require(['app'], function(app) {
-    return $(function() {
-      return Backbone.history.start({
-        pushState: true
-      });
-    });
+  require(['config/_base', 'app', 'apps/hacker/app'], function(_config, HNHeartbeat) {
+    return HNHeartbeat.start();
   });
 
 }).call(this);

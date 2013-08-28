@@ -1,14 +1,16 @@
 require.config
 
-    ## deps: ["main"]
     enforceDefine: true
 
     paths:
       jquery: '../bower_components/jquery/jquery'
       text: '../bower_components/requirejs-text/text'
-      underscore: '../bower_components/underscore-amd/underscore'
+      underscore: '../bower_components/backbone.marionette/public/javascripts/underscore'
       backbone: '../bower_components/backbone-amd/backbone'
-      marionette: '../bower_components/backbone.marionette/lib/backbone.marionette'
+      'backbone.wreqr': '../bower_components/backbone.wreqr/lib/amd/backbone.wreqr'
+      'backbone.eventbinder': '../bower_components/backbone.eventbinder/lib/amd/backbone.eventbinder'
+      'backbone.babysitter': '../bower_components/backbone.babysitter/lib/amd/backbone.babysitter'
+      marionette: '../bower_components/backbone.marionette/lib/core/amd/backbone.marionette'
       html: '../bower_components/HTML/dist/HTML'
       bootstrap: '../bower_components/bootstrap/dist/js/bootstrap.min'
       d3: '../bower_components/d3/d3.min'
@@ -20,17 +22,13 @@ require.config
 
       backbone:
         deps: [
-            'underscore'
-            'jquery'
+          'underscore'
+          'jquery'
         ]
         exports: 'Backbone'
 
       marionette:
-        deps: [
-          'jquery',
-          'underscore',
-          'backbone'
-        ],
+        deps: ['backbone']
         exports: 'Marionette'
 
       bootstrap:
@@ -43,14 +41,16 @@ require.config
       rickshaw:
         exports: 'Rickshaw'
 
-      app:
-        deps: [
-          'backbone'
-        ]
+      text:
+        deps: ['require']
+
+      common:
+        deps: ['marionette']
 
 
 require [
+    'config/_base'
     'app'
-  ], (app) ->
-    $ () ->
-      Backbone.history.start pushState: true
+    'apps/hacker/app'
+  ], (_config, HNHeartbeat) ->
+    HNHeartbeat.start()
