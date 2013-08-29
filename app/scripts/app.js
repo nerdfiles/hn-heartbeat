@@ -1,12 +1,23 @@
 (function() {
-  define(["jquery", "underscore", "backbone", "router"], function($, _, Backbone, Router) {
-    var init, initialize;
-    initialize = function() {
-      return Router.initialize();
-    };
-    return init = {
-      initialize: initialize
-    };
+  define(['backbone', 'marionette', 'msgbus'], function(Backbone, Marionette, msgBus) {
+    var HNHeartbeat,
+      _this = this;
+    HNHeartbeat = new Marionette.Application();
+    return HNHeartbeat.addRegions({
+      accessRegion: '#access-region',
+      headerRegion: '#header-region',
+      mainRegion: '#main-region',
+      lookupRegion: '#lookup-region'
+    }, HNHeartbeat.on('initialize:after', function() {
+      if (!Backbone.history.started) {
+        return Backbone.history.start();
+      }
+    }), HNHeartbeat.addInitializer(function() {
+      return msgBus.commands.execute('hacker:route');
+    }), msgBus.events.on('app:show', function(view) {
+      HNHeartbeat.mainRegion.show(view);
+      return HNHeartbeat.loginRegion.show(view);
+    }), HNHeartbeat);
   });
 
 }).call(this);
