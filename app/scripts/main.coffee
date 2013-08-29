@@ -1,6 +1,6 @@
 require.config
 
-    enforceDefine: true
+    # enforceDefine: true
 
     paths:
       jquery: '../bower_components/jquery/jquery'
@@ -18,6 +18,7 @@ require.config
 
     shim:
       underscore:
+        deps: ['text']
         exports: '_'
 
       backbone:
@@ -41,16 +42,14 @@ require.config
       rickshaw:
         exports: 'Rickshaw'
 
-      text:
-        deps: ['require']
-
       common:
         deps: ['marionette']
 
 
 require [
-    'config/_base'
-    'app'
-    'apps/hacker/app'
-  ], (_config, HNHeartbeat) ->
-    HNHeartbeat.start()
+	'config/_base'
+	'app'
+	'apps/hacker/app'
+], (_config, HNHeartbeat) ->
+	'use strict'
+	HNHeartbeat.start()

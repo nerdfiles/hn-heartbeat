@@ -1,7 +1,7 @@
 (function() {
-  define(['require', 'text!apps/hacker/detail/templates/hackerdetail.html.tmpl'], function(require, Templates) {
+  define(function(require) {
     return {
-      hackerdetail: require(Templates)
+      hackerdetail: require('text!apps/hacker/detail/tmpls/hackerdetail.html.tmpl')
     };
   });
 

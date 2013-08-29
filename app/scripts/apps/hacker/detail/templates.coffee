@@ -1,5 +1,3 @@
-define [
-  'require'
-  'text!apps/hacker/detail/templates/hackerdetail.html.tmpl'
-], (require, Templates) ->
-  hackerdetail: require(Templates)
+# modular template loading
+define (require) ->
+  hackerdetail: require('text!apps/hacker/detail/tmpls/hackerdetail.html.tmpl')

@@ -4,6 +4,7 @@
 
 }).call(this);
 
+define('text',{load: function(id){throw new Error("Dynamic load not allowed: " + id);}});
 //     Underscore.js 1.5.1
 //     http://underscorejs.org
 //     (c) 2009-2013 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -1251,7 +1252,7 @@
 
 }).call(this);
 
-define("underscore", (function (global) {
+define("underscore", ["text"], (function (global) {
     return function () {
         var ret, fn;
         return ret || global._;
@@ -14859,36 +14860,31 @@ _.extend(Marionette.Module, {
     var HNHeartbeat,
       _this = this;
     HNHeartbeat = new Marionette.Application();
-    HNHeartbeat.addRegions({
+    return HNHeartbeat.addRegions({
       accessRegion: '#access-region',
       headerRegion: '#header-region',
       mainRegion: '#main-region',
       lookupRegion: '#lookup-region'
-    });
-    HNHeartbeat.on('initialize:after', function() {
+    }, HNHeartbeat.on('initialize:after', function() {
       if (!Backbone.history.started) {
         return Backbone.history.start();
       }
-    });
-    HNHeartbeat.addInitializer(function() {
+    }), HNHeartbeat.addInitializer(function() {
       return msgBus.commands.execute('hacker:route');
-    });
-    msgBus.events.on('app:show', function(view) {
+    }), msgBus.events.on('app:show', function(view) {
       HNHeartbeat.mainRegion.show(view);
       return HNHeartbeat.loginRegion.show(view);
-    });
-    return HNHeartbeat;
+    }), HNHeartbeat);
   });
 
 }).call(this);
 
-define('text',{load: function(id){throw new Error("Dynamic load not allowed: " + id);}});
-define('text!apps/hacker/detail/templates/hackerdetail.html.tmpl',[],function () { return '<div>hacker1</div>\n';});
+define('text!apps/hacker/detail/tmpls/hackerdetail.html.tmpl',[],function () { return '<div>hacker1</div>\n';});
 
 (function() {
-  define('apps/hacker/detail/templates',['require', 'text!apps/hacker/detail/templates/hackerdetail.html.tmpl'], function(require, Templates) {
+  define('apps/hacker/detail/templates',['require','text!apps/hacker/detail/tmpls/hackerdetail.html.tmpl'],function(require) {
     return {
-      hackerdetail: require(Templates)
+      hackerdetail: require('text!apps/hacker/detail/tmpls/hackerdetail.html.tmpl')
     };
   });
 
@@ -15029,28 +15025,40 @@ define('text!apps/hacker/detail/templates/hackerdetail.html.tmpl',[],function ()
 
 (function() {
   define('apps/hacker/detail/controller',['msgbus', 'apps/hacker/detail/views'], function(msgBus, Views) {
+    'use strict';
     return {
-      showHackerDetail: function(user) {
-        var view;
-        console.log('controller :: showHackerDetail');
-        view = this.getDetailView(user);
-        return msgBus.events.trigger('app:show:hacker', view);
-      },
-      getDetailView: function(user) {
-        return new Views.HackerView({
-          model: user
+      showHacker: function(user) {
+        var _this = this;
+        this.layout = this.getLayout();
+        this.layout.on('show', function() {
+          _this.showLookupBar();
+          return _this.showHackerDetail();
         });
-      },
-      showLookupBar: function() {
-        var lookupView;
-        lookupView = this.getLookupView();
-        return this.layout.lookup.attachView(lookupView);
-      },
-      getLookupView: function() {
-        return new Views.Lookup;
-      },
-      getLayout: function() {
-        return new Views.Layout;
+        msgBus.events.trigger('app:show', this.layout);
+        return {
+          showHackerDetail: function(user) {
+            var view;
+            console.log('controller :: showHackerDetail');
+            view = this.getDetailView(user);
+            return msgBus.events.trigger('app:show:hacker', view);
+          },
+          getDetailView: function(user) {
+            return new Views.HackerView({
+              model: user
+            });
+          },
+          showLookupBar: function() {
+            var lookupView;
+            lookupView = this.getLookupView();
+            return this.layout.lookup.attachView(lookupView);
+          },
+          getLookupView: function() {
+            return new Views.Lookup;
+          },
+          getLayout: function() {
+            return new Views.Layout;
+          }
+        };
       }
     };
   });
@@ -15178,8 +15186,8 @@ define('text!apps/hacker/detail/templates/hackerdetail.html.tmpl',[],function ()
     msgBus.events.on('lookup:user', function(user) {
       return Backbone.history.navigate('lookup/' + user);
     });
-    defaultUser = 'pg';
-    user = msgBus.reqres.request('hacker:entites');
+    defaultUser = '';
+    user = msgBus.reqres.request('hacker:entities');
     Router = (function(_super) {
       __extends(Router, _super);
 
@@ -15203,6 +15211,7 @@ define('text!apps/hacker/detail/templates/hackerdetail.html.tmpl',[],function ()
     });
     return API = {
       lookup: function(user) {
+        Controller.getHacker;
         return msgBus.events.trigger('lookup:user', user);
       },
       defaultLookup: function() {
@@ -15218,7 +15227,6 @@ define('text!apps/hacker/detail/templates/hackerdetail.html.tmpl',[],function ()
 
 (function() {
   require.config({
-    enforceDefine: true,
     paths: {
       jquery: '../bower_components/jquery/jquery',
       text: '../bower_components/requirejs-text/text',
@@ -15235,6 +15243,7 @@ define('text!apps/hacker/detail/templates/hackerdetail.html.tmpl',[],function ()
     },
     shim: {
       underscore: {
+        deps: ['text'],
         exports: '_'
       },
       backbone: {
@@ -15255,9 +15264,6 @@ define('text!apps/hacker/detail/templates/hackerdetail.html.tmpl',[],function ()
       rickshaw: {
         exports: 'Rickshaw'
       },
-      text: {
-        deps: ['require']
-      },
       common: {
         deps: ['marionette']
       }
@@ -15265,6 +15271,7 @@ define('text!apps/hacker/detail/templates/hackerdetail.html.tmpl',[],function ()
   });
 
   require(['config/_base', 'app', 'apps/hacker/app'], function(_config, HNHeartbeat) {
+    'use strict';
     return HNHeartbeat.start();
   });
 

@@ -1,6 +1,5 @@
 (function() {
   require.config({
-    enforceDefine: true,
     paths: {
       jquery: '../bower_components/jquery/jquery',
       text: '../bower_components/requirejs-text/text',
@@ -17,6 +16,7 @@
     },
     shim: {
       underscore: {
+        deps: ['text'],
         exports: '_'
       },
       backbone: {
@@ -37,9 +37,6 @@
       rickshaw: {
         exports: 'Rickshaw'
       },
-      text: {
-        deps: ['require']
-      },
       common: {
         deps: ['marionette']
       }
@@ -47,6 +44,7 @@
   });
 
   require(['config/_base', 'app', 'apps/hacker/app'], function(_config, HNHeartbeat) {
+    'use strict';
     return HNHeartbeat.start();
   });
 

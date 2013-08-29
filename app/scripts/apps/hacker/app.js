@@ -7,8 +7,8 @@
     msgBus.events.on('lookup:user', function(user) {
       return Backbone.history.navigate('lookup/' + user);
     });
-    defaultUser = 'pg';
-    user = msgBus.reqres.request('hacker:entites');
+    defaultUser = '';
+    user = msgBus.reqres.request('hacker:entities');
     Router = (function(_super) {
       __extends(Router, _super);
 
@@ -32,6 +32,7 @@
     });
     return API = {
       lookup: function(user) {
+        Controller.getHacker;
         return msgBus.events.trigger('lookup:user', user);
       },
       defaultLookup: function() {
