@@ -14863,8 +14863,10 @@ _.extend(Marionette.Module, {
     return HNHeartbeat.addRegions({
       accessRegion: '#access-region',
       headerRegion: '#header-region',
-      mainRegion: '#main-region',
-      lookupRegion: '#lookup-region'
+      lookupRegion: '#lookup-region',
+      loginRegion: '#login-region',
+      graphRegion: '#graph-region',
+      overviewRegion: '#overview-region'
     }, HNHeartbeat.on('initialize:after', function() {
       if (!Backbone.history.started) {
         return Backbone.history.start();
@@ -14872,14 +14874,13 @@ _.extend(Marionette.Module, {
     }), HNHeartbeat.addInitializer(function() {
       return msgBus.commands.execute('hacker:route');
     }), msgBus.events.on('app:show', function(view) {
-      HNHeartbeat.mainRegion.show(view);
-      return HNHeartbeat.loginRegion.show(view);
+      return msgBus.graphRegion.show(view);
     }), HNHeartbeat);
   });
 
 }).call(this);
 
-define('text!apps/hacker/detail/tmpls/hackerdetail.html.tmpl',[],function () { return '<div>hacker1</div>\n';});
+define('text!apps/hacker/detail/tmpls/hackerdetail.html.tmpl',[],function () { return '<div class=\'m--heartbeat\'>\n\t<div class=\'bosom\'>\n\t</div>\n</div><!-- /.m--heartbeat -->\n';});
 
 (function() {
   define('apps/hacker/detail/templates',['require','text!apps/hacker/detail/tmpls/hackerdetail.html.tmpl'],function(require) {
