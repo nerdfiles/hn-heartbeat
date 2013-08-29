@@ -1,5 +1,6 @@
 (function() {
   define(['backbone', 'marionette', 'msgbus'], function(Backbone, Marionette, msgBus) {
+    'use strict';
     var HNHeartbeat,
       _this = this;
     HNHeartbeat = new Marionette.Application();

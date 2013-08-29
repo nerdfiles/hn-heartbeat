@@ -12,9 +12,7 @@ define [
       # "hover": () -> msgBus.events.trigger 'detail:hacker:clicked'
 
   Layout: class Layout extends AppViews.Layout
-
     template: _.template(Templates.layout)
-
     regions:
       lookup: '#lookupBar'
 

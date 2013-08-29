@@ -2,6 +2,16 @@
 
 A 'heartbeat' web application for Hacker News members' karma.
 
+##Overview
+
+This is a Backbone.js/Marionette application with Python/Django backend and REST-ful 
+API which depends on Django REST Framework. Grunt.js and Twitter's Bower are used for 
+automation via JavaScript and frontend library/package management.
+
+The app follows a custom RequireJS + Marionette architecture for modular view style, 
+behaviors, and JavaScript resources. Effectively, "apps" (modules) reveal modular 
+views for re-use and lazily loaded resources.
+
 ##MVP Spec
 
 1. On the landing page, user enters their HN ID
