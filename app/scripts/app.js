@@ -18,6 +18,7 @@
     }), HNHeartbeat.addInitializer(function() {
       return msgBus.commands.execute('hacker:route');
     }), msgBus.events.on('app:show', function(view) {
+      HNHeartbeat.loginRegion.show(view);
       return msgBus.graphRegion.show(view);
     }), HNHeartbeat);
   });

@@ -28,8 +28,10 @@ define [
 
 	# render views
   msgBus.events.on 'app:show', (view) =>
-  	# HNHeartbeat.loginRegion.show view
-  	# HNHeartbeat.overviewRegionshow view
+  	# msgBus.loginRegion.show view
+  	# msgBus.overviewRegionshow view
+  	msgBus.loginRegion.show view
+  	msgBus.lookupRegion.show view
   	msgBus.graphRegion.show view
 
   HNHeartbeat
