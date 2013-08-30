@@ -64,7 +64,7 @@ class HackerDetail(generics.RetrieveUpdateAPIView):
     def dispatch(self, request, *args, **kwargs):
         # if request.user.is_authenticated():
             # kwargs[self.slug_field] = request.user.username
-        kwargs[self.slug_field] = request.GET.get('username')
+        kwargs[self.slug_field] = self.kwargs['username']
         return super(HackerDetail, self).dispatch(request, *args, **kwargs)
 
     def pre_save(self, obj):
