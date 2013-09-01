@@ -14887,7 +14887,7 @@ _.extend(Marionette.Module, {
 
 }).call(this);
 
-define('text!apps/hacker/detail/templates/hackerdetail.html.tmpl',[],function () { return '<div class=\'m--heartbeat\'>\n\t<div class=\'bosom\'>\n\t</div>\n</div><!-- /.m--heartbeat -->\n';});
+define('text!apps/hacker/detail/templates/hackerdetail.html.tmpl',[],function () { return '<!-- Filename: apps/hacker/detail/templates/hackerdetail.html.tmpl -->\n\n<div class=\'m--heartbeat\'>\n  <div class=\'bosom\'>\n  </div>\n</div><!-- /.m--heartbeat -->\n';});
 
 (function() {
   define('apps/hacker/detail/templates',['require','text!apps/hacker/detail/templates/hackerdetail.html.tmpl'],function(require) {
