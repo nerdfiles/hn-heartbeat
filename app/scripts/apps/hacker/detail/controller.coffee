@@ -2,14 +2,14 @@ define [
   'msgbus'
   'apps/hacker/detail/views'
 ], (msgBus, Views) ->
-	'use strict'
+  'use strict'
 
-	showHacker: (user) ->
-		@layout = @getLayout()
-		@layout.on 'show', =>
-			@showLookupBar()
-			@showHackerDetail()
-		msgBus.events.trigger 'app:show', @layout
+  showHacker: (user) ->
+    @layout = @getLayout()
+    @layout.on 'show', =>
+      @showLookupBar()
+      @showHackerDetail()
+    msgBus.events.trigger 'app:show', @layout
 
   showHackerDetail: (user) ->
     console.log 'controller :: showHackerDetail'

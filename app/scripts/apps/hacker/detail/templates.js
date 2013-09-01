@@ -1,7 +1,7 @@
 (function() {
   define(function(require) {
     return {
-      hackerdetail: require('text!apps/hacker/detail/tmpls/hackerdetail.html.tmpl')
+      hackerdetail: require('text!apps/hacker/detail/templates/hackerdetail.html.tmpl')
     };
   });
 
