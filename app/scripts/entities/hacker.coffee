@@ -1,4 +1,5 @@
 # Filename: entities/hacker.coffee
+
 define [
   'backbone'
   'msgbus'
@@ -49,7 +50,7 @@ define [
           if res.results
 
             lookupResults = []
-            
+
             # hacker
             hacker = new Hacker
               username: username

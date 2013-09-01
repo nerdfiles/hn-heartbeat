@@ -1,3 +1,5 @@
+# Filename: main.coffee
+
 require.config
 
     # enforceDefine: true
@@ -47,9 +49,10 @@ require.config
 
 
 require [
-	'config/_base'
-	'app'
-	'apps/hacker/app'
+  'config/_base'
+  'app'
+  'apps/hacker/app'
 ], (_config, HNHeartbeat) ->
-	'use strict'
-	HNHeartbeat.start()
+  'use strict'
+
+  HNHeartbeat.start()
