@@ -1,3 +1,5 @@
+# Filename: apps/hacker/app.coffee
+
 define [
   'marionette'
   'apps/hacker/detail/controller'
@@ -29,8 +31,8 @@ define [
 
   API =
     lookup: (user) ->
-    	Controller.getHacker
-    	msgBus.events.trigger 'lookup:user', user
+      Controller.getHacker
+      msgBus.events.trigger 'lookup:user', user
 
     defaultLookup: () ->
       API.lookup hacker.previousLookup or defaultUser

@@ -1,3 +1,5 @@
+# Filename: apps/hacker/detail/controller.coffee
+
 define [
   'msgbus'
   'apps/hacker/detail/views'

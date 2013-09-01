@@ -1,1 +1,1 @@
-# Filename: overview/views.coffee
+# Filename: apps/overview/views.coffee

@@ -10,6 +10,8 @@ define [
   HNHeartbeat = new Marionette.Application()
 
   # Define application regions
+  #
+  # @note Regions need to be coherently mapped to 'apps'.
   HNHeartbeat.addRegions
     accessRegion: '#access-region'
     headerRegion: '#header-region'

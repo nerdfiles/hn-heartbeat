@@ -1,3 +1,5 @@
+# Filename: apps/hacker/detail/views.coffee
+
 define [
   'underscore'
   'backbone'
