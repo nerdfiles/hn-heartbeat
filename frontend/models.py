@@ -91,6 +91,7 @@ class Item(models.Model):
     type = models.CharField(max_length=10, null=True)
     posted_date = models.DateTimeField(null=True)
     added_at = models.DateTimeField(auto_now_add=True)
+    points = models.IntegerField(null=True)
 
     def __unicode__(self):
         return unicode(self.id)
