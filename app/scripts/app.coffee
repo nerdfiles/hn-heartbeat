@@ -25,16 +25,10 @@ define [
 
   # prompt with login and generic stats on application
   HNHeartbeat.addInitializer () ->
-    # msgBus.commands.execute 'login:route'
-    # msgBus.commands.execute 'overview:route'
     msgBus.commands.execute 'hacker:route'
 
   # render views
   msgBus.events.on 'app:show', (view) =>
-    # msgBus.loginRegion.show view
-    # msgBus.overviewRegionshow view
-    msgBus.loginRegion.show view
-    msgBus.lookupRegion.show view
-    msgBus.graphRegion.show view
+    HNHeartbeat.graphRegion.show view
 
   HNHeartbeat

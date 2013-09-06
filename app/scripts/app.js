@@ -21,9 +21,7 @@
       return msgBus.commands.execute('hacker:route');
     });
     msgBus.events.on('app:show', function(view) {
-      msgBus.loginRegion.show(view);
-      msgBus.lookupRegion.show(view);
-      return msgBus.graphRegion.show(view);
+      return HNHeartbeat.graphRegion.show(view);
     });
     return HNHeartbeat;
   });
