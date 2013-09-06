@@ -8,6 +8,11 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Adding field 'Item.points'
+        db.add_column(u'frontend_item', 'points',
+                      self.gf('django.db.models.fields.IntegerField')(null=True),
+                      keep_default=False)
+
         # Adding field 'Hacker.email'
         db.add_column(u'frontend_hacker', 'email',
                       self.gf('django.db.models.fields.EmailField')(max_length=75, null=True, blank=True),
@@ -15,6 +20,9 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
+        # Deleting field 'Item.points'
+        db.delete_column(u'frontend_item', 'points')
+
         # Deleting field 'Hacker.email'
         db.delete_column(u'frontend_hacker', 'email')
 
@@ -65,6 +73,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Item'},
             'added_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'points': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
             'posted_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True'}),
             'type': ('django.db.models.fields.CharField', [], {'max_length': '10', 'null': 'True'})

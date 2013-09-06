@@ -1,4 +1,5 @@
 # Filename: entities/hacker.coffee
+
 define [
   'backbone'
   'msgbus'
@@ -18,7 +19,7 @@ define [
 
       @previousLookup = null
 
-      @create_ts = encodedURIComponent '[2013-05-01T00:00:00Z + TO + *]'
+      @create_ts = encodeURIComponent '[2013-05-01T00:00:00Z + TO + *]'
 
       @contextResults = 40 # Initialize view of item (submission|comment) results
 
@@ -49,7 +50,7 @@ define [
           if res.results
 
             lookupResults = []
-            
+
             # hacker
             hacker = new Hacker
               username: username

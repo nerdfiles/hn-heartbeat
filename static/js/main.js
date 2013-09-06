@@ -4,10 +4,9 @@
 
 }).call(this);
 
-define('text',{load: function(id){throw new Error("Dynamic load not allowed: " + id);}});
-//     Underscore.js 1.5.1
+//     Underscore.js 1.4.4
 //     http://underscorejs.org
-//     (c) 2009-2013 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+//     (c) 2009-2013 Jeremy Ashkenas, DocumentCloud Inc.
 //     Underscore may be freely distributed under the MIT license.
 
 (function() {
@@ -28,12 +27,11 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
   var ArrayProto = Array.prototype, ObjProto = Object.prototype, FuncProto = Function.prototype;
 
   // Create quick reference variables for speed access to core prototypes.
-  var
-    push             = ArrayProto.push,
-    slice            = ArrayProto.slice,
-    concat           = ArrayProto.concat,
-    toString         = ObjProto.toString,
-    hasOwnProperty   = ObjProto.hasOwnProperty;
+  var push             = ArrayProto.push,
+      slice            = ArrayProto.slice,
+      concat           = ArrayProto.concat,
+      toString         = ObjProto.toString,
+      hasOwnProperty   = ObjProto.hasOwnProperty;
 
   // All **ECMAScript 5** native function implementations that we hope to use
   // are declared here.
@@ -72,7 +70,7 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
   }
 
   // Current version.
-  _.VERSION = '1.5.1';
+  _.VERSION = '1.4.4';
 
   // Collection Functions
   // --------------------
@@ -104,7 +102,7 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
     if (obj == null) return results;
     if (nativeMap && obj.map === nativeMap) return obj.map(iterator, context);
     each(obj, function(value, index, list) {
-      results.push(iterator.call(context, value, index, list));
+      results[results.length] = iterator.call(context, value, index, list);
     });
     return results;
   };
@@ -179,7 +177,7 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
     if (obj == null) return results;
     if (nativeFilter && obj.filter === nativeFilter) return obj.filter(iterator, context);
     each(obj, function(value, index, list) {
-      if (iterator.call(context, value, index, list)) results.push(value);
+      if (iterator.call(context, value, index, list)) results[results.length] = value;
     });
     return results;
   };
@@ -246,7 +244,7 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
   // Convenience version of a common use case of `filter`: selecting only objects
   // containing specific `key:value` pairs.
   _.where = function(obj, attrs, first) {
-    if (_.isEmpty(attrs)) return first ? void 0 : [];
+    if (_.isEmpty(attrs)) return first ? null : [];
     return _[first ? 'find' : 'filter'](obj, function(value) {
       for (var key in attrs) {
         if (attrs[key] !== value[key]) return false;
@@ -263,7 +261,7 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
 
   // Return the maximum element or (element-based computation).
   // Can't optimize arrays of integers longer than 65,535 elements.
-  // See [WebKit Bug 80797](https://bugs.webkit.org/show_bug.cgi?id=80797)
+  // See: https://bugs.webkit.org/show_bug.cgi?id=80797
   _.max = function(obj, iterator, context) {
     if (!iterator && _.isArray(obj) && obj[0] === +obj[0] && obj.length < 65535) {
       return Math.max.apply(Math, obj);
@@ -272,7 +270,7 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
     var result = {computed : -Infinity, value: -Infinity};
     each(obj, function(value, index, list) {
       var computed = iterator ? iterator.call(context, value, index, list) : value;
-      computed > result.computed && (result = {value : value, computed : computed});
+      computed >= result.computed && (result = {value : value, computed : computed});
     });
     return result.value;
   };
@@ -332,7 +330,7 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
   // An internal function used for aggregate "group by" operations.
   var group = function(obj, value, context, behavior) {
     var result = {};
-    var iterator = lookupIterator(value == null ? _.identity : value);
+    var iterator = lookupIterator(value || _.identity);
     each(obj, function(value, index) {
       var key = iterator.call(context, value, index, obj);
       behavior(result, key, value);
@@ -371,7 +369,7 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
     return low;
   };
 
-  // Safely create a real, live array from anything iterable.
+  // Safely convert anything iterable into a real, live array.
   _.toArray = function(obj) {
     if (!obj) return [];
     if (_.isArray(obj)) return slice.call(obj);
@@ -430,11 +428,8 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
 
   // Internal implementation of a recursive `flatten` function.
   var flatten = function(input, shallow, output) {
-    if (shallow && _.every(input, _.isArray)) {
-      return concat.apply(output, input);
-    }
     each(input, function(value) {
-      if (_.isArray(value) || _.isArguments(value)) {
+      if (_.isArray(value)) {
         shallow ? push.apply(output, value) : flatten(value, shallow, output);
       } else {
         output.push(value);
@@ -477,7 +472,7 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
   // Produce an array that contains the union: each distinct element from all of
   // the passed-in arrays.
   _.union = function() {
-    return _.uniq(_.flatten(arguments, true));
+    return _.uniq(concat.apply(ArrayProto, arguments));
   };
 
   // Produce an array that contains every item shared between all the
@@ -501,10 +496,11 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
   // Zip together multiple lists into a single array -- elements that share
   // an index go together.
   _.zip = function() {
-    var length = _.max(_.pluck(arguments, "length").concat(0));
+    var args = slice.call(arguments);
+    var length = _.max(_.pluck(args, 'length'));
     var results = new Array(length);
     for (var i = 0; i < length; i++) {
-      results[i] = _.pluck(arguments, '' + i);
+      results[i] = _.pluck(args, "" + i);
     }
     return results;
   };
@@ -584,25 +580,14 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
   // Function (ahem) Functions
   // ------------------
 
-  // Reusable constructor function for prototype setting.
-  var ctor = function(){};
-
   // Create a function bound to a given object (assigning `this`, and arguments,
   // optionally). Delegates to **ECMAScript 5**'s native `Function.bind` if
   // available.
   _.bind = function(func, context) {
-    var args, bound;
-    if (nativeBind && func.bind === nativeBind) return nativeBind.apply(func, slice.call(arguments, 1));
-    if (!_.isFunction(func)) throw new TypeError;
-    args = slice.call(arguments, 2);
-    return bound = function() {
-      if (!(this instanceof bound)) return func.apply(context, args.concat(slice.call(arguments)));
-      ctor.prototype = func.prototype;
-      var self = new ctor;
-      ctor.prototype = null;
-      var result = func.apply(self, args.concat(slice.call(arguments)));
-      if (Object(result) === result) return result;
-      return self;
+    if (func.bind === nativeBind && nativeBind) return nativeBind.apply(func, slice.call(arguments, 1));
+    var args = slice.call(arguments, 2);
+    return function() {
+      return func.apply(context, args.concat(slice.call(arguments)));
     };
   };
 
@@ -619,7 +604,7 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
   // all callbacks defined on an object belong to it.
   _.bindAll = function(obj) {
     var funcs = slice.call(arguments, 1);
-    if (funcs.length === 0) throw new Error("bindAll must be passed function names");
+    if (funcs.length === 0) funcs = _.functions(obj);
     each(funcs, function(f) { obj[f] = _.bind(obj[f], obj); });
     return obj;
   };
@@ -648,23 +633,17 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
   };
 
   // Returns a function, that, when invoked, will only be triggered at most once
-  // during a given window of time. Normally, the throttled function will run
-  // as much as it can, without ever going more than once per `wait` duration;
-  // but if you'd like to disable the execution on the leading edge, pass
-  // `{leading: false}`. To disable execution on the trailing edge, ditto.
-  _.throttle = function(func, wait, options) {
-    var context, args, result;
-    var timeout = null;
+  // during a given window of time.
+  _.throttle = function(func, wait) {
+    var context, args, timeout, result;
     var previous = 0;
-    options || (options = {});
     var later = function() {
-      previous = options.leading === false ? 0 : new Date;
+      previous = new Date;
       timeout = null;
       result = func.apply(context, args);
     };
     return function() {
       var now = new Date;
-      if (!previous && options.leading === false) previous = now;
       var remaining = wait - (now - previous);
       context = this;
       args = arguments;
@@ -673,7 +652,7 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
         timeout = null;
         previous = now;
         result = func.apply(context, args);
-      } else if (!timeout && options.trailing !== false) {
+      } else if (!timeout) {
         timeout = setTimeout(later, remaining);
       }
       return result;
@@ -685,8 +664,7 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
   // N milliseconds. If `immediate` is passed, trigger the function on the
   // leading edge, instead of the trailing.
   _.debounce = function(func, wait, immediate) {
-    var result;
-    var timeout = null;
+    var timeout, result;
     return function() {
       var context = this, args = arguments;
       var later = function() {
@@ -740,6 +718,7 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
 
   // Returns a function that will only be executed after being called N times.
   _.after = function(times, func) {
+    if (times <= 0) return func();
     return function() {
       if (--times < 1) {
         return func.apply(this, arguments);
@@ -755,7 +734,7 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
   _.keys = nativeKeys || function(obj) {
     if (obj !== Object(obj)) throw new TypeError('Invalid object');
     var keys = [];
-    for (var key in obj) if (_.has(obj, key)) keys.push(key);
+    for (var key in obj) if (_.has(obj, key)) keys[keys.length] = key;
     return keys;
   };
 
@@ -827,7 +806,7 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
     each(slice.call(arguments, 1), function(source) {
       if (source) {
         for (var prop in source) {
-          if (obj[prop] === void 0) obj[prop] = source[prop];
+          if (obj[prop] == null) obj[prop] = source[prop];
         }
       }
     });
@@ -851,7 +830,7 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
   // Internal recursive comparison function for `isEqual`.
   var eq = function(a, b, aStack, bStack) {
     // Identical objects are equal. `0 === -0`, but they aren't identical.
-    // See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
+    // See the Harmony `egal` proposal: http://wiki.ecmascript.org/doku.php?id=harmony:egal.
     if (a === b) return a !== 0 || 1 / a == 1 / b;
     // A strict comparison is necessary because `null == undefined`.
     if (a == null || b == null) return a === b;
@@ -893,13 +872,6 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
       // unique nested structures.
       if (aStack[length] == a) return bStack[length] == b;
     }
-    // Objects with different constructors are not equivalent, but `Object`s
-    // from different frames are.
-    var aCtor = a.constructor, bCtor = b.constructor;
-    if (aCtor !== bCtor && !(_.isFunction(aCtor) && (aCtor instanceof aCtor) &&
-                             _.isFunction(bCtor) && (bCtor instanceof bCtor))) {
-      return false;
-    }
     // Add the first object to the stack of traversed objects.
     aStack.push(a);
     bStack.push(b);
@@ -916,6 +888,13 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
         }
       }
     } else {
+      // Objects with different constructors are not equivalent, but `Object`s
+      // from different frames are.
+      var aCtor = a.constructor, bCtor = b.constructor;
+      if (aCtor !== bCtor && !(_.isFunction(aCtor) && (aCtor instanceof aCtor) &&
+                               _.isFunction(bCtor) && (bCtor instanceof bCtor))) {
+        return false;
+      }
       // Deep compare objects.
       for (var key in a) {
         if (_.has(a, key)) {
@@ -1039,7 +1018,7 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
 
   // Run a function **n** times.
   _.times = function(n, iterator, context) {
-    var accum = Array(Math.max(0, n));
+    var accum = Array(n);
     for (var i = 0; i < n; i++) accum[i] = iterator.call(context, i);
     return accum;
   };
@@ -1082,10 +1061,10 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
     };
   });
 
-  // If the value of the named `property` is a function then invoke it with the
-  // `object` as context; otherwise, return it.
+  // If the value of the named property is a function then invoke it;
+  // otherwise, return it.
   _.result = function(object, property) {
-    if (object == null) return void 0;
+    if (object == null) return null;
     var value = object[property];
     return _.isFunction(value) ? value.call(object) : value;
   };
@@ -1250,14 +1229,15 @@ define('text',{load: function(id){throw new Error("Dynamic load not allowed: " +
 
   });
 
-}).call(this);
+  // AMD define happens at the end for compatibility with AMD loaders
+  // that don't enforce next-turn semantics on modules.
+  if (typeof define === 'function' && define.amd) {
+    define('underscore', [],function() {
+      return _;
+    });
+  }
 
-define("underscore", ["text"], (function (global) {
-    return function () {
-        var ret, fn;
-        return ret || global._;
-    };
-}(this)));
+}).call(this);
 
 /*!
  * jQuery JavaScript Library v1.9.1
@@ -14857,34 +14837,41 @@ _.extend(Marionette.Module, {
 
 (function() {
   define('app',['backbone', 'marionette', 'msgbus'], function(Backbone, Marionette, msgBus) {
+    'use strict';
     var HNHeartbeat,
       _this = this;
     HNHeartbeat = new Marionette.Application();
-    return HNHeartbeat.addRegions({
+    HNHeartbeat.addRegions({
       accessRegion: '#access-region',
       headerRegion: '#header-region',
-      mainRegion: '#main-region',
-      lookupRegion: '#lookup-region'
-    }, HNHeartbeat.on('initialize:after', function() {
+      lookupRegion: '#lookup-region',
+      loginRegion: '#login-region',
+      graphRegion: '#graph-region',
+      overviewRegion: '#overview-region'
+    });
+    HNHeartbeat.on('initialize:after', function() {
       if (!Backbone.history.started) {
         return Backbone.history.start();
       }
-    }), HNHeartbeat.addInitializer(function() {
+    });
+    HNHeartbeat.addInitializer(function() {
       return msgBus.commands.execute('hacker:route');
-    }), msgBus.events.on('app:show', function(view) {
-      HNHeartbeat.mainRegion.show(view);
-      return HNHeartbeat.loginRegion.show(view);
-    }), HNHeartbeat);
+    });
+    msgBus.events.on('app:show', function(view) {
+      return HNHeartbeat.graphRegion.show(view);
+    });
+    return HNHeartbeat;
   });
 
 }).call(this);
 
-define('text!apps/hacker/detail/tmpls/hackerdetail.html.tmpl',[],function () { return '<div>hacker1</div>\n';});
+define('text',{load: function(id){throw new Error("Dynamic load not allowed: " + id);}});
+define('text!apps/hacker/show/templates/hackerdetail.html.tmpl',[],function () { return '<!-- Filename: apps/hacker/detail/templates/hackerdetail.html.tmpl -->\n\n<div class=\'m--heartbeat\'>\n  <div class=\'bosom\'>\n    <h1>graph it!</h1>\n  </div>\n</div><!-- /.m--heartbeat -->\n';});
 
 (function() {
-  define('apps/hacker/detail/templates',['require','text!apps/hacker/detail/tmpls/hackerdetail.html.tmpl'],function(require) {
+  define('apps/hacker/show/templates',['require','text!apps/hacker/show/templates/hackerdetail.html.tmpl'],function(require) {
     return {
-      hackerdetail: require('text!apps/hacker/detail/tmpls/hackerdetail.html.tmpl')
+      hackerView: require("text!apps/hacker/show/templates/hackerdetail.html.tmpl")
     };
   });
 
@@ -14894,7 +14881,7 @@ define('text!apps/hacker/detail/tmpls/hackerdetail.html.tmpl',[],function () { r
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define('views/_base',["marionette"], function(Marionette) {
+  define('views/_base',['marionette'], function(Marionette) {
     var AppCollectionView, AppCompositeView, AppItemView, AppLayout, _ref, _ref1, _ref2, _ref3;
     return {
       ItemView: AppItemView = (function(_super) {
@@ -14950,72 +14937,22 @@ define('text!apps/hacker/detail/tmpls/hackerdetail.html.tmpl',[],function () { r
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define('apps/hacker/detail/views',['underscore', 'backbone', 'apps/hacker/detail/templates', 'views/_base', 'msgbus'], function(_, Backbone, Templates, AppViews, msgBus) {
-    var HackerView, Layout, LookupView, _ref, _ref1, _ref2;
+  define('apps/hacker/show/views',['apps/hacker/show/templates', 'views/_base', 'msgbus'], function(Templates, AppViews, msgBus) {
+    var View, _ref;
     return {
-      HackerView: HackerView = (function(_super) {
-        __extends(HackerView, _super);
+      Hacker: View = (function(_super) {
+        __extends(View, _super);
 
-        function HackerView() {
-          _ref = HackerView.__super__.constructor.apply(this, arguments);
+        function View() {
+          _ref = View.__super__.constructor.apply(this, arguments);
           return _ref;
         }
 
-        HackerView.prototype.template = _.template(Templates.hackerdetail);
+        View.prototype.template = _.template(Templates.hackerView);
 
-        return HackerView;
+        View.prototype.className = "close";
 
-      })(AppViews.ItemView),
-      Layout: Layout = (function(_super) {
-        __extends(Layout, _super);
-
-        function Layout() {
-          _ref1 = Layout.__super__.constructor.apply(this, arguments);
-          return _ref1;
-        }
-
-        Layout.prototype.template = _.template(Templates.layout);
-
-        Layout.prototype.regions = {
-          lookup: '#lookupBar'
-        };
-
-        return Layout;
-
-      })(AppViews.Layout),
-      Lookup: LookupView = (function(_super) {
-        __extends(LookupView, _super);
-
-        function LookupView() {
-          _ref2 = LookupView.__super__.constructor.apply(this, arguments);
-          return _ref2;
-        }
-
-        LookupView.prototype.el = '#lookupBar';
-
-        LookupView.prototype.events = {
-          'change #lookupHacker': 'lookup'
-        };
-
-        LookupView.prototype.initialize = function() {
-          var _this = this;
-          return msgBus.events.on('lookup:user', function(user) {
-            return _this.$('#lookupHacker').val(user);
-          });
-        };
-
-        LookupView.prototype.lookup = function() {
-          var lookupUser;
-          lookupUser = this.$('#lookupUser').val().trim();
-          console.log("lookup: " + lookupUser);
-          if (lookupUser.length > 0) {
-            return msgBus.events.trigger('lookup:user', lookupUser);
-          } else {
-            return msgBus.events.trigger('lookup:noLookupUser');
-          }
-        };
-
-        return LookupView;
+        return View;
 
       })(AppViews.ItemView)
     };
@@ -15024,41 +14961,12 @@ define('text!apps/hacker/detail/tmpls/hackerdetail.html.tmpl',[],function () { r
 }).call(this);
 
 (function() {
-  define('apps/hacker/detail/controller',['msgbus', 'apps/hacker/detail/views'], function(msgBus, Views) {
-    'use strict';
+  define('apps/hacker/show/controller',["apps/hacker/show/views", "msgbus"], function(Views, msgBus) {
     return {
-      showHacker: function(user) {
-        var _this = this;
-        this.layout = this.getLayout();
-        this.layout.on('show', function() {
-          _this.showLookupBar();
-          return _this.showHackerDetail();
-        });
-        msgBus.events.trigger('app:show', this.layout);
-        return {
-          showHackerDetail: function(user) {
-            var view;
-            console.log('controller :: showHackerDetail');
-            view = this.getDetailView(user);
-            return msgBus.events.trigger('app:show:hacker', view);
-          },
-          getDetailView: function(user) {
-            return new Views.HackerView({
-              model: user
-            });
-          },
-          showLookupBar: function() {
-            var lookupView;
-            lookupView = this.getLookupView();
-            return this.layout.lookup.attachView(lookupView);
-          },
-          getLookupView: function() {
-            return new Views.Lookup;
-          },
-          getLayout: function() {
-            return new Views.Layout;
-          }
-        };
+      hackerApp: function() {
+        var view;
+        view = new Views.Hacker;
+        return msgBus.events.trigger("app:show", view);
       }
     };
   });
@@ -15069,125 +14977,8 @@ define('text!apps/hacker/detail/tmpls/hackerdetail.html.tmpl',[],function () { r
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define('entities/hacker',['backbone', 'msgbus'], function(Backbone, msgBus) {
-    var API, Hacker, HackerCollection, _ref, _ref1;
-    Hacker = (function(_super) {
-      __extends(Hacker, _super);
-
-      function Hacker() {
-        _ref = Hacker.__super__.constructor.apply(this, arguments);
-        return _ref;
-      }
-
-      return Hacker;
-
-    })(Backbone.Model);
-    HackerCollection = (function(_super) {
-      __extends(HackerCollection, _super);
-
-      function HackerCollection() {
-        _ref1 = HackerCollection.__super__.constructor.apply(this, arguments);
-        return _ref1;
-      }
-
-      HackerCollection.prototype.model = Hacker;
-
-      HackerCollection.prototype.initialize = function() {
-        msgBus.events.on('lookup:user', function(user) {
-          return this.lookup(user);
-        });
-        this.loading = false;
-        this.previousLookup = null;
-        this.create_ts = encodedURIComponent('[2013-05-01T00:00:00Z + TO + *]');
-        return this.contextResults = 40;
-      };
-
-      HackerCollection.prototype.lookup = function(lookupUser) {
-        var _this = this;
-        this.previousLookup = lookupUser;
-        return this.fetchHacker(lookupUser, function(user) {
-          if (user.length < 1) {
-            return msgBus.events.trigger('lookup:noUserFound');
-          } else {
-            return _this.reset(user);
-          }
-        });
-      };
-
-      HackerCollection.prototype.fetchHacker = function(lookupUser, callback) {
-        var q,
-          _this = this;
-        if (this.loading) {
-          return true;
-        }
-        this.loading = true;
-        msgBus.events.trigger('lookup:start');
-        q = lookupUser + '&filter[fields][create_ts]=' + this.create_ts;
-        return $.ajax({
-          url: 'http://api.thriftdb.com/api.hnsearch.com/items/_search',
-          dataType: 'jsonp',
-          data: "username=" + query,
-          success: function(res) {
-            var hacker, lookupResults;
-            msgBus.events.trigger('lookup:stop');
-            if (res.results.length === 0) {
-              callback([]);
-              return [];
-            }
-            if (res.results) {
-              lookupResults = [];
-              hacker = new Hacker({
-                username: username
-              });
-              _.each(res.results, function(item) {
-                return lookupResults[lookupResults.length] = new Item({
-                  title: title,
-                  karma: karma,
-                  date: date
-                });
-              });
-              callback(lookupResults);
-              _this.loading = false;
-              return lookupResults;
-            } else {
-              msgBus.events.trigger('lookup:error');
-              return _this.loading = false;
-            }
-          },
-          error: function() {
-            msgBus.events.trigger('lookup:error');
-            return _this.loading = false;
-          }
-        });
-      };
-
-      return HackerCollection;
-
-    })(Backbone.Collection);
-    msgBus.reqres.setHandler('hacker:entities', function() {
-      return API.getHackerEntities();
-    });
-    return API = {
-      getHackerEntities: function() {
-        var hackers;
-        return hackers = new HackerCollection;
-      }
-    };
-  });
-
-}).call(this);
-
-(function() {
-  var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  define('apps/hacker/app',['marionette', 'apps/hacker/detail/controller', 'msgbus', 'entities/hacker'], function(Marionette, Controller, msgBus) {
-    var API, Router, defaultUser, user, _ref;
-    msgBus.events.on('lookup:user', function(user) {
-      return Backbone.history.navigate('lookup/' + user);
-    });
-    defaultUser = '';
-    user = msgBus.reqres.request('hacker:entities');
+  define('apps/hacker/app',['backbone', 'apps/hacker/show/controller', 'msgbus'], function(Backbone, Controller, msgBus) {
+    var API, Router, _ref;
     Router = (function(_super) {
       __extends(Router, _super);
 
@@ -15197,28 +14988,20 @@ define('text!apps/hacker/detail/tmpls/hackerdetail.html.tmpl',[],function () { r
       }
 
       Router.prototype.appRoutes = {
-        '': 'defaultLookup',
-        'lookup/:user': 'lookup'
+        "hackerapp": "start"
       };
 
       return Router;
 
-    })(Marionette.AppRouter);
-    msgBus.commands.setHandler('hacker:route', function() {
+    })(Backbone.Marionette.AppRouter);
+    msgBus.commands.setHandler("hacker:route", function() {
       return new Router({
         controller: API
       });
     });
     return API = {
-      lookup: function(user) {
-        Controller.getHacker;
-        return msgBus.events.trigger('lookup:user', user);
-      },
-      defaultLookup: function() {
-        return API.lookup(hacker.previousLookup || defaultUser);
-      },
-      showHackerDetail: function(user) {
-        return Controller.showHackerDetail(user);
+      start: function() {
+        return Controller.hackerApp();
       }
     };
   });
@@ -15227,46 +15010,20 @@ define('text!apps/hacker/detail/tmpls/hackerdetail.html.tmpl',[],function () { r
 
 (function() {
   require.config({
+    enforceDefine: true,
     paths: {
       jquery: '../bower_components/jquery/jquery',
-      text: '../bower_components/requirejs-text/text',
-      underscore: '../bower_components/backbone.marionette/public/javascripts/underscore',
+      underscore: '../bower_components/underscore-amd/underscore',
       backbone: '../bower_components/backbone-amd/backbone',
       'backbone.wreqr': '../bower_components/backbone.wreqr/lib/amd/backbone.wreqr',
       'backbone.eventbinder': '../bower_components/backbone.eventbinder/lib/amd/backbone.eventbinder',
       'backbone.babysitter': '../bower_components/backbone.babysitter/lib/amd/backbone.babysitter',
       marionette: '../bower_components/backbone.marionette/lib/core/amd/backbone.marionette',
+      text: '../bower_components/requirejs-text/text',
       html: '../bower_components/HTML/dist/HTML',
       bootstrap: '../bower_components/bootstrap/dist/js/bootstrap.min',
       d3: '../bower_components/d3/d3.min',
       rickshaw: '../bower_components/rickshaw/rickshaw.min'
-    },
-    shim: {
-      underscore: {
-        deps: ['text'],
-        exports: '_'
-      },
-      backbone: {
-        deps: ['underscore', 'jquery'],
-        exports: 'Backbone'
-      },
-      marionette: {
-        deps: ['backbone'],
-        exports: 'Marionette'
-      },
-      bootstrap: {
-        deps: ['jquery'],
-        exports: 'jquery'
-      },
-      d3: {
-        exports: 'd3'
-      },
-      rickshaw: {
-        exports: 'Rickshaw'
-      },
-      common: {
-        deps: ['marionette']
-      }
     }
   });
 

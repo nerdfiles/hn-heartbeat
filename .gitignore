@@ -5,6 +5,7 @@ test/temp
 test/bower_components/
 venv
 *.pyc
+*.swp
 local.py
 
 tags
