@@ -1,1 +1,1 @@
-# Filename: apps/login/app.coffee
+# Filename: apps/login/apps.coffee

@@ -31,7 +31,7 @@
         });
         this.loading = false;
         this.previousLookup = null;
-        this.create_ts = encodedURIComponent('[2013-05-01T00:00:00Z + TO + *]');
+        this.create_ts = encodeURIComponent('[2013-05-01T00:00:00Z + TO + *]');
         return this.contextResults = 40;
       };
 

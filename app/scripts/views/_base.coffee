@@ -1,6 +1,6 @@
-# override marionette views for any of our application specific needs
-
-define ["marionette"], (Marionette) ->
+# Filename: views/_base.coffee
+# Override marionette views for any of our application specific needs.
+define ['marionette'], (Marionette) ->
   ItemView: class AppItemView extends Marionette.ItemView
   CollectionView: class AppCollectionView extends Marionette.CollectionView
   CompositeView: class AppCompositeView extends Marionette.CompositeView

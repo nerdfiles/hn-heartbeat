@@ -1,5 +1,4 @@
 # Filename: app.coffee
-
 define [
   'backbone'
   'marionette'
