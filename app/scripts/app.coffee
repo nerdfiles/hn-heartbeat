@@ -4,12 +4,11 @@ define [
   'marionette'
   'msgbus'
 ], (Backbone, Marionette, msgBus) ->
-  'use strict'
+  "use strict"
 
   HNHeartbeat = new Marionette.Application()
 
   # Define application regions
-  #
   # @note Regions need to be coherently mapped to 'apps'.
   HNHeartbeat.addRegions
     accessRegion: '#access-region'
@@ -19,16 +18,20 @@ define [
     graphRegion: '#graph-region' # Hackers will be presented in graphs, which will call Overviews
     overviewRegion: '#overview-region' # Overviews will contail Items
 
-  # init history
-  HNHeartbeat.on 'initialize:after', () ->
+  # Initialize Backbone history
+  HNHeartbeat.on "initialize:after", () ->
     Backbone.history.start() unless Backbone.history.started
 
-  # prompt with login and generic stats on application
+  # Set up routes
   HNHeartbeat.addInitializer () ->
-    msgBus.commands.execute 'hacker:route'
+    msgBus.commands.execute "hacker:route"
+    msgBus.commands.execute "login:route"
 
-  # render views
-  msgBus.events.on 'app:show', (view) =>
+  # Show regions
+  msgBus.events.on "app:show:login", (view) =>
+    HNHeartbeat.loginRegion.show view
+
+  msgBus.events.on "app:show", (view) =>
     HNHeartbeat.graphRegion.show view
 
   HNHeartbeat

@@ -1,9 +1,10 @@
 # Filename: apps/hacker/controller.coffee
 define [
-  "apps/hacker/show/views"
+  "apps/hacker/views"
   "msgbus"
 ], (Views, msgBus) ->
+  "use strict"
 
-  hackerApp: () ->
+  "app.hacker": () ->
     view = new Views.Hacker
     msgBus.events.trigger "app:show", view

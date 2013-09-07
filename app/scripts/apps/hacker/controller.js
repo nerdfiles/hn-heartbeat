@@ -1,7 +1,8 @@
 (function() {
-  define(["apps/hacker/show/views", "msgbus"], function(Views, msgBus) {
+  define(["apps/hacker/views", "msgbus"], function(Views, msgBus) {
+    "use strict";
     return {
-      hackerApp: function() {
+      "app.hacker": function() {
         var view;
         view = new Views.Hacker;
         return msgBus.events.trigger("app:show", view);

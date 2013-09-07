@@ -14837,7 +14837,7 @@ _.extend(Marionette.Module, {
 
 (function() {
   define('app',['backbone', 'marionette', 'msgbus'], function(Backbone, Marionette, msgBus) {
-    'use strict';
+    "use strict";
     var HNHeartbeat,
       _this = this;
     HNHeartbeat = new Marionette.Application();
@@ -14849,15 +14849,19 @@ _.extend(Marionette.Module, {
       graphRegion: '#graph-region',
       overviewRegion: '#overview-region'
     });
-    HNHeartbeat.on('initialize:after', function() {
+    HNHeartbeat.on("initialize:after", function() {
       if (!Backbone.history.started) {
         return Backbone.history.start();
       }
     });
     HNHeartbeat.addInitializer(function() {
-      return msgBus.commands.execute('hacker:route');
+      msgBus.commands.execute("hacker:route");
+      return msgBus.commands.execute("login:route");
     });
-    msgBus.events.on('app:show', function(view) {
+    msgBus.events.on("app:show:login", function(view) {
+      return HNHeartbeat.loginRegion.show(view);
+    });
+    msgBus.events.on("app:show", function(view) {
       return HNHeartbeat.graphRegion.show(view);
     });
     return HNHeartbeat;
@@ -14866,12 +14870,12 @@ _.extend(Marionette.Module, {
 }).call(this);
 
 define('text',{load: function(id){throw new Error("Dynamic load not allowed: " + id);}});
-define('text!apps/hacker/show/templates/hackerdetail.html.tmpl',[],function () { return '<!-- Filename: apps/hacker/detail/templates/hackerdetail.html.tmpl -->\n\n<div class=\'m--heartbeat\'>\n  <div class=\'bosom\'>\n    <h1>graph it!</h1>\n  </div>\n</div><!-- /.m--heartbeat -->\n';});
+define('text!apps/hacker/templates/hackerdetail.html.tmpl',[],function () { return '<!-- Filename: apps/hacker/detail/templates/hackerdetail.html.tmpl -->\n\n<div class=\'m--heartbeat\'>\n  <div class=\'bosom\'>\n  </div>\n</div><!-- /.m--heartbeat -->\n';});
 
 (function() {
-  define('apps/hacker/show/templates',['require','text!apps/hacker/show/templates/hackerdetail.html.tmpl'],function(require) {
+  define('apps/hacker/templates',['require','text!apps/hacker/templates/hackerdetail.html.tmpl'],function(require) {
     return {
-      hackerView: require("text!apps/hacker/show/templates/hackerdetail.html.tmpl")
+      "hacker.view": require("text!apps/hacker/templates/hackerdetail.html.tmpl")
     };
   });
 
@@ -14937,7 +14941,8 @@ define('text!apps/hacker/show/templates/hackerdetail.html.tmpl',[],function () {
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define('apps/hacker/show/views',['apps/hacker/show/templates', 'views/_base', 'msgbus'], function(Templates, AppViews, msgBus) {
+  define('apps/hacker/views',['apps/hacker/templates', 'views/_base', 'msgbus'], function(Templates, AppViews, msgBus) {
+    "use strict";
     var View, _ref;
     return {
       Hacker: View = (function(_super) {
@@ -14948,9 +14953,9 @@ define('text!apps/hacker/show/templates/hackerdetail.html.tmpl',[],function () {
           return _ref;
         }
 
-        View.prototype.template = _.template(Templates.hackerView);
+        View.prototype.template = _.template(Templates["hacker.view"]);
 
-        View.prototype.className = "close";
+        View.prototype.className = "m--hacker";
 
         return View;
 
@@ -14961,9 +14966,10 @@ define('text!apps/hacker/show/templates/hackerdetail.html.tmpl',[],function () {
 }).call(this);
 
 (function() {
-  define('apps/hacker/show/controller',["apps/hacker/show/views", "msgbus"], function(Views, msgBus) {
+  define('apps/hacker/controller',["apps/hacker/views", "msgbus"], function(Views, msgBus) {
+    "use strict";
     return {
-      hackerApp: function() {
+      "app.hacker": function() {
         var view;
         view = new Views.Hacker;
         return msgBus.events.trigger("app:show", view);
@@ -14977,7 +14983,8 @@ define('text!apps/hacker/show/templates/hackerdetail.html.tmpl',[],function () {
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define('apps/hacker/app',['backbone', 'apps/hacker/show/controller', 'msgbus'], function(Backbone, Controller, msgBus) {
+  define('apps/hacker/app',["backbone", "apps/hacker/controller", "msgbus"], function(Backbone, Controller, msgBus) {
+    "use strict";
     var API, Router, _ref;
     Router = (function(_super) {
       __extends(Router, _super);
@@ -14988,7 +14995,7 @@ define('text!apps/hacker/show/templates/hackerdetail.html.tmpl',[],function () {
       }
 
       Router.prototype.appRoutes = {
-        "hackerapp": "start"
+        "app.hacker": "start"
       };
 
       return Router;
@@ -15001,7 +15008,7 @@ define('text!apps/hacker/show/templates/hackerdetail.html.tmpl',[],function () {
     });
     return API = {
       start: function() {
-        return Controller.hackerApp();
+        return Controller["app.hacker"]();
       }
     };
   });

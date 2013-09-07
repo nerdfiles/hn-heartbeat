@@ -1,6 +1,6 @@
 (function() {
   define(['backbone', 'marionette', 'msgbus'], function(Backbone, Marionette, msgBus) {
-    'use strict';
+    "use strict";
     var HNHeartbeat,
       _this = this;
     HNHeartbeat = new Marionette.Application();
@@ -12,15 +12,19 @@
       graphRegion: '#graph-region',
       overviewRegion: '#overview-region'
     });
-    HNHeartbeat.on('initialize:after', function() {
+    HNHeartbeat.on("initialize:after", function() {
       if (!Backbone.history.started) {
         return Backbone.history.start();
       }
     });
     HNHeartbeat.addInitializer(function() {
-      return msgBus.commands.execute('hacker:route');
+      msgBus.commands.execute("hacker:route");
+      return msgBus.commands.execute("login:route");
     });
-    msgBus.events.on('app:show', function(view) {
+    msgBus.events.on("app:show:login", function(view) {
+      return HNHeartbeat.loginRegion.show(view);
+    });
+    msgBus.events.on("app:show", function(view) {
       return HNHeartbeat.graphRegion.show(view);
     });
     return HNHeartbeat;
