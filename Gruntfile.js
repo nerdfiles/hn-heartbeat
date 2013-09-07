@@ -62,21 +62,21 @@ module.exports = function (grunt) {
          *     }
          * },
          */
-				/*
-				 * compass: {
-				 * 	dist: {
-				 * 		options: {
-				 * 			sassDir: '<%= yeoman.app %>/styles/compass/sass',
-				 * 			cssDir: '<%= yeoman.app %>/styles/compass/stylesheets',
-				 * 			imagesDir: '<%= yeoman.app %>/styles/compass/images',
-				 * 			javascriptsDir: '<%= yeoman.app %>/styles/scripts',
-				 * 			fontsDir: '<%= yeoman.app %>/styles/font',
-				 * 			// importPath: '<%= yeoman.app %>/components',
-				 * 			relativeAssets: true
-				 * 		}
-				 * 	}
-				 * },
-				 */
+        /*
+          * compass: {
+          * 	dist: {
+          * 		options: {
+          * 			sassDir: '<%= yeoman.app %>/styles/compass/sass',
+          * 			cssDir: '<%= yeoman.app %>/styles/compass/stylesheets',
+          * 			imagesDir: '<%= yeoman.app %>/styles/compass/images',
+          * 			javascriptsDir: '<%= yeoman.app %>/styles/scripts',
+          * 			fontsDir: '<%= yeoman.app %>/styles/font',
+          * 			// importPath: '<%= yeoman.app %>/components',
+          * 			relativeAssets: true
+          * 		}
+          * 	}
+          * },
+          */
         coffee: {
             dist: {
                 files: [{
@@ -216,3 +216,4 @@ module.exports = function (grunt) {
         'copy:dist'
     ]);
 };
+
