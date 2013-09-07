@@ -10,5 +10,5 @@
   },
   "_source": "git://github.com/marionettejs/backbone.eventbinder.git",
   "_target": "~1.0.2",
-  "_direct": true
+  "_originalSource": "backbone.eventbinder"
 }

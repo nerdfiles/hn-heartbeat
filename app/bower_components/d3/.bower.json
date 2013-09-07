@@ -31,5 +31,5 @@
   },
   "_source": "git://github.com/mbostock/d3.git",
   "_target": "~3.2.8",
-  "_direct": true
+  "_originalSource": "d3"
 }

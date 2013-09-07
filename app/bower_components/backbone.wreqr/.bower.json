@@ -10,5 +10,5 @@
   },
   "_source": "git://github.com/marionettejs/backbone.wreqr.git",
   "_target": "~0.2.0",
-  "_direct": true
+  "_originalSource": "backbone.wreqr"
 }
