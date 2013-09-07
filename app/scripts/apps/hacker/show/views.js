@@ -15,7 +15,7 @@
 
         View.prototype.template = _.template(Templates.hackerView);
 
-        View.prototype.className = "close";
+        View.prototype.className = "hackerView";
 
         return View;
 
