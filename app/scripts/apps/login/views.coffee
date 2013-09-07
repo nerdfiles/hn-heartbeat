@@ -7,5 +7,5 @@ define [
   "use strict"
 
   Login: class View extends AppViews.ItemView
-    template: _.template Templates.loginView
+    template: _.template Templates["login.view"]
     className: "m--login"

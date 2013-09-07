@@ -14,7 +14,7 @@
           return _ref;
         }
 
-        View.prototype.template = _.template(Templates.loginView);
+        View.prototype.template = _.template(Templates["login.view"]);
 
         View.prototype.className = "m--login";
 

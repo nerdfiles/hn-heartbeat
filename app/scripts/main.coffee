@@ -17,10 +17,11 @@ require.config
 
 
 require [
-  'config/_base'
-  'app'
-  'apps/hacker/app'
+  "config/_base"
+  "app"
+  "apps/hacker/app"
+  "apps/login/app"
 ], (_config, HNHeartbeat) ->
-  'use strict'
+  "use strict"
 
   HNHeartbeat.start()

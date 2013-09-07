@@ -14836,32 +14836,35 @@ _.extend(Marionette.Module, {
 }).call(this);
 
 (function() {
-  define('app',['backbone', 'marionette', 'msgbus'], function(Backbone, Marionette, msgBus) {
+  define('app',["backbone", "marionette", "msgbus"], function(Backbone, Marionette, msgBus) {
     "use strict";
     var HNHeartbeat,
       _this = this;
     HNHeartbeat = new Marionette.Application();
     HNHeartbeat.addRegions({
-      accessRegion: '#access-region',
-      headerRegion: '#header-region',
-      lookupRegion: '#lookup-region',
-      loginRegion: '#login-region',
-      graphRegion: '#graph-region',
-      overviewRegion: '#overview-region'
+      accessRegion: ".r--access",
+      lookupRegion: ".r--lookup",
+      loginRegion: ".r--login",
+      graphRegion: ".r--graph",
+      overviewRegion: ".r--overview"
     });
     HNHeartbeat.on("initialize:after", function() {
+      console.log("history started");
       if (!Backbone.history.started) {
         return Backbone.history.start();
       }
     });
     HNHeartbeat.addInitializer(function() {
+      console.log("init routes");
       msgBus.commands.execute("hacker:route");
       return msgBus.commands.execute("login:route");
     });
     msgBus.events.on("app:show:login", function(view) {
+      console.log("show:login");
       return HNHeartbeat.loginRegion.show(view);
     });
     msgBus.events.on("app:show", function(view) {
+      console.log("show");
       return HNHeartbeat.graphRegion.show(view);
     });
     return HNHeartbeat;
@@ -14870,7 +14873,7 @@ _.extend(Marionette.Module, {
 }).call(this);
 
 define('text',{load: function(id){throw new Error("Dynamic load not allowed: " + id);}});
-define('text!apps/hacker/templates/hackerdetail.html.tmpl',[],function () { return '<!-- Filename: apps/hacker/detail/templates/hackerdetail.html.tmpl -->\n\n<div class=\'m--heartbeat\'>\n  <div class=\'bosom\'>\n  </div>\n</div><!-- /.m--heartbeat -->\n';});
+define('text!apps/hacker/templates/hackerdetail.html.tmpl',[],function () { return '<!-- Filename: apps/hacker/detail/templates/hackerdetail.html.tmpl -->\n<div class=\'m--heartbeat\'>\n  <div class=\'bosom\'>\n    <h1>hacker</h1>\n  </div>\n</div><!-- /.m--heartbeat -->\n';});
 
 (function() {
   define('apps/hacker/templates',['require','text!apps/hacker/templates/hackerdetail.html.tmpl'],function(require) {
@@ -15015,6 +15018,106 @@ define('text!apps/hacker/templates/hackerdetail.html.tmpl',[],function () { retu
 
 }).call(this);
 
+define('text!apps/login/templates/base.html.tmpl',[],function () { return '<div class="m--login" id="login">\n  <div class="bosom">\n    <h1>Hacker News Heartbeat</h1>\n    <form \n      id="login" \n      class="login" \n      method="post">\n\n      <fieldset>\n        <legend>Login</legend>\n        <div class="form-row">\n          <input \n            id="__username__" \n            name="username" \n            type="text" \n            placeholder="Give us yr Hacker News handle!" />\n        </div>\n      </fieldset>\n\n    </form>\n  </div>\n</div>\n\n';});
+
+(function() {
+  define('apps/login/templates',['require','text!apps/login/templates/base.html.tmpl'],function(require) {
+    return {
+      "login.view": require("text!apps/login/templates/base.html.tmpl")
+    };
+  });
+
+}).call(this);
+
+(function() {
+  define('msgBus',["backbone.wreqr"], function(Wreqr) {
+    return {
+      reqres: new Wreqr.RequestResponse(),
+      commands: new Wreqr.Commands(),
+      events: new Wreqr.EventAggregator()
+    };
+  });
+
+}).call(this);
+
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  define('apps/login/views',["apps/login/templates", "views/_base", "msgBus"], function(Templates, AppViews, msgBus) {
+    "use strict";
+    var View, _ref;
+    return {
+      Login: View = (function(_super) {
+        __extends(View, _super);
+
+        function View() {
+          _ref = View.__super__.constructor.apply(this, arguments);
+          return _ref;
+        }
+
+        View.prototype.template = _.template(Templates["login.view"]);
+
+        View.prototype.className = "m--login";
+
+        return View;
+
+      })(AppViews.ItemView)
+    };
+  });
+
+}).call(this);
+
+(function() {
+  define('apps/login/controller',["apps/login/views", "msgBus"], function(Views, msgBus) {
+    "use strict";
+    return {
+      "app.login": function() {
+        var view;
+        view = new Views.Login;
+        return msgBus.events.trigger("app:show:login", view);
+      }
+    };
+  });
+
+}).call(this);
+
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  define('apps/login/app',["backbone", "apps/login/controller", "msgBus"], function(Backbone, Controller, msgBus) {
+    "use strict";
+    var API, Router, _ref;
+    Router = (function(_super) {
+      __extends(Router, _super);
+
+      function Router() {
+        _ref = Router.__super__.constructor.apply(this, arguments);
+        return _ref;
+      }
+
+      Router.prototype.appRoutes = {
+        "app.login": "start"
+      };
+
+      return Router;
+
+    })(Backbone.Marionette.AppRouter);
+    msgBus.commands.setHandler("login:route", function() {
+      return new Router({
+        controller: API
+      });
+    });
+    return API = {
+      start: function() {
+        return Controller["app.login"]();
+      }
+    };
+  });
+
+}).call(this);
+
 (function() {
   require.config({
     enforceDefine: true,
@@ -15034,8 +15137,8 @@ define('text!apps/hacker/templates/hackerdetail.html.tmpl',[],function () { retu
     }
   });
 
-  require(['config/_base', 'app', 'apps/hacker/app'], function(_config, HNHeartbeat) {
-    'use strict';
+  require(["config/_base", "app", "apps/hacker/app", "apps/login/app"], function(_config, HNHeartbeat) {
+    "use strict";
     return HNHeartbeat.start();
   });
 
