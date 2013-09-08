@@ -8,7 +8,9 @@ define [
   "use strict"
 
   "app.hacker": () ->
+
     view = new Views.Hacker
+
     msgBus.events.trigger "app:show", view
 
     # Something Russell pretend'd ?
