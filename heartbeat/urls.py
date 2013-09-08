@@ -10,6 +10,8 @@ admin.autodiscover()
 urlpatterns = patterns('',
                        url(r'^$', 'frontend.views.HomeView', name='home'),
                        url(r'^dashboard/', include(admin.site.urls)),
+                       url(r'^dashboard.links/$',
+                           'frontend.views.all_urls_view', name='dashboard-links'),
                        )
 
 urlpatterns += patterns('frontend.views',

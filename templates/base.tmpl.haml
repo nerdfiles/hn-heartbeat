@@ -111,8 +111,22 @@
     %div{:class => "r--graph"}
 
     %section{:class => "s--footer"}
-      %p
-        %a{:href => "#home", :title => "socialbeat.io"} socialbeat.io
+      %ul
+        %li
+          %a{:href => "#home", :title => "socialbeat.io"} socialbeat.io
+
+        {% if user.is_authenticated %}
+          %li
+            %a{:href => "{% url 'admin:index' %}", :title => "Django backend"} Dashboard
+          %li
+            %a{:href => "{% url 'logout' %}", :title => "Log out"} Log out
+        {% else %}
+          %form{:action => "{% url 'admin:index' %}", :method => "POST"}
+            {% csrf_token %}
+            %input{:id => "username-field", :name => "username", :type => "text"}
+            %input{:id =>"password-field", :name => "password", :type => "password"}
+            %button{:type => "submit"} Login
+        {% endif %}
 
     /[if lt IE 7]
       <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>

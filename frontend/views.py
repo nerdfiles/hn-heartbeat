@@ -112,6 +112,29 @@ class HackerAdd(generics.CreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+def all_urls_view(request):
+    from heartbeat.urls import urlpatterns  # this import should be inside the function to avoid an import loop
+    nice_urls = get_urls(
+        urlpatterns)  # build the list of urls recursively and then sort it alphabetically
+    return render_response(request, "links.tmpl.html", {"links": nice_urls})
+
+
+def get_urls(raw_urls, nice_urls=[], urlbase=''):
+    '''Recursively builds a list of all the urls in the current project and the name of their associated view'''
+    from operator import itemgetter
+    for entry in raw_urls:
+        fullurl = (urlbase + entry.regex.pattern).replace('^', '')
+        if entry.callback:  # if it points to a view
+            viewname = entry.callback.func_name
+            nice_urls.append({"pattern": fullurl,
+                              "location": viewname})
+        else:  # if it points to another urlconf, recur!
+            get_urls(entry.url_patterns, nice_urls, fullurl)
+    nice_urls = sorted(nice_urls, key=itemgetter(
+        'pattern'))  # sort alphabetically
+    return nice_urls
+
+
 def HomeView(request):
     '''
         Landing page view.
