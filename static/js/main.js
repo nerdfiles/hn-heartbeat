@@ -18281,7 +18281,7 @@ define("rickshaw", ["d3"], (function (global) {
 }(this)));
 
 define('text',{load: function(id){throw new Error("Dynamic load not allowed: " + id);}});
-define('text!apps/hacker/templates/hackerdetail.html.tmpl',[],function () { return '<!-- Filename: apps/hacker/detail/templates/hackerdetail.html.tmpl -->\n<div class=\'m--heartbeat\'>\n  <div class=\'bosom\'>\n    <h1>hacker</h1>\n    <p>bob</p>\n  </div>\n</div><!-- /.m--heartbeat -->\n';});
+define('text!apps/hacker/templates/hackerdetail.html.tmpl',[],function () { return '<!-- Filename: apps/hacker/detail/templates/hackerdetail.html.tmpl -->\n<div class=\'m--heartbeat\'>\n  <div class=\'bosom\'>\n    <div id="graph">\n    </div>\n  </div>\n</div><!-- /.m--heartbeat -->\n';});
 
 (function() {
   define('apps/hacker/templates',['require','text!apps/hacker/templates/hackerdetail.html.tmpl'],function(require) {
@@ -18366,7 +18366,13 @@ define('text!apps/hacker/templates/hackerdetail.html.tmpl',[],function () { retu
 
         View.prototype.template = _.template(Templates["hacker.view"]);
 
+        View.prototype.ui = {
+          graph: "#graph"
+        };
+
         View.prototype.onBeforeRender = function() {};
+
+        View.prototype.onRender = function() {};
 
         View.prototype.className = "m--hacker";
 
@@ -18379,13 +18385,40 @@ define('text!apps/hacker/templates/hackerdetail.html.tmpl',[],function () { retu
 }).call(this);
 
 (function() {
-  define('apps/hacker/controller',["apps/hacker/views", "msgbus"], function(Views, msgBus) {
+  define('apps/hacker/controller',["d3", "rickshaw", "apps/hacker/views", "msgbus"], function(D3, rickshaw, Views, msgBus) {
     "use strict";
     return {
       "app.hacker": function() {
-        var view;
+        var data, view;
         view = new Views.Hacker;
-        return msgBus.events.trigger("app:show", view);
+        msgBus.events.trigger("app:show", view);
+        data = [
+          {
+            x: 0,
+            y: 40
+          }, {
+            x: 1,
+            y: 49
+          }, {
+            x: 2,
+            y: 17
+          }, {
+            x: 3,
+            y: 42
+          }
+        ];
+        this.graph = new Rickshaw.Graph({
+          element: document.querySelector("#graph"),
+          width: 580,
+          height: 250,
+          series: [
+            {
+              color: "steelblue",
+              data: data
+            }
+          ]
+        });
+        return this.graph.render();
       }
     };
   });

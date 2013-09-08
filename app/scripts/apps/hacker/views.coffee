@@ -12,9 +12,14 @@ define [
 
     template: _.template Templates["hacker.view"]
 
+    ui:
+      graph: "#graph"
+
     onBeforeRender: () ->
       # console.log "onBeforeRender"
       # console.log d3
       # console.log Rickshaw
+
+    onRender: () ->
 
     className: "m--hacker"

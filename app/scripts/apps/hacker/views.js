@@ -16,7 +16,13 @@
 
         View.prototype.template = _.template(Templates["hacker.view"]);
 
+        View.prototype.ui = {
+          graph: "#graph"
+        };
+
         View.prototype.onBeforeRender = function() {};
+
+        View.prototype.onRender = function() {};
 
         View.prototype.className = "m--hacker";
 
