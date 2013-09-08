@@ -1,11 +1,11 @@
 # Filename: apps/hacker/views.coffee
 define [
-  "d3"
-  "rickshaw"
+  # "d3"
+  # "rickshaw"
   "apps/hacker/templates"
   "views/_base"
   "msgbus"
-], (D3, rickshaw, Templates, AppViews, msgBus) ->
+], (Templates, AppViews, msgBus) ->
   "use strict"
 
   Hacker: class View extends AppViews.ItemView
@@ -21,7 +21,8 @@ define [
       # console.log Rickshaw
 
     onRender: () ->
-      # This happens after DOM rendering.
+      # This happens before DOM rendering (before elements are available 
+      # for selection.
       #
       # sd:07 09 2013.20.35.05
 

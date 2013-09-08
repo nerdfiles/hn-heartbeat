@@ -12,6 +12,22 @@ define [
     msgBus.events.trigger "app:show", view
 
     # Something Russell pretend'd ?
+    #
+    #   i'm waiting to take a shower
+    #   the washing machine is on
+    #   it's only 10 30 a.m.
+    #   what have i done so far
+    #   i ate breakfast
+    #   should i buy a pair of black jeans
+    #   they're too hot for summer
+    #   but summer's almost over
+    #   ­ field mice, matthew savoca
+    #
+    # So we're isolating the graph rendering to the controller, and 
+    # manipulating it there. Could we pass it into the view? What's cleanest ?
+    # @review
+    #   https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.view.md
+    #
     # sd:07 09 2013.20.55.42
 
     [elem+1 for elem in [1,2,3]].pop() # returns [2,3,4]
