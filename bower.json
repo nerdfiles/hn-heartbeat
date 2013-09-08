@@ -17,5 +17,8 @@
     "backbone.babysitter": "~0.0.6",
     "backbone.wreqr": "~0.2.0",
     "backbone.eventbinder": "~1.0.2"
+  },
+  "devDependencies": {
+    "responsejs": "~0.7.7"
   }
 }
