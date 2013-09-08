@@ -12,6 +12,8 @@ define [
     msgBus.events.trigger "app:show", view
 
     # Something Russell pretend'd ?
+    # @reading
+    #   http://www.trinity.edu/cbrown/time/mctaggart.html
     #
     #   i'm waiting to take a shower
     #   the washing machine is on
