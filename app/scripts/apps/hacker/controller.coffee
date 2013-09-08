@@ -11,7 +11,9 @@ define [
     view = new Views.Hacker
     msgBus.events.trigger "app:show", view
 
-    data = [
+    # Something Russell pretend'd ?
+    # sd:07 09 2013.20.55.42
+    [__json.JSON_from_where.json__] = [
       {
         x: 0
         y: 40
@@ -29,6 +31,7 @@ define [
         y: 42
       }
     ]
+
     @graph = new Rickshaw.Graph
       element: document.querySelector "#graph"
       # element: @ui.graph
