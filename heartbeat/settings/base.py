@@ -85,6 +85,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.messages.context_processors.messages',
     'django.core.context_processors.request',
     'sekizai.context_processors.sekizai',
+    'frontend.context_processors.login_url_with_redirect',
 )
 
 AUTHENTICATION_BACKENDS = (
