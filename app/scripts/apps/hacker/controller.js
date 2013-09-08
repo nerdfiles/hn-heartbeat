@@ -3,10 +3,27 @@
     "use strict";
     return {
       "app.hacker": function() {
-        var data, view;
+        var data, elem, view, __json;
         view = new Views.Hacker;
         msgBus.events.trigger("app:show", view);
-        data = [
+        [
+          (function() {
+            var _i, _len, _ref, _results;
+            _ref = [1, 2, 3];
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              elem = _ref[_i];
+              _results.push(elem + 1);
+            }
+            return _results;
+          })()
+        ].pop();
+        __json = {
+          JSON_from_where: {
+            json__: {}
+          }
+        };
+        __json.JSON_from_where.json__ = (data = [
           {
             x: 0,
             y: 40
@@ -20,7 +37,9 @@
             x: 3,
             y: 42
           }
-        ];
+        ])[0];
+        console.log(__json.JSON_from_where.json__);
+        console.log([__json.JSON_from_where.json__]);
         this.graph = new Rickshaw.Graph({
           element: document.querySelector("#graph"),
           width: 580,

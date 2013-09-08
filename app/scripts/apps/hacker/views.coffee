@@ -26,7 +26,3 @@ define [
       # sd:07 09 2013.20.35.05
 
     className: "m--hacker"
-      
-      # Comments of the future, dude.
-      #
-      # sd:07 09 2013.20.35.43
