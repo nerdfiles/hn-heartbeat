@@ -13,8 +13,8 @@ define [
     template: _.template Templates["hacker.view"]
 
     onBeforeRender: () ->
-      console.log "onBeforeRender"
-      console.log d3
-      console.log Rickshaw
+      # console.log "onBeforeRender"
+      # console.log d3
+      # console.log Rickshaw
 
     className: "m--hacker"

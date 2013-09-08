@@ -18366,11 +18366,7 @@ define('text!apps/hacker/templates/hackerdetail.html.tmpl',[],function () { retu
 
         View.prototype.template = _.template(Templates["hacker.view"]);
 
-        View.prototype.onBeforeRender = function() {
-          console.log("onBeforeRender");
-          console.log(d3);
-          return console.log(Rickshaw);
-        };
+        View.prototype.onBeforeRender = function() {};
 
         View.prototype.className = "m--hacker";
 
