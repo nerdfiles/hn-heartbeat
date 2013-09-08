@@ -95,18 +95,24 @@
 
     %script{:src => "{% static 'js/vendor/modernizr.js' %}"}
 
-  %body{:class => "hn-heartbeat"}
+  %body{:class => "app--hn-heartbeat"}
 
-    %div{:id => "access-region", :class => "access"}
+    %div{:class => "r--access"}
       %ul.menu
         %li
-          %a{:href => "#content"} Skip to content
+          %a{:href => "#content"} Skip to Content
         %li
-          %a{:href => "#login"} Skip to login
+          %a{:href => "#login"} Skip to Login
+          -# Show skip to the form itself, and should trigger navigate()
 
-    %div{:id => "header-region", :class => "header"}
+    %section{:class => "s--header"}
+      %div{:class => "r--login"}
 
-    %div{:id => "graph-region", :class => "app"}
+    %div{:class => "r--graph"}
+
+    %section{:class => "s--footer"}
+      %p
+        %a{:href => "#home", :title => "socialbeat.io"} socialbeat.io
 
     /[if lt IE 7]
       <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>

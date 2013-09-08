@@ -1,11 +1,10 @@
 # Filename: entities/hacker.coffee
-
 define [
   'backbone'
   'msgbus'
 ], (Backbone, msgBus) ->
   class Hacker extends Backbone.Model
-  
+
   class HackerCollection extends Backbone.Collection
 
     model: Hacker

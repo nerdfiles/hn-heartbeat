@@ -12,3 +12,4 @@ tags
 .sass-cache
 
 .start
+npm-debug.log
