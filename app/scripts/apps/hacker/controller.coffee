@@ -7,6 +7,25 @@ define [
 ], (D3, rickshaw, Views, msgBus) ->
   "use strict"
 
+  showHackerDetail: (hacker) ->
+    view = @getDetailView hacker
+    msgBus.events.trigger "app:show", view
+
+  getDetailView: (hacker) ->
+    new Views.HackerDetailView
+      model: hacker
+
+  showLookupView: () ->
+    lookupView = @getLookupView
+    @layout.lookup.attachView lookupView
+
+  getLookupView: () ->
+    new Views.Lookup
+
+  "overview": () ->
+
+    console.log "overview"
+
   "app.hacker": () ->
 
     view = new Views.Hacker

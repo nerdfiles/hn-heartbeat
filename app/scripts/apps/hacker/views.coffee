@@ -1,12 +1,27 @@
 # Filename: apps/hacker/views.coffee
 define [
-  # "d3"
-  # "rickshaw"
   "apps/hacker/templates"
   "views/_base"
   "msgbus"
 ], (Templates, AppViews, msgBus) ->
   "use strict"
+
+  Lookup: class View extends AppViews.ItemView
+    el: "#lookup"
+    events:
+      "change #lookupUser": "lookup"
+
+    initialize: () ->
+      msgBus.events.on "lookup:user", (user) =>
+        @.$("#lookupUser").val(user)
+
+    lookup: () ->
+      username = @.$("#lookupUser").val().trim()
+
+      if username.length > 0
+        msgBus.events.trigger "lookup:user", username
+      else
+        msgBus.events.trigger "lookup:noUsername"
 
   Hacker: class View extends AppViews.ItemView
 
