@@ -6,8 +6,16 @@ define [
 ], (Templates, AppViews, msgBus) ->
   "use strict"
 
+  Layout: class Layout extends AppViews.Layout
+    template: _.template(Templates.layout)
+    regions:
+      lookup: ".r--lookup"
+      graph: ".r--graph"
+
   Lookup: class View extends AppViews.ItemView
+
     el: "#lookup"
+
     events:
       "change #lookupUser": "lookup"
 
@@ -25,7 +33,7 @@ define [
 
   Hacker: class View extends AppViews.ItemView
 
-    template: _.template Templates["hacker.view"]
+    template: _.template Templates["graph"]
 
     ui:
       graph: "#graph"

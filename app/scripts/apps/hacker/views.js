@@ -4,14 +4,32 @@
 
   define(["apps/hacker/templates", "views/_base", "msgbus"], function(Templates, AppViews, msgBus) {
     "use strict";
-    var View, _ref, _ref1;
+    var Layout, View, _ref, _ref1, _ref2;
     return {
+      Layout: Layout = (function(_super) {
+        __extends(Layout, _super);
+
+        function Layout() {
+          _ref = Layout.__super__.constructor.apply(this, arguments);
+          return _ref;
+        }
+
+        Layout.prototype.template = _.template(Templates.layout);
+
+        Layout.prototype.regions = {
+          lookup: ".r--lookup",
+          graph: ".r--graph"
+        };
+
+        return Layout;
+
+      })(AppViews.Layout),
       Lookup: View = (function(_super) {
         __extends(View, _super);
 
         function View() {
-          _ref = View.__super__.constructor.apply(this, arguments);
-          return _ref;
+          _ref1 = View.__super__.constructor.apply(this, arguments);
+          return _ref1;
         }
 
         View.prototype.el = "#lookup";
@@ -44,11 +62,11 @@
         __extends(View, _super);
 
         function View() {
-          _ref1 = View.__super__.constructor.apply(this, arguments);
-          return _ref1;
+          _ref2 = View.__super__.constructor.apply(this, arguments);
+          return _ref2;
         }
 
-        View.prototype.template = _.template(Templates["hacker.view"]);
+        View.prototype.template = _.template(Templates["graph"]);
 
         View.prototype.ui = {
           graph: "#graph"

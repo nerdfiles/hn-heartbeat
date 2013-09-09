@@ -18281,12 +18281,15 @@ define("rickshaw", ["d3"], (function (global) {
 }(this)));
 
 define('text',{load: function(id){throw new Error("Dynamic load not allowed: " + id);}});
-define('text!apps/hacker/templates/hackerdetail.html.tmpl',[],function () { return '<!-- Filename: apps/hacker/detail/templates/hackerdetail.html.tmpl -->\n<div class=\'m--heartbeat\'>\n  <div class=\'bosom\'>\n    <div id="graph">\n    </div>\n  </div>\n</div><!-- /.m--heartbeat -->\n';});
+define('text!apps/hacker/templates/graph.html.tmpl',[],function () { return '<!-- Filename: apps/hacker/detail/templates/hackerdetail.html.tmpl -->\n<div class=\'m--heartbeat\'>\n  <div class=\'bosom\'>\n    <div id="graph">\n    </div>\n  </div>\n</div><!-- /.m--heartbeat -->\n';});
+
+define('text!apps/hacker/templates/layout.html.tmpl',[],function () { return '<div class="layout"></div>\n';});
 
 (function() {
-  define('apps/hacker/templates',['require','text!apps/hacker/templates/hackerdetail.html.tmpl'],function(require) {
+  define('apps/hacker/templates',['require','text!apps/hacker/templates/graph.html.tmpl','text!apps/hacker/templates/layout.html.tmpl'],function(require) {
     return {
-      "hacker.view": require("text!apps/hacker/templates/hackerdetail.html.tmpl")
+      "graph": require("text!apps/hacker/templates/graph.html.tmpl"),
+      "layout": require("text!apps/hacker/templates/layout.html.tmpl")
     };
   });
 
@@ -18354,14 +18357,32 @@ define('text!apps/hacker/templates/hackerdetail.html.tmpl',[],function () { retu
 
   define('apps/hacker/views',["apps/hacker/templates", "views/_base", "msgbus"], function(Templates, AppViews, msgBus) {
     "use strict";
-    var View, _ref, _ref1;
+    var Layout, View, _ref, _ref1, _ref2;
     return {
+      Layout: Layout = (function(_super) {
+        __extends(Layout, _super);
+
+        function Layout() {
+          _ref = Layout.__super__.constructor.apply(this, arguments);
+          return _ref;
+        }
+
+        Layout.prototype.template = _.template(Templates.layout);
+
+        Layout.prototype.regions = {
+          lookup: ".r--lookup",
+          graph: ".r--graph"
+        };
+
+        return Layout;
+
+      })(AppViews.Layout),
       Lookup: View = (function(_super) {
         __extends(View, _super);
 
         function View() {
-          _ref = View.__super__.constructor.apply(this, arguments);
-          return _ref;
+          _ref1 = View.__super__.constructor.apply(this, arguments);
+          return _ref1;
         }
 
         View.prototype.el = "#lookup";
@@ -18394,11 +18415,11 @@ define('text!apps/hacker/templates/hackerdetail.html.tmpl',[],function () { retu
         __extends(View, _super);
 
         function View() {
-          _ref1 = View.__super__.constructor.apply(this, arguments);
-          return _ref1;
+          _ref2 = View.__super__.constructor.apply(this, arguments);
+          return _ref2;
         }
 
-        View.prototype.template = _.template(Templates["hacker.view"]);
+        View.prototype.template = _.template(Templates["graph"]);
 
         View.prototype.ui = {
           graph: "#graph"
@@ -18422,13 +18443,21 @@ define('text!apps/hacker/templates/hackerdetail.html.tmpl',[],function () { retu
   define('apps/hacker/controller',["d3", "rickshaw", "apps/hacker/views", "msgbus"], function(D3, rickshaw, Views, msgBus) {
     "use strict";
     return {
+      showHacker: function(hacker) {
+        var _this = this;
+        this.layout = this.getLayout;
+        this.layout.on("show", function() {
+          return _this.showLookupView();
+        });
+        return msgBus.events.trigger("app:show", this.layout);
+      },
       showHackerDetail: function(hacker) {
         var view;
         view = this.getDetailView(hacker);
         return msgBus.events.trigger("app:show", view);
       },
       getDetailView: function(hacker) {
-        return new Views.HackerDetailView({
+        return new Views.Hacker({
           model: hacker
         });
       },
@@ -18439,6 +18468,9 @@ define('text!apps/hacker/templates/hackerdetail.html.tmpl',[],function () { retu
       },
       getLookupView: function() {
         return new Views.Lookup;
+      },
+      getLayout: function() {
+        return new Views.Layout;
       },
       "overview": function() {
         return console.log("overview");

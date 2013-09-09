@@ -1,7 +1,8 @@
 (function() {
   define(function(require) {
     return {
-      "hacker.view": require("text!apps/hacker/templates/hackerdetail.html.tmpl")
+      "graph": require("text!apps/hacker/templates/graph.html.tmpl"),
+      "layout": require("text!apps/hacker/templates/layout.html.tmpl")
     };
   });
 

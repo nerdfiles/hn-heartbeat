@@ -2,13 +2,21 @@
   define(["d3", "rickshaw", "apps/hacker/views", "msgbus"], function(D3, rickshaw, Views, msgBus) {
     "use strict";
     return {
+      showHacker: function(hacker) {
+        var _this = this;
+        this.layout = this.getLayout;
+        this.layout.on("show", function() {
+          return _this.showLookupView();
+        });
+        return msgBus.events.trigger("app:show", this.layout);
+      },
       showHackerDetail: function(hacker) {
         var view;
         view = this.getDetailView(hacker);
         return msgBus.events.trigger("app:show", view);
       },
       getDetailView: function(hacker) {
-        return new Views.HackerDetailView({
+        return new Views.Hacker({
           model: hacker
         });
       },
@@ -19,6 +27,9 @@
       },
       getLookupView: function() {
         return new Views.Lookup;
+      },
+      getLayout: function() {
+        return new Views.Layout;
       },
       "overview": function() {
         return console.log("overview");

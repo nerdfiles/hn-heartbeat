@@ -7,12 +7,18 @@ define [
 ], (D3, rickshaw, Views, msgBus) ->
   "use strict"
 
+  showHacker: (hacker) ->
+    @layout = @getLayout
+    @layout.on "show", =>
+      @showLookupView()
+    msgBus.events.trigger "app:show", @layout
+
   showHackerDetail: (hacker) ->
     view = @getDetailView hacker
     msgBus.events.trigger "app:show", view
 
   getDetailView: (hacker) ->
-    new Views.HackerDetailView
+    new Views.Hacker
       model: hacker
 
   showLookupView: () ->
@@ -21,6 +27,9 @@ define [
 
   getLookupView: () ->
     new Views.Lookup
+
+  getLayout: () ->
+    new Views.Layout
 
   "overview": () ->
 
