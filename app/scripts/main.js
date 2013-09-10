@@ -30,7 +30,7 @@
     }
   });
 
-  require(["config/_base", "app", "apps/hacker/app", "apps/login/app"], function(_config, HNHeartbeat) {
+  require(["config/_base", "app", "apps/graph/app", "apps/overview/app", "apps/login/app"], function(_config, HNHeartbeat) {
     "use strict";
     return HNHeartbeat.start();
   });

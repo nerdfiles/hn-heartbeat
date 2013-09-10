@@ -2,7 +2,8 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(['backbone', 'msgbus'], function(Backbone, msgBus) {
+  define(["backbone", "msgbus"], function(Backbone, msgBus) {
+    "use strict";
     var API, Hacker, HackerCollection, _ref, _ref1;
     Hacker = (function(_super) {
       __extends(Hacker, _super);

@@ -1,4 +1,5 @@
 # Filename: app.coffee
+# Author: nerdfiles (tw: @filesofnerds, e-mail: nerdfiles@gmail.com)
 define [
   "backbone"
   "marionette"
@@ -12,29 +13,28 @@ define [
   # @note Regions need to be coherently mapped to 'apps'.
   HNHeartbeat.addRegions
     accessRegion: ".r--access"
-    lookupRegion: ".r--lookup"
-    loginRegion: ".r--login"
     graphRegion: ".r--graph" # Hackers will be presented in graphs, which will call Overviews
+    lookupRegion: ".r--lookup"
     overviewRegion: ".r--overview" # Overviews will contail Items
+    loginRegion: ".r--login"
 
   # Initialize Backbone history
   HNHeartbeat.on "initialize:after", () ->
-    console.log "history started"
     Backbone.history.start() unless Backbone.history.started
 
   # Set up routes
   HNHeartbeat.addInitializer () ->
-    console.log "init routes"
-    msgBus.commands.execute "hacker:route"
+    # msgBus.commands.execute "access:route"
+    msgBus.commands.execute "graph:route"
+    # msgBus.commands.execute "overview:route"
     msgBus.commands.execute "login:route"
 
-  # Show regions
+  # Specify events for views per region
+  # @note A controller might specify events here
   msgBus.events.on "app:show:login", (view) =>
-    console.log "show:login"
     HNHeartbeat.loginRegion.show view
 
   msgBus.events.on "app:show", (view) =>
-    console.log "show"
     HNHeartbeat.graphRegion.show view
 
   HNHeartbeat

@@ -1,6 +1,6 @@
 # Filename: apps/hacker/views.coffee
 define [
-  "apps/hacker/templates"
+  "apps/graph/templates"
   "views/_base"
   "msgbus"
 ], (Templates, AppViews, msgBus) ->

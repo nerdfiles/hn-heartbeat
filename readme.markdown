@@ -4,19 +4,39 @@ A 'heartbeat' web application for Hacker News members' karma.
 
 ##Overview
 
-This is a Backbone.js/Marionette application with Python/Django backend and REST-ful 
-API which depends on Django REST Framework. Grunt.js and Twitter's Bower are used for 
-automation via JavaScript and frontend library/package management.
+This is a Backbone.js/Marionette application with Python/Django backend and  
+REST-ful API which depends on Django REST Framework. Grunt.js and Twitter's  
+Bower are used for automation via JavaScript and frontend library/package  
+management.
 
-The app follows a custom RequireJS + Marionette architecture for modular view style, 
-behaviors, and JavaScript resources. Effectively, "apps" (modules) reveal modular 
-views for re-use and lazily loaded resources.
+The app follows a custom RequireJS + Marionette architecture for modular view  
+style, behaviors, and JavaScript resources. Effectively, "apps" (modules)  
+reveal modular views for re-use and lazily loaded resources.
 
 ##MVP Spec
 
 1. On the landing page, user enters their HN ID
-2. On the main page, user is presented with a line chart showing their Karma score over time (3 lines - 1 for karma from submissions, 1 for karma from comments, and the combined total).
-3. Then just display out below the chart a nicely displayed list of each submission, comment, date, and karma points.
+2. On the main page, user is presented with a line chart showing their Karma  
+   score over time (3 lines - 1 for karma from submissions, 1 for karma from  
+   comments, and the combined total).
+3. Then just display out below the chart a nicely displayed list of each  
+   submission, comment, date, and karma points.
+
+###Future Goals
+
+Enable a broader definition of "user" to include all popular social networks,  
+fitting content to a "karma" model. Concepts such as "liking" can be treated  
+analogously as an "upvote"; and these can be applied to any type of content, 
+where it is a "comment", "post". 
+
+A singular post can be treated as a simple Hypermedia object which may have  
+various interaction handles depending on the type of post that it is, which  
+exposes a content type: text, image, etc.
+
+A user can be given a time series graph which exposes over time the behavior  
+of their posting habits in terms of the implied Hypermedia Persona, given the  
+coupling of second-order content ("post", etc.) to first-order content  
+("image", etc.).
 
 ##Development
 

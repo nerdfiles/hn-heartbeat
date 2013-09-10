@@ -1,5 +1,5 @@
 (function() {
-  define(["d3", "rickshaw", "apps/hacker/views", "msgbus"], function(D3, rickshaw, Views, msgBus) {
+  define(["d3", "rickshaw", "apps/graph/views", "msgbus"], function(D3, rickshaw, Views, msgBus) {
     "use strict";
     return {
       showHacker: function(hacker) {
@@ -31,10 +31,10 @@
       getLayout: function() {
         return new Views.Layout;
       },
-      "overview": function() {
+      "app.overview": function() {
         return console.log("overview");
       },
-      "app.hacker": function() {
+      "app.graph": function() {
         var data, elem, view, __json;
         view = new Views.Hacker;
         msgBus.events.trigger("app:show", view);

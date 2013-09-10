@@ -2,7 +2,7 @@
 define [
   "d3"
   "rickshaw"
-  "apps/hacker/views"
+  "apps/graph/views"
   "msgbus"
 ], (D3, rickshaw, Views, msgBus) ->
   "use strict"
@@ -31,11 +31,11 @@ define [
   getLayout: () ->
     new Views.Layout
 
-  "overview": () ->
+  "app.overview": () ->
 
     console.log "overview"
 
-  "app.hacker": () ->
+  "app.graph": () ->
 
     view = new Views.Hacker
 

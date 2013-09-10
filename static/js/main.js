@@ -14843,28 +14843,24 @@ _.extend(Marionette.Module, {
     HNHeartbeat = new Marionette.Application();
     HNHeartbeat.addRegions({
       accessRegion: ".r--access",
-      lookupRegion: ".r--lookup",
-      loginRegion: ".r--login",
       graphRegion: ".r--graph",
-      overviewRegion: ".r--overview"
+      lookupRegion: ".r--lookup",
+      overviewRegion: ".r--overview",
+      loginRegion: ".r--login"
     });
     HNHeartbeat.on("initialize:after", function() {
-      console.log("history started");
       if (!Backbone.history.started) {
         return Backbone.history.start();
       }
     });
     HNHeartbeat.addInitializer(function() {
-      console.log("init routes");
-      msgBus.commands.execute("hacker:route");
+      msgBus.commands.execute("graph:route");
       return msgBus.commands.execute("login:route");
     });
     msgBus.events.on("app:show:login", function(view) {
-      console.log("show:login");
       return HNHeartbeat.loginRegion.show(view);
     });
     msgBus.events.on("app:show", function(view) {
-      console.log("show");
       return HNHeartbeat.graphRegion.show(view);
     });
     return HNHeartbeat;
@@ -18281,15 +18277,15 @@ define("rickshaw", ["d3"], (function (global) {
 }(this)));
 
 define('text',{load: function(id){throw new Error("Dynamic load not allowed: " + id);}});
-define('text!apps/hacker/templates/graph.html.tmpl',[],function () { return '<!-- Filename: apps/hacker/detail/templates/hackerdetail.html.tmpl -->\n<div class=\'m--heartbeat\'>\n  <div class=\'bosom\'>\n    <div id="graph">\n    </div>\n  </div>\n</div><!-- /.m--heartbeat -->\n';});
+define('text!apps/graph/templates/graph.html.tmpl',[],function () { return '<!-- Filename: apps/hacker/detail/templates/hackerdetail.html.tmpl -->\n<div class=\'m--heartbeat\'>\n  <div class=\'bosom\'>\n    <div id="graph">\n    </div>\n  </div>\n</div><!-- /.m--heartbeat -->\n';});
 
-define('text!apps/hacker/templates/layout.html.tmpl',[],function () { return '<div class="layout"></div>\n';});
+define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<div class="layout"></div>\n';});
 
 (function() {
-  define('apps/hacker/templates',['require','text!apps/hacker/templates/graph.html.tmpl','text!apps/hacker/templates/layout.html.tmpl'],function(require) {
+  define('apps/graph/templates',['require','text!apps/graph/templates/graph.html.tmpl','text!apps/graph/templates/layout.html.tmpl'],function(require) {
     return {
-      "graph": require("text!apps/hacker/templates/graph.html.tmpl"),
-      "layout": require("text!apps/hacker/templates/layout.html.tmpl")
+      "graph": require("text!apps/graph/templates/graph.html.tmpl"),
+      "layout": require("text!apps/graph/templates/layout.html.tmpl")
     };
   });
 
@@ -18355,7 +18351,7 @@ define('text!apps/hacker/templates/layout.html.tmpl',[],function () { return '<d
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define('apps/hacker/views',["apps/hacker/templates", "views/_base", "msgbus"], function(Templates, AppViews, msgBus) {
+  define('apps/graph/views',["apps/graph/templates", "views/_base", "msgbus"], function(Templates, AppViews, msgBus) {
     "use strict";
     var Layout, View, _ref, _ref1, _ref2;
     return {
@@ -18440,7 +18436,7 @@ define('text!apps/hacker/templates/layout.html.tmpl',[],function () { return '<d
 }).call(this);
 
 (function() {
-  define('apps/hacker/controller',["d3", "rickshaw", "apps/hacker/views", "msgbus"], function(D3, rickshaw, Views, msgBus) {
+  define('apps/graph/controller',["d3", "rickshaw", "apps/graph/views", "msgbus"], function(D3, rickshaw, Views, msgBus) {
     "use strict";
     return {
       showHacker: function(hacker) {
@@ -18472,10 +18468,10 @@ define('text!apps/hacker/templates/layout.html.tmpl',[],function () { return '<d
       getLayout: function() {
         return new Views.Layout;
       },
-      "overview": function() {
+      "app.overview": function() {
         return console.log("overview");
       },
-      "app.hacker": function() {
+      "app.graph": function() {
         var data, elem, view, __json;
         view = new Views.Hacker;
         msgBus.events.trigger("app:show", view);
@@ -18535,7 +18531,8 @@ define('text!apps/hacker/templates/layout.html.tmpl',[],function () { return '<d
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define('entities/hacker',['backbone', 'msgbus'], function(Backbone, msgBus) {
+  define('entities/hacker',["backbone", "msgbus"], function(Backbone, msgBus) {
+    "use strict";
     var API, Hacker, HackerCollection, _ref, _ref1;
     Hacker = (function(_super) {
       __extends(Hacker, _super);
@@ -18647,11 +18644,11 @@ define('text!apps/hacker/templates/layout.html.tmpl',[],function () { return '<d
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define('apps/hacker/app',["backbone", "apps/hacker/controller", "msgbus", "entities/hacker"], function(Backbone, Controller, msgBus) {
+  define('apps/graph/app',["backbone", "apps/graph/controller", "msgbus", "entities/hacker"], function(Backbone, Controller, msgBus) {
     "use strict";
     var API, Router, user, _ref;
     msgBus.events.on("lookup:user", function(user) {
-      return Backbone.history.navigate(".lookup/" + user);
+      return Backbone.history.navigate("lookup/" + user);
     });
     user = msgBus.reqres.request = "hacker:entities";
     Router = (function(_super) {
@@ -18664,32 +18661,39 @@ define('text!apps/hacker/templates/layout.html.tmpl',[],function () { return '<d
 
       Router.prototype.appRoutes = {
         "": "overview",
-        ".hacker": "start",
-        ".lookup/:username": "lookup"
+        "graph": "graph",
+        "lookup/:username": "lookup"
       };
 
       return Router;
 
     })(Backbone.Marionette.AppRouter);
-    msgBus.commands.setHandler("hacker:route", function() {
+    msgBus.commands.setHandler("graph:route", function() {
       return new Router({
         controller: API
       });
     });
     return API = {
       overview: function() {
-        return Controller["overview"]();
+        return Controller["app.overview"]();
       },
       lookup: function(username) {
         return msgBus.events.trigger("lookup:user", username);
       },
-      start: function() {
-        return Controller["app.hacker"]();
+      graph: function() {
+        return Controller["app.graph"]();
       }
     };
   });
 
 }).call(this);
+
+(function() {
+
+
+}).call(this);
+
+define("apps/overview/app", function(){});
 
 define('text!apps/login/templates/base.html.tmpl',[],function () { return '<div class="m--login" id="login">\n  <div class="bosom">\n    <h1>Hacker News Heartbeat</h1>\n    <form \n      id="login" \n      class="login" \n      method="post">\n\n      <fieldset>\n        <legend>Login</legend>\n        <div class="form-row">\n          <input \n            id="__username__" \n            name="username" \n            type="text" \n            placeholder="Give us yr Hacker News handle!" />\n        </div>\n      </fieldset>\n\n    </form>\n  </div>\n</div>\n\n';});
 
@@ -18823,7 +18827,7 @@ define('text!apps/login/templates/base.html.tmpl',[],function () { return '<div 
     }
   });
 
-  require(["config/_base", "app", "apps/hacker/app", "apps/login/app"], function(_config, HNHeartbeat) {
+  require(["config/_base", "app", "apps/graph/app", "apps/overview/app", "apps/login/app"], function(_config, HNHeartbeat) {
     "use strict";
     return HNHeartbeat.start();
   });

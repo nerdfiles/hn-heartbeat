@@ -1,8 +1,10 @@
 # Filename: entities/hacker.coffee
 define [
-  'backbone'
-  'msgbus'
+  "backbone"
+  "msgbus"
 ], (Backbone, msgBus) ->
+  "use strict"
+
   class Hacker extends Backbone.Model
 
   class HackerCollection extends Backbone.Collection
@@ -71,9 +73,11 @@ define [
           msgBus.events.trigger 'lookup:error'
           @loading = false
 
+  # Specify frontend data API service handlersck
   msgBus.reqres.setHandler 'hacker:entities', () ->
     API.getHackerEntities()
 
+  # Declare frontend data API service for calls from the internal app
   API =
     getHackerEntities: () ->
       hackers = new HackerCollection

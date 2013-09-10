@@ -30,7 +30,8 @@ require.config
 require [
   "config/_base"
   "app"
-  "apps/hacker/app"
+  "apps/graph/app"
+  "apps/overview/app"
   "apps/login/app"
 ], (_config, HNHeartbeat) ->
   "use strict"
