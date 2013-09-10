@@ -1,4 +1,4 @@
-# Filename: apps/hacker/app.coffee
+# Filename: apps/graph/app.coffee
 define [
   "backbone"
   "apps/graph/controller"
@@ -18,7 +18,6 @@ define [
   class Router extends Backbone.Marionette.AppRouter
     appRoutes:
       "": "overview"
-      "graph": "graph"
       "lookup/:username": "lookup"
 
   # Link controllers to routes
@@ -32,6 +31,7 @@ define [
       Controller["app.overview"]()
 
     lookup: (username) ->
+      # Call lookup!
       msgBus.events.trigger "lookup:user", username
 
     graph: () ->

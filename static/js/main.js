@@ -18439,7 +18439,7 @@ define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<di
   define('apps/graph/controller',["d3", "rickshaw", "apps/graph/views", "msgbus"], function(D3, rickshaw, Views, msgBus) {
     "use strict";
     return {
-      showHacker: function(hacker) {
+      showGraph: function(hacker) {
         var _this = this;
         this.layout = this.getLayout;
         this.layout.on("show", function() {
@@ -18447,13 +18447,13 @@ define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<di
         });
         return msgBus.events.trigger("app:show", this.layout);
       },
-      showHackerDetail: function(hacker) {
+      showGraphDetail: function(hacker) {
         var view;
         view = this.getDetailView(hacker);
         return msgBus.events.trigger("app:show", view);
       },
       getDetailView: function(hacker) {
-        return new Views.Hacker({
+        return new Views.Graph({
           model: hacker
         });
       },
@@ -18472,21 +18472,9 @@ define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<di
         return console.log("overview");
       },
       "app.graph": function() {
-        var data, elem, view, __json;
-        view = new Views.Hacker;
+        var data, view, __json;
+        view = new Views.Graph;
         msgBus.events.trigger("app:show", view);
-        [
-          (function() {
-            var _i, _len, _ref, _results;
-            _ref = [1, 2, 3];
-            _results = [];
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              elem = _ref[_i];
-              _results.push(elem + 1);
-            }
-            return _results;
-          })()
-        ].pop();
         __json = {
           JSON_from_where: {
             json__: {}
@@ -18507,8 +18495,6 @@ define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<di
             y: 42
           }
         ])[0];
-        console.log(__json.JSON_from_where.json__);
-        console.log([__json.JSON_from_where.json__]);
         this.graph = new Rickshaw.Graph({
           element: document.querySelector("#graph"),
           width: 580,
@@ -18661,7 +18647,6 @@ define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<di
 
       Router.prototype.appRoutes = {
         "": "overview",
-        "graph": "graph",
         "lookup/:username": "lookup"
       };
 

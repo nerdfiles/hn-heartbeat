@@ -1,4 +1,4 @@
-# Filename: apps/hacker/controller.coffee
+# Filename: apps/graph/controller.coffee
 define [
   "d3"
   "rickshaw"
@@ -7,18 +7,18 @@ define [
 ], (D3, rickshaw, Views, msgBus) ->
   "use strict"
 
-  showHacker: (hacker) ->
+  showGraph: (hacker) ->
     @layout = @getLayout
     @layout.on "show", =>
       @showLookupView()
     msgBus.events.trigger "app:show", @layout
 
-  showHackerDetail: (hacker) ->
+  showGraphDetail: (hacker) ->
     view = @getDetailView hacker
     msgBus.events.trigger "app:show", view
 
   getDetailView: (hacker) ->
-    new Views.Hacker
+    new Views.Graph
       model: hacker
 
   showLookupView: () ->
@@ -37,7 +37,7 @@ define [
 
   "app.graph": () ->
 
-    view = new Views.Hacker
+    view = new Views.Graph
 
     msgBus.events.trigger "app:show", view
 
@@ -62,7 +62,7 @@ define [
     #
     # sd:07 09 2013.20.55.42
 
-    [elem+1 for elem in [1,2,3]].pop() # returns [2,3,4]
+    # [elem+1 for elem in [1,2,3]].pop() # returns [2,3,4]
 
     # @spec
     # sd:08 09 2013.13.44.05
@@ -99,8 +99,8 @@ define [
       }
     ]
 
-    console.log  __json.JSON_from_where.json__
-    console.log [__json.JSON_from_where.json__]
+    # console.log  __json.JSON_from_where.json__
+    # console.log [__json.JSON_from_where.json__]
 
     @graph = new Rickshaw.Graph
       element: document.querySelector "#graph"

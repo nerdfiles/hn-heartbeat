@@ -19,7 +19,6 @@
 
       Router.prototype.appRoutes = {
         "": "overview",
-        "graph": "graph",
         "lookup/:username": "lookup"
       };
 
