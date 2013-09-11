@@ -24,60 +24,62 @@ define [
 
       @contextResults = 40 # Initialize view of item (submission|comment) results
 
-    lookup: (hacker) ->
+    lookup: (username) ->
 
-      @previousLookup = hacker
+      @previousLookup = username
 
-      @fetchHacker hacker, (user) =>
+      @fetchUser username, (user) =>
+        console.log user
         if user.length < 1
-          msgBus.events.trigger 'lookup:noUserFound'
+          msgBus.events.trigger 'lookup:noUsername'
         else
           @reset user
 
-    fetchHacker: (hacker, callback) ->
+    fetchUser: (username, callback) ->
       return true if @loading
       @loading = true
       msgBus.events.trigger 'lookup:start'
-      query = hacker + '&filter[fields][create_ts]=' + @create_ts
-      $.ajax
-        url: 'http://api.thriftdb.com/api.hnsearch.com/items/_search'
-        dataType: 'jsonp'
-        data: "username=#{query}"
-        success: (res) =>
-          console.log res
-          msgBus.events.trigger 'lookup:stop'
-          if res.results.length is 0
-            callback []
-            return []
-          if res.results
-            lookupResults = []
-            # get hacker by username
-            user = new Hacker
-              username: hacker
+      query = "username=" + username + "&filter[fields][create_ts]=" + @create_ts
+      console.log query
+      # $.ajax
+      #   url: 'http://api.thriftdb.com/api.hnsearch.com/items/_search'
+      #   dataType: 'jsonp'
+      #   data: "#{query}"
+      #   success: (res) =>
+      #     console.log res
+      #     msgBus.events.trigger 'lookup:stop'
+      #     if res.results.length is 0
+      #       callback []
+      #       return []
+      #     if res.results
+      #       lookupResults = []
+      #       # get hacker by username
+      #       user = new Hacker
+      #         username: hacker
 
-            # items
-            _.each res.results, (item) ->
-              # console.log item
-              # Model
-              # lookupResults[lookupResults.length] = new Item
-              #   title: title
-              #   karma: karma
-              #   date: date
-            callback lookupResults
-            @loading = false
-            lookupResults
-          else
-            msgBus.events.trigger 'lookup:error'
-            @loading = false
-        error: () =>
-          msgBus.events.trigger 'lookup:error'
-          @loading = false
+      #       # items
+      #       _.each res.results, (item) ->
+      #         # console.log item
+      #         # Model
+      #         # lookupResults[lookupResults.length] = new Item
+      #         #   title: title
+      #         #   karma: karma
+      #         #   date: date
+      #       callback lookupResults
+      #       @loading = false
+      #       lookupResults
+      #     else
+      #       msgBus.events.trigger 'lookup:error'
+      #       @loading = false
+      #   error: () =>
+      #     msgBus.events.trigger 'lookup:error'
+      #     @loading = false
 
   # Specify frontend data API service handlersck
   msgBus.reqres.setHandler 'hacker:entities', () ->
-    API.getHackerEntities()
+    API.getUserEntities()
 
   # Declare frontend data API service for calls from the internal app
   API =
-    getHackerEntities: () ->
+    getUserEntities: () ->
       hackers = new HackerCollection
