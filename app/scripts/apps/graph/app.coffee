@@ -1,10 +1,10 @@
 # Filename: apps/graph/app.coffee
 define [
-  "backbone"
+  "marionette"
   "apps/graph/controller"
   "msgbus"
   "entities/hacker"
-], (Backbone, Controller, msgBus) ->
+], (Marionette, Controller, msgBus) ->
   "use strict"
 
   # Primary call to action event to look for a user from the desire social network
@@ -12,13 +12,16 @@ define [
     Backbone.history.navigate "lookup/" + user
 
   # Specify entities to be used
-  user = msgBus.reqres.request = "hacker:entities"
+  hacker = msgBus.reqres.request = "hacker:entities"
 
   # Specify controllers to routes
   class Router extends Backbone.Marionette.AppRouter
     appRoutes:
       "": "overview"
       "lookup/:username": "lookup"
+
+  msgBus.events.on "lookup:hacker", (hacker) ->
+      API.showUserGraph hacker
 
   # Link controllers to routes
   msgBus.commands.setHandler "graph:route", () ->
@@ -28,11 +31,11 @@ define [
   # Declare internal API to be used across apps/modules
   API =
     overview: () ->
-      Controller["app.overview"]()
-
+      console.log 'overview'
+      Controller.showGraph()
     lookup: (username) ->
       # Call lookup!
+      # Controller.showGraph hackers
       msgBus.events.trigger "lookup:user", username
-
-    graph: () ->
-      Controller["app.graph"]()
+    showUserGraph: (hacker) ->
+      Controller.showUserGraphView(hacker)

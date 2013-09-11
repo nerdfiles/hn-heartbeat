@@ -7,7 +7,6 @@
     HNHeartbeat.addRegions({
       accessRegion: ".r--access",
       graphRegion: ".r--graph",
-      lookupRegion: ".r--lookup",
       overviewRegion: ".r--overview",
       loginRegion: ".r--login"
     });
@@ -17,11 +16,7 @@
       }
     });
     HNHeartbeat.addInitializer(function() {
-      msgBus.commands.execute("graph:route");
-      return msgBus.commands.execute("login:route");
-    });
-    msgBus.events.on("app:show:login", function(view) {
-      return HNHeartbeat.loginRegion.show(view);
+      return msgBus.commands.execute("graph:route");
     });
     msgBus.events.on("app:show", function(view) {
       return HNHeartbeat.graphRegion.show(view);

@@ -14844,7 +14844,6 @@ _.extend(Marionette.Module, {
     HNHeartbeat.addRegions({
       accessRegion: ".r--access",
       graphRegion: ".r--graph",
-      lookupRegion: ".r--lookup",
       overviewRegion: ".r--overview",
       loginRegion: ".r--login"
     });
@@ -14854,11 +14853,7 @@ _.extend(Marionette.Module, {
       }
     });
     HNHeartbeat.addInitializer(function() {
-      msgBus.commands.execute("graph:route");
-      return msgBus.commands.execute("login:route");
-    });
-    msgBus.events.on("app:show:login", function(view) {
-      return HNHeartbeat.loginRegion.show(view);
+      return msgBus.commands.execute("graph:route");
     });
     msgBus.events.on("app:show", function(view) {
       return HNHeartbeat.graphRegion.show(view);
@@ -18279,7 +18274,7 @@ define("rickshaw", ["d3"], (function (global) {
 define('text',{load: function(id){throw new Error("Dynamic load not allowed: " + id);}});
 define('text!apps/graph/templates/graph.html.tmpl',[],function () { return '<!-- Filename: apps/hacker/detail/templates/hackerdetail.html.tmpl -->\n<div class=\'m--heartbeat\'>\n  <div class=\'bosom\'>\n    <div id="graph">\n    </div>\n  </div>\n</div><!-- /.m--heartbeat -->\n';});
 
-define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<div class="layout"></div>\n';});
+define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<div class="layout">\n  <input type="text" name="lookup" autocomplete="off" id="lookupUser" value="" />\n</div>\n';});
 
 (function() {
   define('apps/graph/templates',['require','text!apps/graph/templates/graph.html.tmpl','text!apps/graph/templates/layout.html.tmpl'],function(require) {
@@ -18351,34 +18346,16 @@ define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<di
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define('apps/graph/views',["apps/graph/templates", "views/_base", "msgbus"], function(Templates, AppViews, msgBus) {
+  define('apps/graph/views',["d3", "rickshaw", "apps/graph/templates", "views/_base", "msgbus"], function(D3, rickshaw, Templates, AppViews, msgBus) {
     "use strict";
-    var Layout, View, _ref, _ref1, _ref2;
+    var Layout, View, _ref, _ref1, _ref2, _ref3;
     return {
-      Layout: Layout = (function(_super) {
-        __extends(Layout, _super);
-
-        function Layout() {
-          _ref = Layout.__super__.constructor.apply(this, arguments);
-          return _ref;
-        }
-
-        Layout.prototype.template = _.template(Templates.layout);
-
-        Layout.prototype.regions = {
-          lookup: ".r--lookup",
-          graph: ".r--graph"
-        };
-
-        return Layout;
-
-      })(AppViews.Layout),
       Lookup: View = (function(_super) {
         __extends(View, _super);
 
         function View() {
-          _ref1 = View.__super__.constructor.apply(this, arguments);
-          return _ref1;
+          _ref = View.__super__.constructor.apply(this, arguments);
+          return _ref;
         }
 
         View.prototype.el = "#lookup";
@@ -18407,7 +18384,68 @@ define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<di
         return View;
 
       })(AppViews.ItemView),
-      Hacker: View = (function(_super) {
+      GlobalGraph: View = (function(_super) {
+        __extends(View, _super);
+
+        function View() {
+          _ref1 = View.__super__.constructor.apply(this, arguments);
+          return _ref1;
+        }
+
+        View.prototype.template = _.template(Templates.graph);
+
+        View.prototype.ui = {
+          graph: "#graph"
+        };
+
+        View.prototype.className = "m--global-graph";
+
+        View.prototype.onBeforeRender = function() {};
+
+        View.prototype.onRender = function() {
+          return this["app.graph"]();
+        };
+
+        View.prototype["app.graph"] = function() {
+          var data, __json;
+          __json = {
+            JSON_from_where: {
+              json__: {}
+            }
+          };
+          __json.JSON_from_where.json__ = (data = [
+            {
+              x: 0,
+              y: 40
+            }, {
+              x: 1,
+              y: 49
+            }, {
+              x: 2,
+              y: 17
+            }, {
+              x: 3,
+              y: 42
+            }
+          ])[0];
+          this.graph = new Rickshaw.Graph({
+            element: document.querySelector("#graph"),
+            width: 580,
+            height: 250,
+            series: [
+              {
+                color: "steelblue",
+                data: data
+              }
+            ]
+          });
+          return this.graph.render();
+        };
+
+        return View;
+
+      })(AppViews.ItemView),
+      UserGraph: View = (function(_super) {
         __extends(View, _super);
 
         function View() {
@@ -18415,51 +18453,78 @@ define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<di
           return _ref2;
         }
 
-        View.prototype.template = _.template(Templates["graph"]);
+        View.prototype.template = _.template(Templates.graph);
 
         View.prototype.ui = {
           graph: "#graph"
         };
 
+        View.prototype.className = "m--user-graph";
+
         View.prototype.onBeforeRender = function() {};
 
         View.prototype.onRender = function() {};
 
-        View.prototype.className = "m--hacker";
-
         return View;
 
-      })(AppViews.ItemView)
+      })(AppViews.ItemView),
+      Layout: Layout = (function(_super) {
+        __extends(Layout, _super);
+
+        function Layout() {
+          _ref3 = Layout.__super__.constructor.apply(this, arguments);
+          return _ref3;
+        }
+
+        Layout.prototype.template = _.template(Templates.layout);
+
+        Layout.prototype.regions = {
+          lookup: ".r--lookup",
+          global: ".r--globalGraph"
+        };
+
+        return Layout;
+
+      })(AppViews.Layout)
     };
   });
 
 }).call(this);
 
 (function() {
-  define('apps/graph/controller',["d3", "rickshaw", "apps/graph/views", "msgbus"], function(D3, rickshaw, Views, msgBus) {
+  define('apps/graph/controller',["msgbus", "apps/graph/views"], function(msgBus, Views) {
     "use strict";
     return {
-      showGraph: function(hacker) {
+      showGraph: function(hackers) {
         var _this = this;
-        this.layout = this.getLayout;
+        this.layout = this.getLayout();
         this.layout.on("show", function() {
-          return _this.showLookupView();
+          _this.showLookupView();
+          return _this.showGlobalGraphView();
         });
         return msgBus.events.trigger("app:show", this.layout);
       },
-      showGraphDetail: function(hacker) {
+      showGlobalGraphView: function() {
         var view;
-        view = this.getDetailView(hacker);
-        return msgBus.events.trigger("app:show", view);
+        view = this.getGlobalGraphView();
+        return this.layout.global.show(view);
       },
-      getDetailView: function(hacker) {
-        return new Views.Graph({
+      getGlobalGraphView: function() {
+        return new Views.GlobalGraph;
+      },
+      showUserGraphView: function(hacker) {
+        var view;
+        view = this.getUserGraphView(hacker);
+        return msgBus.events.trigger("app:show:graph", view);
+      },
+      getUserGraphView: function(hacker) {
+        return new Views.UserGraph({
           model: hacker
         });
       },
       showLookupView: function() {
         var lookupView;
-        lookupView = this.getLookupView;
+        lookupView = this.getLookupView();
         return this.layout.lookup.attachView(lookupView);
       },
       getLookupView: function() {
@@ -18467,46 +18532,6 @@ define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<di
       },
       getLayout: function() {
         return new Views.Layout;
-      },
-      "app.overview": function() {
-        return console.log("overview");
-      },
-      "app.graph": function() {
-        var data, view, __json;
-        view = new Views.Graph;
-        msgBus.events.trigger("app:show", view);
-        __json = {
-          JSON_from_where: {
-            json__: {}
-          }
-        };
-        __json.JSON_from_where.json__ = (data = [
-          {
-            x: 0,
-            y: 40
-          }, {
-            x: 1,
-            y: 49
-          }, {
-            x: 2,
-            y: 17
-          }, {
-            x: 3,
-            y: 42
-          }
-        ])[0];
-        this.graph = new Rickshaw.Graph({
-          element: document.querySelector("#graph"),
-          width: 580,
-          height: 250,
-          series: [
-            {
-              color: "steelblue",
-              data: data
-            }
-          ]
-        });
-        return this.graph.render();
       }
     };
   });
@@ -18630,13 +18655,13 @@ define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<di
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define('apps/graph/app',["backbone", "apps/graph/controller", "msgbus", "entities/hacker"], function(Backbone, Controller, msgBus) {
+  define('apps/graph/app',["marionette", "apps/graph/controller", "msgbus", "entities/hacker"], function(Marionette, Controller, msgBus) {
     "use strict";
-    var API, Router, user, _ref;
+    var API, Router, hacker, _ref;
     msgBus.events.on("lookup:user", function(user) {
       return Backbone.history.navigate("lookup/" + user);
     });
-    user = msgBus.reqres.request = "hacker:entities";
+    hacker = msgBus.reqres.request = "hacker:entities";
     Router = (function(_super) {
       __extends(Router, _super);
 
@@ -18653,6 +18678,9 @@ define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<di
       return Router;
 
     })(Backbone.Marionette.AppRouter);
+    msgBus.events.on("lookup:hacker", function(hacker) {
+      return API.showUserGraph(hacker);
+    });
     msgBus.commands.setHandler("graph:route", function() {
       return new Router({
         controller: API
@@ -18660,13 +18688,14 @@ define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<di
     });
     return API = {
       overview: function() {
-        return Controller["app.overview"]();
+        console.log('overview');
+        return Controller.showGraph();
       },
       lookup: function(username) {
         return msgBus.events.trigger("lookup:user", username);
       },
-      graph: function() {
-        return Controller["app.graph"]();
+      showUserGraph: function(hacker) {
+        return Controller.showUserGraphView(hacker);
       }
     };
   });

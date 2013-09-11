@@ -14,7 +14,6 @@ define [
   HNHeartbeat.addRegions
     accessRegion: ".r--access"
     graphRegion: ".r--graph" # Hackers will be presented in graphs, which will call Overviews
-    lookupRegion: ".r--lookup"
     overviewRegion: ".r--overview" # Overviews will contail Items
     loginRegion: ".r--login"
 
@@ -27,12 +26,12 @@ define [
     # msgBus.commands.execute "access:route"
     msgBus.commands.execute "graph:route"
     # msgBus.commands.execute "overview:route"
-    msgBus.commands.execute "login:route"
+    # msgBus.commands.execute "login:route"
 
   # Specify events for views per region
   # @note A controller might specify events here
-  msgBus.events.on "app:show:login", (view) =>
-    HNHeartbeat.loginRegion.show view
+  # msgBus.events.on "app:show:login", (view) =>
+  #   HNHeartbeat.loginRegion.show view
 
   msgBus.events.on "app:show", (view) =>
     HNHeartbeat.graphRegion.show view

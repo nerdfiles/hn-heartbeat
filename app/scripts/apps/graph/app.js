@@ -2,13 +2,13 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(["backbone", "apps/graph/controller", "msgbus", "entities/hacker"], function(Backbone, Controller, msgBus) {
+  define(["marionette", "apps/graph/controller", "msgbus", "entities/hacker"], function(Marionette, Controller, msgBus) {
     "use strict";
-    var API, Router, user, _ref;
+    var API, Router, hacker, _ref;
     msgBus.events.on("lookup:user", function(user) {
       return Backbone.history.navigate("lookup/" + user);
     });
-    user = msgBus.reqres.request = "hacker:entities";
+    hacker = msgBus.reqres.request = "hacker:entities";
     Router = (function(_super) {
       __extends(Router, _super);
 
@@ -25,6 +25,9 @@
       return Router;
 
     })(Backbone.Marionette.AppRouter);
+    msgBus.events.on("lookup:hacker", function(hacker) {
+      return API.showUserGraph(hacker);
+    });
     msgBus.commands.setHandler("graph:route", function() {
       return new Router({
         controller: API
@@ -32,13 +35,14 @@
     });
     return API = {
       overview: function() {
-        return Controller["app.overview"]();
+        console.log('overview');
+        return Controller.showGraph();
       },
       lookup: function(username) {
         return msgBus.events.trigger("lookup:user", username);
       },
-      graph: function() {
-        return Controller["app.graph"]();
+      showUserGraph: function(hacker) {
+        return Controller.showUserGraphView(hacker);
       }
     };
   });
