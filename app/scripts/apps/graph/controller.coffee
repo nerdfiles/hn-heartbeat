@@ -18,6 +18,48 @@ define [
     view = @getGlobalGraphView()
     @layout.global.show view
 
+    # could pass in hackers here after cached serialized data
+    # sd:10 09 2013.23.01.30
+    __json =
+      JSON_from_where:
+        json__: {}
+
+    [__json.JSON_from_where.json__] = data = [
+      {
+        x: 0
+        y: 40
+      }
+      {
+        x: 1
+        y: 49
+      }
+      {
+        x: 2
+        y: 17
+      }
+      {
+        x: 3
+        y: 42
+      }
+    ]
+
+    # console.log  __json.JSON_from_where.json__
+    # console.log [__json.JSON_from_where.json__]
+
+    @graph = new Rickshaw.Graph
+      element: document.querySelector "#graph"
+      # element: @ui.graph
+      width: 580
+      height: 250
+      series: [
+        {
+          color: "steelblue"
+          data: data
+        }
+      ]
+
+    @graph.render()
+
   getGlobalGraphView: () ->
     new Views.GlobalGraph
 

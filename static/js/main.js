@@ -18274,7 +18274,7 @@ define("rickshaw", ["d3"], (function (global) {
 define('text',{load: function(id){throw new Error("Dynamic load not allowed: " + id);}});
 define('text!apps/graph/templates/graph.html.tmpl',[],function () { return '<!-- Filename: apps/hacker/detail/templates/hackerdetail.html.tmpl -->\n<div class=\'m--heartbeat\'>\n  <div class=\'bosom\'>\n    <div id="graph">\n    </div>\n  </div>\n</div><!-- /.m--heartbeat -->\n';});
 
-define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<div class="layout">\n  <input type="text" name="lookup" autocomplete="off" id="lookupUser" value="" />\n</div>\n';});
+define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<div class="layout">\n  <div id="graph"></div>\n  <input type="text" name="lookup" autocomplete="off" id="lookupUser" value="" />\n</div>\n';});
 
 (function() {
   define('apps/graph/templates',['require','text!apps/graph/templates/graph.html.tmpl','text!apps/graph/templates/layout.html.tmpl'],function(require) {
@@ -18402,45 +18402,7 @@ define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<di
 
         View.prototype.onBeforeRender = function() {};
 
-        View.prototype.onRender = function() {
-          return this["app.graph"]();
-        };
-
-        View.prototype["app.graph"] = function() {
-          var data, __json;
-          __json = {
-            JSON_from_where: {
-              json__: {}
-            }
-          };
-          __json.JSON_from_where.json__ = (data = [
-            {
-              x: 0,
-              y: 40
-            }, {
-              x: 1,
-              y: 49
-            }, {
-              x: 2,
-              y: 17
-            }, {
-              x: 3,
-              y: 42
-            }
-          ])[0];
-          this.graph = new Rickshaw.Graph({
-            element: document.querySelector("#graph"),
-            width: 580,
-            height: 250,
-            series: [
-              {
-                color: "steelblue",
-                data: data
-              }
-            ]
-          });
-          return this.graph.render();
-        };
+        View.prototype.onRender = function() {};
 
         return View;
 
@@ -18505,9 +18467,41 @@ define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<di
         return msgBus.events.trigger("app:show", this.layout);
       },
       showGlobalGraphView: function() {
-        var view;
+        var data, view, __json;
         view = this.getGlobalGraphView();
-        return this.layout.global.show(view);
+        this.layout.global.show(view);
+        __json = {
+          JSON_from_where: {
+            json__: {}
+          }
+        };
+        __json.JSON_from_where.json__ = (data = [
+          {
+            x: 0,
+            y: 40
+          }, {
+            x: 1,
+            y: 49
+          }, {
+            x: 2,
+            y: 17
+          }, {
+            x: 3,
+            y: 42
+          }
+        ])[0];
+        this.graph = new Rickshaw.Graph({
+          element: document.querySelector("#graph"),
+          width: 580,
+          height: 250,
+          series: [
+            {
+              color: "steelblue",
+              data: data
+            }
+          ]
+        });
+        return this.graph.render();
       },
       getGlobalGraphView: function() {
         return new Views.GlobalGraph;

@@ -12,9 +12,41 @@
         return msgBus.events.trigger("app:show", this.layout);
       },
       showGlobalGraphView: function() {
-        var view;
+        var data, view, __json;
         view = this.getGlobalGraphView();
-        return this.layout.global.show(view);
+        this.layout.global.show(view);
+        __json = {
+          JSON_from_where: {
+            json__: {}
+          }
+        };
+        __json.JSON_from_where.json__ = (data = [
+          {
+            x: 0,
+            y: 40
+          }, {
+            x: 1,
+            y: 49
+          }, {
+            x: 2,
+            y: 17
+          }, {
+            x: 3,
+            y: 42
+          }
+        ])[0];
+        this.graph = new Rickshaw.Graph({
+          element: document.querySelector("#graph"),
+          width: 580,
+          height: 250,
+          series: [
+            {
+              color: "steelblue",
+              data: data
+            }
+          ]
+        });
+        return this.graph.render();
       },
       getGlobalGraphView: function() {
         return new Views.GlobalGraph;

@@ -58,45 +58,7 @@
 
         View.prototype.onBeforeRender = function() {};
 
-        View.prototype.onRender = function() {
-          return this["app.graph"]();
-        };
-
-        View.prototype["app.graph"] = function() {
-          var data, __json;
-          __json = {
-            JSON_from_where: {
-              json__: {}
-            }
-          };
-          __json.JSON_from_where.json__ = (data = [
-            {
-              x: 0,
-              y: 40
-            }, {
-              x: 1,
-              y: 49
-            }, {
-              x: 2,
-              y: 17
-            }, {
-              x: 3,
-              y: 42
-            }
-          ])[0];
-          this.graph = new Rickshaw.Graph({
-            element: document.querySelector("#graph"),
-            width: 580,
-            height: 250,
-            series: [
-              {
-                color: "steelblue",
-                data: data
-              }
-            ]
-          });
-          return this.graph.render();
-        };
+        View.prototype.onRender = function() {};
 
         return View;
 
