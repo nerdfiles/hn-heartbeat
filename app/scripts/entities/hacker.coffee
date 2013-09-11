@@ -13,56 +13,56 @@ define [
 
     initialize: () ->
 
-      msgBus.events.on 'lookup:user', (user) ->
+      msgBus.events.on 'lookup:user', (user) =>
         @lookup user
 
       @loading = false
 
       @previousLookup = null
 
-      @create_ts = encodeURIComponent '[2013-05-01T00:00:00Z + TO + *]'
+      @create_ts = '[2013-05-01T00:00:00Z + TO + *]'
 
       @contextResults = 40 # Initialize view of item (submission|comment) results
 
-    lookup: (lookupUser) ->
+    lookup: (hacker) ->
 
-      @previousLookup = lookupUser
+      @previousLookup = hacker
 
-      @fetchHacker lookupUser, (user) =>
+      @fetchHacker hacker, (user) =>
         if user.length < 1
           msgBus.events.trigger 'lookup:noUserFound'
         else
           @reset user
 
-    fetchHacker: (lookupUser, callback) ->
+    fetchHacker: (hacker, callback) ->
       return true if @loading
       @loading = true
       msgBus.events.trigger 'lookup:start'
-      q = lookupUser + '&filter[fields][create_ts]=' + @create_ts
+      query = hacker + '&filter[fields][create_ts]=' + @create_ts
       $.ajax
         url: 'http://api.thriftdb.com/api.hnsearch.com/items/_search'
         dataType: 'jsonp'
         data: "username=#{query}"
         success: (res) =>
+          console.log res
           msgBus.events.trigger 'lookup:stop'
           if res.results.length is 0
             callback []
             return []
           if res.results
-
             lookupResults = []
-
-            # hacker
-            hacker = new Hacker
-              username: username
+            # get hacker by username
+            user = new Hacker
+              username: hacker
 
             # items
             _.each res.results, (item) ->
+              # console.log item
               # Model
-              lookupResults[lookupResults.length] = new Item
-                title: title
-                karma: karma
-                date: date
+              # lookupResults[lookupResults.length] = new Item
+              #   title: title
+              #   karma: karma
+              #   date: date
             callback lookupResults
             @loading = false
             lookupResults

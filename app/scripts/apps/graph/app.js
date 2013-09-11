@@ -8,7 +8,7 @@
     msgBus.events.on("lookup:user", function(user) {
       return Backbone.history.navigate("lookup/" + user);
     });
-    hacker = msgBus.reqres.request = "hacker:entities";
+    hacker = msgBus.reqres.request("hacker:entities");
     Router = (function(_super) {
       __extends(Router, _super);
 
@@ -35,7 +35,6 @@
     });
     return API = {
       overview: function() {
-        console.log('overview');
         return Controller.showGraph();
       },
       lookup: function(username) {

@@ -27,19 +27,20 @@
       HackerCollection.prototype.model = Hacker;
 
       HackerCollection.prototype.initialize = function() {
+        var _this = this;
         msgBus.events.on('lookup:user', function(user) {
-          return this.lookup(user);
+          return _this.lookup(user);
         });
         this.loading = false;
         this.previousLookup = null;
-        this.create_ts = encodeURIComponent('[2013-05-01T00:00:00Z + TO + *]');
+        this.create_ts = '[2013-05-01T00:00:00Z + TO + *]';
         return this.contextResults = 40;
       };
 
-      HackerCollection.prototype.lookup = function(lookupUser) {
+      HackerCollection.prototype.lookup = function(hacker) {
         var _this = this;
-        this.previousLookup = lookupUser;
-        return this.fetchHacker(lookupUser, function(user) {
+        this.previousLookup = hacker;
+        return this.fetchHacker(hacker, function(user) {
           if (user.length < 1) {
             return msgBus.events.trigger('lookup:noUserFound');
           } else {
@@ -48,21 +49,22 @@
         });
       };
 
-      HackerCollection.prototype.fetchHacker = function(lookupUser, callback) {
-        var q,
+      HackerCollection.prototype.fetchHacker = function(hacker, callback) {
+        var query,
           _this = this;
         if (this.loading) {
           return true;
         }
         this.loading = true;
         msgBus.events.trigger('lookup:start');
-        q = lookupUser + '&filter[fields][create_ts]=' + this.create_ts;
+        query = hacker + '&filter[fields][create_ts]=' + this.create_ts;
         return $.ajax({
           url: 'http://api.thriftdb.com/api.hnsearch.com/items/_search',
           dataType: 'jsonp',
           data: "username=" + query,
           success: function(res) {
-            var hacker, lookupResults;
+            var lookupResults, user;
+            console.log(res);
             msgBus.events.trigger('lookup:stop');
             if (res.results.length === 0) {
               callback([]);
@@ -70,16 +72,10 @@
             }
             if (res.results) {
               lookupResults = [];
-              hacker = new Hacker({
-                username: username
+              user = new Hacker({
+                username: hacker
               });
-              _.each(res.results, function(item) {
-                return lookupResults[lookupResults.length] = new Item({
-                  title: title,
-                  karma: karma,
-                  date: date
-                });
-              });
+              _.each(res.results, function(item) {});
               callback(lookupResults);
               _this.loading = false;
               return lookupResults;

@@ -12,7 +12,7 @@ define [
     Backbone.history.navigate "lookup/" + user
 
   # Specify entities to be used
-  hacker = msgBus.reqres.request = "hacker:entities"
+  hacker = msgBus.reqres.request "hacker:entities"
 
   # Specify controllers to routes
   class Router extends Backbone.Marionette.AppRouter
@@ -31,7 +31,7 @@ define [
   # Declare internal API to be used across apps/modules
   API =
     overview: () ->
-      console.log 'overview'
+      # console.log 'overview'
       Controller.showGraph()
     lookup: (username) ->
       # Call lookup!
