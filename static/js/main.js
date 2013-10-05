@@ -14902,68 +14902,38 @@ _.extend(Marionette.Module, {
         return this.contextResults = 40;
       };
 
-      HackerCollection.prototype.lookup = function(hacker) {
+      HackerCollection.prototype.lookup = function(username) {
         var _this = this;
-        this.previousLookup = hacker;
-        return this.fetchHacker(hacker, function(user) {
+        this.previousLookup = username;
+        return this.fetchUser(username, function(user) {
+          console.log(user);
           if (user.length < 1) {
-            return msgBus.events.trigger('lookup:noUserFound');
+            return msgBus.events.trigger('lookup:noUsername');
           } else {
             return _this.reset(user);
           }
         });
       };
 
-      HackerCollection.prototype.fetchHacker = function(hacker, callback) {
-        var query,
-          _this = this;
+      HackerCollection.prototype.fetchUser = function(username, callback) {
+        var query;
         if (this.loading) {
           return true;
         }
         this.loading = true;
         msgBus.events.trigger('lookup:start');
-        query = hacker + '&filter[fields][create_ts]=' + this.create_ts;
-        return $.ajax({
-          url: 'http://api.thriftdb.com/api.hnsearch.com/items/_search',
-          dataType: 'jsonp',
-          data: "username=" + query,
-          success: function(res) {
-            var lookupResults, user;
-            console.log(res);
-            msgBus.events.trigger('lookup:stop');
-            if (res.results.length === 0) {
-              callback([]);
-              return [];
-            }
-            if (res.results) {
-              lookupResults = [];
-              user = new Hacker({
-                username: hacker
-              });
-              _.each(res.results, function(item) {});
-              callback(lookupResults);
-              _this.loading = false;
-              return lookupResults;
-            } else {
-              msgBus.events.trigger('lookup:error');
-              return _this.loading = false;
-            }
-          },
-          error: function() {
-            msgBus.events.trigger('lookup:error');
-            return _this.loading = false;
-          }
-        });
+        query = "username=" + username + "&filter[fields][create_ts]=" + this.create_ts;
+        return console.log(query);
       };
 
       return HackerCollection;
 
     })(Backbone.Collection);
     msgBus.reqres.setHandler('hacker:entities', function() {
-      return API.getHackerEntities();
+      return API.getUserEntities();
     });
     return API = {
-      getHackerEntities: function() {
+      getUserEntities: function() {
         var hackers;
         return hackers = new HackerCollection;
       }
@@ -18600,9 +18570,12 @@ define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<di
             y: 49
           }, {
             x: 2,
-            y: 17
+            y: 57
           }, {
             x: 3,
+            y: 17
+          }, {
+            x: 4,
             y: 42
           }
         ])[0];
