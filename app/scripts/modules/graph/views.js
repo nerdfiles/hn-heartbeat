@@ -2,7 +2,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(["d3", "rickshaw", "apps/graph/templates", "views/_base", "msgbus"], function(D3, rickshaw, Templates, AppViews, msgBus) {
+  define(["d3", "rickshaw", "modules/graph/templates", "views/_base", "msgbus"], function(D3, rickshaw, Templates, AppViews, msgBus) {
     "use strict";
     var Layout, View, _ref, _ref1, _ref2, _ref3;
     return {
@@ -56,9 +56,15 @@
 
         View.prototype.className = "m--global-graph";
 
-        View.prototype.onBeforeRender = function() {};
+        View.prototype.onBeforeRender = function() {
+          console.log("onBeforeRender");
+          return console.log(this.ui);
+        };
 
-        View.prototype.onRender = function() {};
+        View.prototype.onRender = function() {
+          console.log("onRender");
+          return console.log(this.ui);
+        };
 
         return View;
 
@@ -79,9 +85,15 @@
 
         View.prototype.className = "m--user-graph";
 
-        View.prototype.onBeforeRender = function() {};
+        View.prototype.onBeforeRender = function() {
+          console.log("onBeforeRender");
+          return console.log(this.ui);
+        };
 
-        View.prototype.onRender = function() {};
+        View.prototype.onRender = function() {
+          console.log("onRender");
+          return console.log(this.ui);
+        };
 
         return View;
 
@@ -98,7 +110,7 @@
 
         Layout.prototype.regions = {
           lookup: ".r--lookup",
-          global: ".r--globalGraph"
+          global: ".r--graph"
         };
 
         return Layout;

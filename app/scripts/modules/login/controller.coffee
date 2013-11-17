@@ -1,6 +1,6 @@
-# Filename: apps/login/controller.coffee
+# Filename: modules/login/controller.coffee
 define [
-  "apps/login/views"
+  "modules/login/views"
   "msgBus"
 ], (Views, msgBus) ->
   "use strict"

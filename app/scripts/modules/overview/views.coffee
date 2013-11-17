@@ -1,7 +1,7 @@
-# Filename: apps/overview/views.coffee
+# Filename: modules/overview/views.coffee
 define [
   "backbone"
-  "apps/overview/templates"
+  "modules/overview/templates"
   "views/_base"
   "msgbus"
 ], (Backbone, Templates, AppView, msgBus) ->

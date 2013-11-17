@@ -16,6 +16,7 @@ define [
     graphRegion: ".r--graph" # Hackers will be presented in graphs, which will call Overviews
     overviewRegion: ".r--overview" # Overviews will contail Items
     loginRegion: ".r--login"
+    lookupRegion: ".r--lookup"
 
   # Initialize Backbone history
   HNHeartbeat.on "initialize:after", () ->

@@ -17,6 +17,7 @@ require.config
       bootstrap: "../bower_components/bootstrap/dist/js/bootstrap.min"
       d3: "../bower_components/d3/d3.min"
       rickshaw: "../bower_components/rickshaw/rickshaw"
+      "Q": "//cdnjs.cloudflare.com/ajax/libs/q.js/0.9.6/q.min"
 
     shim:
       underscore:
@@ -30,10 +31,10 @@ require.config
 require [
   "config/_base"
   "app"
-  "apps/access/app"
-  "apps/graph/app"
-  "apps/overview/app"
-  "apps/login/app"
+  "modules/access/module"
+  "modules/graph/module"
+  "modules/overview/module"
+  "modules/login/module"
 ], (_config, HNHeartbeat) ->
   "use strict"
 

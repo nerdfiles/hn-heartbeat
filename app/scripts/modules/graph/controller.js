@@ -1,8 +1,8 @@
 (function() {
-  define(["msgbus", "apps/graph/views"], function(msgBus, Views) {
+  define(["msgbus", "modules/graph/views"], function(msgBus, Views) {
     "use strict";
     return {
-      showGraph: function(hackers) {
+      showGraph: function(hacker) {
         var _this = this;
         this.layout = this.getLayout();
         this.layout.on("show", function() {
@@ -54,10 +54,54 @@
       getGlobalGraphView: function() {
         return new Views.GlobalGraph;
       },
-      showUserGraphView: function(hacker) {
-        var view;
-        view = this.getUserGraphView(hacker);
-        return msgBus.events.trigger("app:show:graph", view);
+      showUserGraph: function(hacker) {
+        var _this = this;
+        this.layout = this.getLayout();
+        this.layout.on("show", function() {
+          _this.showLookupView();
+          return _this.showUserGraphView();
+        });
+        return msgBus.events.trigger("app:show", this.layout);
+      },
+      showUserGraphView: function() {
+        var data, view, __json;
+        view = this.getUserGraphView();
+        this.layout.global.show(view);
+        __json = {
+          JSON_from_where: {
+            json__: {}
+          }
+        };
+        __json.JSON_from_where.json__ = (data = [
+          {
+            x: 0,
+            y: 50
+          }, {
+            x: 1,
+            y: 59
+          }, {
+            x: 2,
+            y: 57
+          }, {
+            x: 3,
+            y: 17
+          }, {
+            x: 4,
+            y: 42
+          }
+        ])[0];
+        this.graph = new Rickshaw.Graph({
+          element: document.querySelector("#graph"),
+          width: 580,
+          height: 250,
+          series: [
+            {
+              color: "lightblue",
+              data: data
+            }
+          ]
+        });
+        return this.graph.render();
       },
       getUserGraphView: function(hacker) {
         return new Views.UserGraph({

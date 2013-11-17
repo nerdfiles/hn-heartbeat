@@ -8,7 +8,8 @@
       accessRegion: ".r--access",
       graphRegion: ".r--graph",
       overviewRegion: ".r--overview",
-      loginRegion: ".r--login"
+      loginRegion: ".r--login",
+      lookupRegion: ".r--lookup"
     });
     HNHeartbeat.on("initialize:after", function() {
       if (!Backbone.history.started) {

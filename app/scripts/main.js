@@ -14,7 +14,8 @@
       "response.js": "../bower_components/responsejs/response.min",
       bootstrap: "../bower_components/bootstrap/dist/js/bootstrap.min",
       d3: "../bower_components/d3/d3.min",
-      rickshaw: "../bower_components/rickshaw/rickshaw"
+      rickshaw: "../bower_components/rickshaw/rickshaw",
+      "Q": "//cdnjs.cloudflare.com/ajax/libs/q.js/0.9.6/q.min"
     },
     shim: {
       underscore: {
@@ -30,7 +31,7 @@
     }
   });
 
-  require(["config/_base", "app", "apps/access/app", "apps/graph/app", "apps/overview/app", "apps/login/app"], function(_config, HNHeartbeat) {
+  require(["config/_base", "app", "modules/access/module", "modules/graph/module", "modules/overview/module", "modules/login/module"], function(_config, HNHeartbeat) {
     "use strict";
     return HNHeartbeat.start();
   });

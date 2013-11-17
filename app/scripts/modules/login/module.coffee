@@ -1,7 +1,7 @@
-# Filename: apps/login/apps.coffee
+# Filename: modules/login/apps.coffee
 define [
   "backbone"
-  "apps/login/controller"
+  "modules/login/controller"
   "msgBus"
 ], (Backbone, Controller, msgBus) ->
   "use strict"

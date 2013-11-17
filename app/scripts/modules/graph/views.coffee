@@ -1,8 +1,8 @@
-# Filename: apps/graph/views.coffee
+# Filename: modules/graph/views.coffee
 define [
   "d3"
   "rickshaw"
-  "apps/graph/templates"
+  "modules/graph/templates"
   "views/_base"
   "msgbus"
 ], (D3, rickshaw, Templates, AppViews, msgBus) ->
@@ -29,14 +29,11 @@ define [
       graph: "#graph"
     className: "m--global-graph"
     onBeforeRender: () ->
-      # console.log "onBeforeRender"
-      # console.log d3
-      # console.log Rickshaw
+      console.log "onBeforeRender"
+      console.log @ui
     onRender: () ->
-      # This happens before DOM rendering (before elements are available 
-      # for selection.
-      #
-      # sd:07 09 2013.20.35.05
+      console.log "onRender"
+      console.log @ui
 
   UserGraph: class View extends AppViews.ItemView
     template: _.template Templates.graph
@@ -44,17 +41,14 @@ define [
       graph: "#graph"
     className: "m--user-graph"
     onBeforeRender: () ->
-      # console.log "onBeforeRender"
-      # console.log d3
-      # console.log Rickshaw
+      console.log "onBeforeRender"
+      console.log @ui
     onRender: () ->
-      # This happens before DOM rendering (before elements are available 
-      # for selection.
-      #
-      # sd:07 09 2013.20.35.05
+      console.log "onRender"
+      console.log @ui
 
   Layout: class Layout extends AppViews.Layout
     template: _.template(Templates.layout)
     regions:
       lookup: ".r--lookup"
-      global: ".r--globalGraph"
+      global: ".r--graph"

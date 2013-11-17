@@ -1,7 +1,7 @@
-# Filename: apps/graph/app.coffee
+# Filename: modules/graph/app.coffee
 define [
   "marionette"
-  "apps/graph/controller"
+  "modules/graph/controller"
   "msgbus"
   "entities/hacker"
 ], (Marionette, Controller, msgBus) ->
@@ -17,11 +17,11 @@ define [
   # Specify controllers to routes
   class Router extends Backbone.Marionette.AppRouter
     appRoutes:
-      "": "overview"
-      "lookup/:username": "lookup"
+      "": "graphOverview"
+      "lookup/:username": "graphUser"
 
-  msgBus.events.on "lookup:hacker", (hacker) ->
-      API.showUserGraph hacker
+  # msgBus.events.on "lookup:hacker", (hacker) ->
+  #     API.graphUser hacker
 
   # Link controllers to routes
   msgBus.commands.setHandler "graph:route", () ->
@@ -30,12 +30,11 @@ define [
 
   # Declare internal API to be used across apps/modules
   API =
-    overview: () ->
-      # console.log 'overview'
+    # Overview Graph
+    graphOverview: () ->
       Controller.showGraph()
-    lookup: (username) ->
-      # Call lookup!
-      # Controller.showGraph hackers
-      msgBus.events.trigger "lookup:user", username
-    showUserGraph: (hacker) ->
-      Controller.showUserGraphView(hacker)
+
+    # User Graph Lookup
+    graphUser: (hacker) ->
+      Controller.showUserGraph hacker
+      msgBus.events.trigger "lookup:user", hacker

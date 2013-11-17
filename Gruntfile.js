@@ -173,16 +173,17 @@ module.exports = function (grunt) {
             }
         },
         watch: {
-          src: {
-            files: ['<%= yeoman.app %>/scripts/**/**/**/*.coffee', '<%= yeoman.app %>/styles/**/*.less'],
-            tasks: [
-                'clean:dist',
-                'coffee',
-                'less',
-                // 'recess',
-                'requirejs',
-                'copy:dist']
-          }
+            src: {
+                files: ['<%= yeoman.app %>/scripts/**/**/**/*.coffee', '<%= yeoman.app %>/styles/**/*.less'],
+                tasks: [
+                    'clean:dist',
+                    'coffee',
+                    'less',
+                    // 'recess',
+                    'requirejs',
+                    'copy:dist'
+                ]
+            }
         },
         bower: {
             all: {

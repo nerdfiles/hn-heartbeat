@@ -1,6 +1,6 @@
-# Filename: apps/login/views.coffee
+# Filename: modules/login/views.coffee
 define [
-  "apps/login/templates"
+  "modules/login/templates"
   "views/_base"
   "msgBus"
 ], (Templates, AppViews, msgBus) ->

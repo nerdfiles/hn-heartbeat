@@ -1,5 +1,5 @@
 (function() {
-  define(["apps/login/views", "msgBus"], function(Views, msgBus) {
+  define(["modules/login/views", "msgBus"], function(Views, msgBus) {
     "use strict";
     return {
       "app.login": function() {

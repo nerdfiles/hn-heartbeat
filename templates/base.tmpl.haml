@@ -108,7 +108,7 @@
     %section{:class => "s--header"}
       %div{:class => "r--login"}
 
-    %div{:class => "r--graph"}
+    %section{:class => "r--graph"}
 
     %section{:class => "s--footer"}
       %ul
@@ -139,6 +139,7 @@
       g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
       s.parentNode.insertBefore(g,s)}(document,'script'));
 
-    %script{:data-main => "{% static 'js/main' %}", :src => "{% static 'js/vendor/require.js' %}"}
+    -# %script{:data-main => "{% static 'js/main' %}", :src => "{% static 'js/vendor/require.js' %}"}
+    %script{:data-main => "{% static 'js/main' %}", :src => "//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.9/require.min.js"}
 
 </html>

@@ -1,6 +1,8 @@
 (function () {
 (function() {
-  define('config/_base',[], function() {});
+  define('config/_base',["Q"], function(Q) {
+    return window.Q = Q;
+  });
 
 }).call(this);
 
@@ -14845,7 +14847,8 @@ _.extend(Marionette.Module, {
       accessRegion: ".r--access",
       graphRegion: ".r--graph",
       overviewRegion: ".r--overview",
-      loginRegion: ".r--login"
+      loginRegion: ".r--login",
+      lookupRegion: ".r--lookup"
     });
     HNHeartbeat.on("initialize:after", function() {
       if (!Backbone.history.started) {
@@ -14898,7 +14901,7 @@ _.extend(Marionette.Module, {
         });
         this.loading = false;
         this.previousLookup = null;
-        this.create_ts = '[2013-05-01T00:00:00Z + TO + *]';
+        this.create_ts = '[2013-05-01T00:00:00Z+TO+*]';
         return this.contextResults = 40;
       };
 
@@ -14906,7 +14909,6 @@ _.extend(Marionette.Module, {
         var _this = this;
         this.previousLookup = username;
         return this.fetchUser(username, function(user) {
-          console.log(user);
           if (user.length < 1) {
             return msgBus.events.trigger('lookup:noUsername');
           } else {
@@ -14916,14 +14918,37 @@ _.extend(Marionette.Module, {
       };
 
       HackerCollection.prototype.fetchUser = function(username, callback) {
-        var query;
+        var more_query, query,
+          _this = this;
         if (this.loading) {
           return true;
         }
         this.loading = true;
         msgBus.events.trigger('lookup:start');
-        query = "username=" + username + "&filter[fields][create_ts]=" + this.create_ts;
-        return console.log(query);
+        more_query = "&weights[title]=1.1&weights[text]=0.7&weights[domain]=2.0&weights[username]=0.1&weights[type]=0.0&boosts[fields][points]=0.15&boosts[fields][num_comments]=0.15&boosts[functions][pow(2,div(div(ms(create_ts,NOW),3600000),72))]=200.0";
+        query = "q=" + username + more_query + "&filter[fields][create_ts]=" + this.create_ts;
+        return $.ajax({
+          url: 'http://api.thriftdb.com/api.hnsearch.com/items/_search',
+          dataType: 'jsonp',
+          data: "" + query,
+          success: function(res) {
+            var lookupResults, user;
+            msgBus.events.trigger('lookup:stop');
+            if (res.results.length === 0) {
+              callback([]);
+              return [];
+            }
+            console.log(res.results);
+            if (res.results.length) {
+              lookupResults = [];
+              user = new Hacker({
+                username: username,
+                items: res.results
+              });
+            }
+            return console.log(user);
+          }
+        });
       };
 
       return HackerCollection;
@@ -14943,7 +14968,7 @@ _.extend(Marionette.Module, {
 }).call(this);
 
 (function() {
-  define('apps/access/app',["marionette", "msgbus", "entities/hacker"], function(Marionette, Controller, msgBus) {
+  define('modules/access/module',["marionette", "msgbus", "entities/hacker"], function(Marionette, Controller, msgBus) {
     return "use strict";
   });
 
@@ -18358,15 +18383,15 @@ define("rickshaw", ["d3"], (function (global) {
 }(this)));
 
 define('text',{load: function(id){throw new Error("Dynamic load not allowed: " + id);}});
-define('text!apps/graph/templates/graph.html.tmpl',[],function () { return '<!-- Filename: apps/hacker/detail/templates/hackerdetail.html.tmpl -->\n<div class=\'m--heartbeat\'>\n  <div class=\'bosom\'>\n    <div id="graph">\n    </div>\n  </div>\n</div><!-- /.m--heartbeat -->\n';});
+define('text!modules/graph/templates/graph.html.tmpl',[],function () { return '<!-- Filename: apps/hacker/detail/templates/hackerdetail.html.tmpl -->\n<div class=\'m--heartbeat\'>\n  <div class=\'bosom\'>\n    <div id="graph">\n    </div>\n  </div>\n</div><!-- /.m--heartbeat -->\n';});
 
-define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<div class="layout">\n  <div id="graph"></div>\n  <input type="text" name="lookup" autocomplete="off" id="lookupUser" value="" />\n</div>\n';});
+define('text!modules/graph/templates/layout.html.tmpl',[],function () { return '<div class="layout">\n  <div id="graph"></div>\n  <div id="lookup">\n    <input\n      type="text"\n      autocomplete="off"\n      id="lookupUser"\n      name="lookupUser"\n      value="" />\n  </div>\n</div>\n';});
 
 (function() {
-  define('apps/graph/templates',['require','text!apps/graph/templates/graph.html.tmpl','text!apps/graph/templates/layout.html.tmpl'],function(require) {
+  define('modules/graph/templates',['require','text!modules/graph/templates/graph.html.tmpl','text!modules/graph/templates/layout.html.tmpl'],function(require) {
     return {
-      "graph": require("text!apps/graph/templates/graph.html.tmpl"),
-      "layout": require("text!apps/graph/templates/layout.html.tmpl")
+      "graph": require("text!modules/graph/templates/graph.html.tmpl"),
+      "layout": require("text!modules/graph/templates/layout.html.tmpl")
     };
   });
 
@@ -18432,7 +18457,7 @@ define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<di
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define('apps/graph/views',["d3", "rickshaw", "apps/graph/templates", "views/_base", "msgbus"], function(D3, rickshaw, Templates, AppViews, msgBus) {
+  define('modules/graph/views',["d3", "rickshaw", "modules/graph/templates", "views/_base", "msgbus"], function(D3, rickshaw, Templates, AppViews, msgBus) {
     "use strict";
     var Layout, View, _ref, _ref1, _ref2, _ref3;
     return {
@@ -18486,9 +18511,15 @@ define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<di
 
         View.prototype.className = "m--global-graph";
 
-        View.prototype.onBeforeRender = function() {};
+        View.prototype.onBeforeRender = function() {
+          console.log("onBeforeRender");
+          return console.log(this.ui);
+        };
 
-        View.prototype.onRender = function() {};
+        View.prototype.onRender = function() {
+          console.log("onRender");
+          return console.log(this.ui);
+        };
 
         return View;
 
@@ -18509,9 +18540,15 @@ define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<di
 
         View.prototype.className = "m--user-graph";
 
-        View.prototype.onBeforeRender = function() {};
+        View.prototype.onBeforeRender = function() {
+          console.log("onBeforeRender");
+          return console.log(this.ui);
+        };
 
-        View.prototype.onRender = function() {};
+        View.prototype.onRender = function() {
+          console.log("onRender");
+          return console.log(this.ui);
+        };
 
         return View;
 
@@ -18528,7 +18565,7 @@ define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<di
 
         Layout.prototype.regions = {
           lookup: ".r--lookup",
-          global: ".r--globalGraph"
+          global: ".r--graph"
         };
 
         return Layout;
@@ -18540,10 +18577,10 @@ define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<di
 }).call(this);
 
 (function() {
-  define('apps/graph/controller',["msgbus", "apps/graph/views"], function(msgBus, Views) {
+  define('modules/graph/controller',["msgbus", "modules/graph/views"], function(msgBus, Views) {
     "use strict";
     return {
-      showGraph: function(hackers) {
+      showGraph: function(hacker) {
         var _this = this;
         this.layout = this.getLayout();
         this.layout.on("show", function() {
@@ -18595,10 +18632,54 @@ define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<di
       getGlobalGraphView: function() {
         return new Views.GlobalGraph;
       },
-      showUserGraphView: function(hacker) {
-        var view;
-        view = this.getUserGraphView(hacker);
-        return msgBus.events.trigger("app:show:graph", view);
+      showUserGraph: function(hacker) {
+        var _this = this;
+        this.layout = this.getLayout();
+        this.layout.on("show", function() {
+          _this.showLookupView();
+          return _this.showUserGraphView();
+        });
+        return msgBus.events.trigger("app:show", this.layout);
+      },
+      showUserGraphView: function() {
+        var data, view, __json;
+        view = this.getUserGraphView();
+        this.layout.global.show(view);
+        __json = {
+          JSON_from_where: {
+            json__: {}
+          }
+        };
+        __json.JSON_from_where.json__ = (data = [
+          {
+            x: 0,
+            y: 50
+          }, {
+            x: 1,
+            y: 59
+          }, {
+            x: 2,
+            y: 57
+          }, {
+            x: 3,
+            y: 17
+          }, {
+            x: 4,
+            y: 42
+          }
+        ])[0];
+        this.graph = new Rickshaw.Graph({
+          element: document.querySelector("#graph"),
+          width: 580,
+          height: 250,
+          series: [
+            {
+              color: "lightblue",
+              data: data
+            }
+          ]
+        });
+        return this.graph.render();
       },
       getUserGraphView: function(hacker) {
         return new Views.UserGraph({
@@ -18625,7 +18706,7 @@ define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<di
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define('apps/graph/app',["marionette", "apps/graph/controller", "msgbus", "entities/hacker"], function(Marionette, Controller, msgBus) {
+  define('modules/graph/module',["marionette", "modules/graph/controller", "msgbus", "entities/hacker"], function(Marionette, Controller, msgBus) {
     "use strict";
     var API, Router, hacker, _ref;
     msgBus.events.on("lookup:user", function(user) {
@@ -18641,30 +18722,25 @@ define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<di
       }
 
       Router.prototype.appRoutes = {
-        "": "overview",
-        "lookup/:username": "lookup"
+        "": "graphOverview",
+        "lookup/:username": "graphUser"
       };
 
       return Router;
 
     })(Backbone.Marionette.AppRouter);
-    msgBus.events.on("lookup:hacker", function(hacker) {
-      return API.showUserGraph(hacker);
-    });
     msgBus.commands.setHandler("graph:route", function() {
       return new Router({
         controller: API
       });
     });
     return API = {
-      overview: function() {
+      graphOverview: function() {
         return Controller.showGraph();
       },
-      lookup: function(username) {
-        return msgBus.events.trigger("lookup:user", username);
-      },
-      showUserGraph: function(hacker) {
-        return Controller.showUserGraphView(hacker);
+      graphUser: function(hacker) {
+        Controller.showUserGraph(hacker);
+        return msgBus.events.trigger("lookup:user", hacker);
       }
     };
   });
@@ -18676,14 +18752,14 @@ define('text!apps/graph/templates/layout.html.tmpl',[],function () { return '<di
 
 }).call(this);
 
-define("apps/overview/app", function(){});
+define("modules/overview/module", function(){});
 
-define('text!apps/login/templates/base.html.tmpl',[],function () { return '<div class="m--login" id="login">\n  <div class="bosom">\n    <h1>Hacker News Heartbeat</h1>\n    <form \n      id="login" \n      class="login" \n      method="post">\n\n      <fieldset>\n        <legend>Login</legend>\n        <div class="form-row">\n          <input \n            id="__username__" \n            name="username" \n            type="text" \n            placeholder="Give us yr Hacker News handle!" />\n        </div>\n      </fieldset>\n\n    </form>\n  </div>\n</div>\n\n';});
+define('text!modules/login/templates/base.html.tmpl',[],function () { return '<div class="m--login" id="login">\n  <div class="bosom">\n    <h1>Hacker News Heartbeat</h1>\n    <form \n      id="login" \n      class="login" \n      method="post">\n\n      <fieldset>\n        <legend>Login</legend>\n        <div class="form-row">\n          <input \n            id="__username__" \n            name="username" \n            type="text" \n            placeholder="Give us yr Hacker News handle!" />\n        </div>\n      </fieldset>\n\n    </form>\n  </div>\n</div>\n\n';});
 
 (function() {
-  define('apps/login/templates',['require','text!apps/login/templates/base.html.tmpl'],function(require) {
+  define('modules/login/templates',['require','text!modules/login/templates/base.html.tmpl'],function(require) {
     return {
-      "login.view": require("text!apps/login/templates/base.html.tmpl")
+      "login.view": require("text!modules/login/templates/base.html.tmpl")
     };
   });
 
@@ -18704,7 +18780,7 @@ define('text!apps/login/templates/base.html.tmpl',[],function () { return '<div 
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define('apps/login/views',["apps/login/templates", "views/_base", "msgBus"], function(Templates, AppViews, msgBus) {
+  define('modules/login/views',["modules/login/templates", "views/_base", "msgBus"], function(Templates, AppViews, msgBus) {
     "use strict";
     var View, _ref;
     return {
@@ -18729,7 +18805,7 @@ define('text!apps/login/templates/base.html.tmpl',[],function () { return '<div 
 }).call(this);
 
 (function() {
-  define('apps/login/controller',["apps/login/views", "msgBus"], function(Views, msgBus) {
+  define('modules/login/controller',["modules/login/views", "msgBus"], function(Views, msgBus) {
     "use strict";
     return {
       "app.login": function() {
@@ -18746,7 +18822,7 @@ define('text!apps/login/templates/base.html.tmpl',[],function () { return '<div 
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define('apps/login/app',["backbone", "apps/login/controller", "msgBus"], function(Backbone, Controller, msgBus) {
+  define('modules/login/module',["backbone", "modules/login/controller", "msgBus"], function(Backbone, Controller, msgBus) {
     "use strict";
     var API, Router, _ref;
     Router = (function(_super) {
@@ -18794,7 +18870,8 @@ define('text!apps/login/templates/base.html.tmpl',[],function () { return '<div 
       "response.js": "../bower_components/responsejs/response.min",
       bootstrap: "../bower_components/bootstrap/dist/js/bootstrap.min",
       d3: "../bower_components/d3/d3.min",
-      rickshaw: "../bower_components/rickshaw/rickshaw"
+      rickshaw: "../bower_components/rickshaw/rickshaw",
+      "Q": "//cdnjs.cloudflare.com/ajax/libs/q.js/0.9.6/q.min"
     },
     shim: {
       underscore: {
@@ -18810,7 +18887,7 @@ define('text!apps/login/templates/base.html.tmpl',[],function () { return '<div 
     }
   });
 
-  require(["config/_base", "app", "apps/access/app", "apps/graph/app", "apps/overview/app", "apps/login/app"], function(_config, HNHeartbeat) {
+  require(["config/_base", "app", "modules/access/module", "modules/graph/module", "modules/overview/module", "modules/login/module"], function(_config, HNHeartbeat) {
     "use strict";
     return HNHeartbeat.start();
   });
