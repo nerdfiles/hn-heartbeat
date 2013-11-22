@@ -83,7 +83,8 @@
       };
 
       HackerCollection.prototype.fetchUser = function(username, callback) {
-        var hckr;
+        var hckr,
+          _this = this;
         if (this.loading) {
           return true;
         }
@@ -94,10 +95,12 @@
         });
         return hckr.save(null, {
           success: function(res) {
-            return console.log(res);
+            console.log(res);
+            return _this.loading = false;
           },
           error: function(err) {
-            return console.log(err);
+            console.log(err);
+            return _this.loading = false;
           }
         });
       };

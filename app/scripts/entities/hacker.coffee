@@ -68,10 +68,12 @@ define [
         # method: 'POST'
         # dataType: 'json'
         # data: data
-        success: (res) ->
+        success: (res) =>
           console.log res
-        error: (err) ->
+          @loading = false
+        error: (err) =>
           console.log err
+          @loading = false
       # Need to use Promises here
       # $.ajax
       #   # url: 'http://api.thriftdb.com/api.hnsearch.com/items/_search'

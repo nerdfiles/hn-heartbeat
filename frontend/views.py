@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# from django.conf import settings
-from django.contrib import auth
+# from django.contrib import auth
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -66,6 +65,7 @@ class HackerAdd(generics.CreateAPIView):
 
     # Auth
     def post(self, request, *args, **kwargs):
+        from pprint import pprint
         # If the user exists, error out.
         print(self)
         print(request.DATA)
@@ -73,8 +73,8 @@ class HackerAdd(generics.CreateAPIView):
         # serializer = self.get_serializer(
         #     data=request.DATA, files=request.FILES)
 
-        serializer = self.get_serializer(
-            data=request.DATA)
+        serializer = self.get_serializer(data=request.DATA)
+        pprint(dir(serializer))
 
         if serializer.is_valid():
             password = serializer.init_data.get(
@@ -85,13 +85,18 @@ class HackerAdd(generics.CreateAPIView):
             self.object = serializer.save()
             self.post_save(self.object, created=True)
 
-            _user = auth.authenticate(
-                username=self.object.username, password=password)
+            # If we authenticate and log in here, we're assuming the user
+            # likely wishes to see their own HN profile.
+            # We just want to add a new HN user with their data.
 
-            auth.login(request, _user)
+            # _user = auth.authenticate(
+            #     username=self.object.username, password=password)
+
+            # auth.login(request, _user)
 
             headers = self.get_success_headers(serializer.data)
-            return Response(serializer.data, status=status.HTTP_201_CREATED,
+            return Response(serializer.data,
+                            status=status.HTTP_201_CREATED,
                             headers=headers)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
