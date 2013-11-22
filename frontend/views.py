@@ -67,6 +67,8 @@ class HackerAdd(generics.CreateAPIView):
     # Auth
     def post(self, request, *args, **kwargs):
         # If the user exists, error out.
+        print(self)
+        print(request.DATA)
 
         # serializer = self.get_serializer(
         #     data=request.DATA, files=request.FILES)
