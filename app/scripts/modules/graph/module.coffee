@@ -1,4 +1,4 @@
-# Filename: modules/graph/app.coffee
+# Filename: modules/graph/module.coffee
 define [
   "marionette"
   "modules/graph/controller"
@@ -20,8 +20,8 @@ define [
       "": "graphOverview"
       "lookup/:username": "graphUser"
 
-  # msgBus.events.on "lookup:hacker", (hacker) ->
-  #     API.graphUser hacker
+  # msgBus.events.on "lookup:hacker", (user) ->
+  #     API.graphUser user
 
   # Link controllers to routes
   msgBus.commands.setHandler "graph:route", () ->
@@ -35,6 +35,12 @@ define [
       Controller.showGraph()
 
     # User Graph Lookup
-    graphUser: (hacker) ->
+    graphUser: (username) ->
+
+      console.log '---entities---'
+      console.log hacker
+      console.log '---entities---'
+
       Controller.showUserGraph hacker
-      msgBus.events.trigger "lookup:user", hacker
+
+      msgBus.events.trigger "lookup:user", username

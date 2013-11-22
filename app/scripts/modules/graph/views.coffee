@@ -9,12 +9,16 @@ define [
   "use strict"
 
   Lookup: class View extends AppViews.ItemView
+
     el: "#lookup"
+
     events:
       "change #lookupUser": "lookup"
+
     initialize: () ->
       msgBus.events.on "lookup:user", (user) =>
-        @.$("#lookupUser").val(user)
+        @.$("#lookupUser").val user
+
     lookup: () ->
       username = @.$("#lookupUser").val().trim()
 
@@ -45,10 +49,10 @@ define [
       console.log @ui
     onRender: () ->
       console.log "onRender"
-      console.log @ui
+      console.log @model
 
   Layout: class Layout extends AppViews.Layout
-    template: _.template(Templates.layout)
+    template: _.template Templates.layout
     regions:
       lookup: ".r--lookup"
       global: ".r--graph"

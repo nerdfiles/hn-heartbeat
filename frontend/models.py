@@ -89,7 +89,7 @@ class Item(models.Model):
 
     title = models.CharField(max_length=100, null=True)
     type = models.CharField(max_length=10, null=True)
-    posted_date = models.DateTimeField(null=True)
+    posted_date = models.DateTimeField(null=True, blank=True)
     added_at = models.DateTimeField(auto_now_add=True)
     points = models.IntegerField(null=True)
 
@@ -133,7 +133,7 @@ class Heartbeat(models.Model):
 
     '''
 
-    items = models.ForeignKey(Item,)
+    items = models.ManyToManyField(Item, related_name="item", null=True, blank=True)
     added_at = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):

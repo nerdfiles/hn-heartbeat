@@ -59,14 +59,16 @@
         this.layout = this.getLayout();
         this.layout.on("show", function() {
           _this.showLookupView();
-          return _this.showUserGraphView();
+          return _this.showUserGraphView(hacker);
         });
         return msgBus.events.trigger("app:show", this.layout);
       },
-      showUserGraphView: function() {
+      showUserGraphView: function(hacker) {
         var data, view, __json;
-        view = this.getUserGraphView();
-        this.layout.global.show(view);
+        view = this.getUserGraphView(hacker);
+        console.log('---showUserGraphView---');
+        console.log(hacker);
+        console.log('---showUserGraphView---');
         __json = {
           JSON_from_where: {
             json__: {}

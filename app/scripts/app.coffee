@@ -34,7 +34,10 @@ define [
   # msgBus.events.on "app:show:login", (view) =>
   #   HNHeartbeat.loginRegion.show view
 
-  msgBus.events.on "app:show", (view) =>
+  msgBus.events.on "app:show", (view) ->
     HNHeartbeat.graphRegion.show view
+
+  # msgBus.events.on "app:show:graph", (view) =>
+  #   HNHeartbeat.graphRegion.show view
 
   HNHeartbeat

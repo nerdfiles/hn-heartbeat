@@ -93,7 +93,10 @@
     -# JS
     -# ==========================================================================
 
-    %script{:src => "{% static 'js/vendor/modernizr.js' %}"}
+    -# %script{:src => "{% static 'js/vendor/modernizr.js' %}"}
+    %script{:src => '//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js' }
+
+    %meta{ :name => 'x-csrf-token', :content => '{{ csrf_token }}' }
 
   %body{:class => "app--hn-heartbeat"}
 
@@ -133,11 +136,11 @@
     /[if lt IE 7]
       <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
 
-    :javascript
-      var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
-      (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-      g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-      s.parentNode.insertBefore(g,s)}(document,'script'));
+    -# :javascript
+    -#   var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+    -#   (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+    -#   g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+    -#   s.parentNode.insertBefore(g,s)}(document,'script'));
 
     -# %script{:data-main => "{% static 'js/main' %}", :src => "{% static 'js/vendor/require.js' %}"}
     %script{:data-main => "{% static 'js/main' %}", :src => "//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.9/require.min.js"}

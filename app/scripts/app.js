@@ -1,8 +1,7 @@
 (function() {
   define(["backbone", "marionette", "msgbus"], function(Backbone, Marionette, msgBus) {
     "use strict";
-    var HNHeartbeat,
-      _this = this;
+    var HNHeartbeat;
     HNHeartbeat = new Marionette.Application();
     HNHeartbeat.addRegions({
       accessRegion: ".r--access",

@@ -13,6 +13,7 @@ class ItemAdmin(admin.ModelAdmin):
         (None, {
             'fields': (
                 'title', 'type',
+                'points',
                 'posted_date',)}),
     )
 

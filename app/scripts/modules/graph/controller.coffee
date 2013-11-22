@@ -46,9 +46,6 @@ define [
       }
     ]
 
-    # console.log  __json.JSON_from_where.json__
-    # console.log [__json.JSON_from_where.json__]
-
     @graph = new Rickshaw.Graph
       element: document.querySelector "#graph"
       # element: @ui.graph
@@ -73,20 +70,16 @@ define [
 
     @layout.on "show", () =>
       @showLookupView()
-      @showUserGraphView()
+      @showUserGraphView hacker
 
     msgBus.events.trigger "app:show", @layout
 
-    # view = @getUserGraphView hacker
-    # view.on "dialog:button:clicked", () ->
-    #   console.log @
-    # msgBus.events.trigger "app:show:graph", view
-
   # User Graph View
-  showUserGraphView: () ->
-    view = @getUserGraphView()
-    # console.log @layout
-    @layout.global.show view
+  showUserGraphView: (hacker) ->
+    view = @getUserGraphView hacker
+    console.log '---showUserGraphView---'
+    console.log hacker
+    console.log '---showUserGraphView---'
 
     # could pass in hackers here after cached serialized data
     # sd:10 09 2013.23.01.30
@@ -117,8 +110,8 @@ define [
       }
     ]
 
-    # console.log  __json.JSON_from_where.json__
-    # console.log [__json.JSON_from_where.json__]
+    # Too much fucken JavaScript OMFG right now
+    # data = hacker.heartbeat
 
     @graph = new Rickshaw.Graph
       element: document.querySelector "#graph"

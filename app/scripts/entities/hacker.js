@@ -2,7 +2,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(["backbone", "msgbus"], function(Backbone, msgBus) {
+  define(["backbone", "msgbus", "Q"], function(Backbone, msgBus, Q) {
     "use strict";
     var API, Hacker, HackerCollection, _ref, _ref1;
     Hacker = (function(_super) {
@@ -12,6 +12,18 @@
         _ref = Hacker.__super__.constructor.apply(this, arguments);
         return _ref;
       }
+
+      Hacker.prototype.initialize = function(x, y, z) {
+        console.log(x);
+        console.log(y);
+        console.log(z);
+        return this.username = x.username;
+      };
+
+      Hacker.prototype.url = function() {
+        var url;
+        return url = this.isNew() ? '/api/create/' : '/api/hacker/' + this.username;
+      };
 
       return Hacker;
 
@@ -28,8 +40,8 @@
 
       HackerCollection.prototype.initialize = function() {
         var _this = this;
-        msgBus.events.on('lookup:user', function(user) {
-          return _this.lookup(user);
+        msgBus.events.on('lookup:user', function(username) {
+          return _this.lookup(username);
         });
         this.loading = false;
         this.previousLookup = null;
@@ -49,36 +61,43 @@
         });
       };
 
+      HackerCollection.prototype.createUser = function(username, callback) {
+        var data, hckr;
+        if (this.loading) {
+          return true;
+        }
+        this.loading = true;
+        msgBus.events.trigger('create:start');
+        data = {};
+        hckr = new Hacker({
+          username: username
+        });
+        return hckr.save(null, {
+          success: function(res) {
+            return console.log(res);
+          },
+          error: function(err) {
+            return console.log(err);
+          }
+        });
+      };
+
       HackerCollection.prototype.fetchUser = function(username, callback) {
-        var more_query, query,
-          _this = this;
+        var hckr;
         if (this.loading) {
           return true;
         }
         this.loading = true;
         msgBus.events.trigger('lookup:start');
-        more_query = "&weights[title]=1.1&weights[text]=0.7&weights[domain]=2.0&weights[username]=0.1&weights[type]=0.0&boosts[fields][points]=0.15&boosts[fields][num_comments]=0.15&boosts[functions][pow(2,div(div(ms(create_ts,NOW),3600000),72))]=200.0";
-        query = "q=" + username + more_query + "&filter[fields][create_ts]=" + this.create_ts;
-        return $.ajax({
-          url: 'http://api.thriftdb.com/api.hnsearch.com/items/_search',
-          dataType: 'jsonp',
-          data: "" + query,
+        hckr = new Hacker({
+          username: username
+        });
+        return hckr.save(null, {
           success: function(res) {
-            var lookupResults, user;
-            msgBus.events.trigger('lookup:stop');
-            if (res.results.length === 0) {
-              callback([]);
-              return [];
-            }
-            console.log(res.results);
-            if (res.results.length) {
-              lookupResults = [];
-              user = new Hacker({
-                username: username,
-                items: res.results
-              });
-            }
-            return console.log(user);
+            return console.log(res);
+          },
+          error: function(err) {
+            return console.log(err);
           }
         });
       };

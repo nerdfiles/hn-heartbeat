@@ -35,7 +35,9 @@ require [
   "modules/graph/module"
   "modules/overview/module"
   "modules/login/module"
+  "modules/user/module"
 ], (_config, HNHeartbeat) ->
+
   "use strict"
 
   HNHeartbeat.start()

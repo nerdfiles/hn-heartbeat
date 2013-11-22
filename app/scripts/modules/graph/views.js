@@ -92,7 +92,7 @@
 
         View.prototype.onRender = function() {
           console.log("onRender");
-          return console.log(this.ui);
+          return console.log(this.model);
         };
 
         return View;

@@ -1,7 +1,7 @@
-# Filename: modules/login/module.coffee
+# Filename: modules/user/module.coffee
 define [
   "backbone"
-  "modules/login/controller"
+  "modules/user/controller"
   "msgBus"
 ], (Backbone, Controller, msgBus) ->
   "use strict"
@@ -9,7 +9,7 @@ define [
   # Specify controllers
   class Router extends Backbone.Marionette.AppRouter
     appRoutes:
-      "app.login": "start"
+      "user/login": "start"
 
   # Link controllers to routes
   msgBus.commands.setHandler "login:route", () ->
@@ -19,4 +19,4 @@ define [
   # Declare API
   API =
     start: () ->
-      Controller["app.login"]()
+      Controller["login"]()

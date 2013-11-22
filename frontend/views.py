@@ -17,6 +17,7 @@ from rest_framework.response import Response
 # from rest_framework.response import Response
 from models import Hacker
 from serializers import HackerSerializer
+# from permissions import UserPermissions
 
 
 def render_response(request, *args, **kwargs):
@@ -31,34 +32,6 @@ class HackerDetail(generics.RetrieveUpdateAPIView):
     slug_field = slug_url_kwarg = 'username'
     model = Hacker
     serializer_class = HackerSerializer
-
-    # def __init__():
-        # from pprint import pprint
-        # from django.core.cache import cache
-        # import requests
-        # http://api.thriftdb.com/api.hnsearch.com/items/_search?\
-        # q=m1&weights[username]=1.0&filter[fields][create_ts]=\
-        # [2013-01-01T00:00:00Z%20+%20TO%20+%20*]
-
-        # TIMEOUT = 2880 * 2
-        # user = 'qhoxie'
-        # api_key = settings.API_KEY
-
-        # call = 'http://hndroidapi.appspot.com/submitted/format/json\
-        # /user/%s?appid=hn-heartbeat&callback=&guid=%s' % (user, api_key)
-        # user_cache = cache.get('user_cache')
-        # if user_cache:
-            # print user_cache
-
-        # r = requests.get(call)
-        # content = r.json()
-        # pprint(content)
-
-        # cache.set(
-            # "user_cache",
-            # content,
-            # TIMEOUT
-        # )
 
     @csrf_exempt
     def dispatch(self, request, *args, **kwargs):
@@ -77,21 +50,30 @@ class HackerDetail(generics.RetrieveUpdateAPIView):
 
 
 class HackerAdd(generics.CreateAPIView):
+
     model = Hacker
     serializer_class = HackerSerializer
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     # __shared_state = {}
 
     # def __init__(self):
-        # from pprint import pprint
-        # pprint(dir(self))
-        # self.__dict__ = self.__shared_state
-        # self.lastUpdate = None
+    #     from pprint import pprint
+    #     pprint(dir(self))
+    #     # self.__dict__ = self.__shared_state
+    #     self.lastUpdate = None
 
     # Auth
     def post(self, request, *args, **kwargs):
+        # If the user exists, error out.
+
+        # serializer = self.get_serializer(
+        #     data=request.DATA, files=request.FILES)
+
         serializer = self.get_serializer(
-            data=request.DATA, files=request.FILES)
+            data=request.DATA)
+
         if serializer.is_valid():
             password = serializer.init_data.get(
                 'password', None) or Hacker.objects.make_random_password()
@@ -103,6 +85,7 @@ class HackerAdd(generics.CreateAPIView):
 
             _user = auth.authenticate(
                 username=self.object.username, password=password)
+
             auth.login(request, _user)
 
             headers = self.get_success_headers(serializer.data)
@@ -113,14 +96,19 @@ class HackerAdd(generics.CreateAPIView):
 
 
 def all_urls_view(request):
-    from heartbeat.urls import urlpatterns  # this import should be inside the function to avoid an import loop
+    # this import should be inside the function to avoid an import loop
+    from heartbeat.urls import urlpatterns
+    # build the list of urls recursively and then sort it alphabetically
     nice_urls = get_urls(
-        urlpatterns)  # build the list of urls recursively and then sort it alphabetically
+        urlpatterns)
     return render_response(request, "links.tmpl.html", {"links": nice_urls})
 
 
 def get_urls(raw_urls, nice_urls=[], urlbase=''):
-    '''Recursively builds a list of all the urls in the current project and the name of their associated view'''
+    '''
+        Recursively builds a list of all the urls in the current project and
+        the name of their associated view
+    '''
     from operator import itemgetter
     for entry in raw_urls:
         fullurl = (urlbase + entry.regex.pattern).replace('^', '')

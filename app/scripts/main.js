@@ -31,7 +31,7 @@
     }
   });
 
-  require(["config/_base", "app", "modules/access/module", "modules/graph/module", "modules/overview/module", "modules/login/module"], function(_config, HNHeartbeat) {
+  require(["config/_base", "app", "modules/access/module", "modules/graph/module", "modules/overview/module", "modules/login/module", "modules/user/module"], function(_config, HNHeartbeat) {
     "use strict";
     return HNHeartbeat.start();
   });
