@@ -15,7 +15,7 @@ from rest_framework.response import Response
 
 # from rest_framework.response import Response
 from models import Hacker
-from serializers import HackerSerializer
+from serializers import HackerAddSerializer, HackerGetSerializer
 # from permissions import UserPermissions
 
 
@@ -25,12 +25,18 @@ def render_response(request, *args, **kwargs):
 
 
 class HackerDetail(generics.RetrieveUpdateAPIView):
+    '''
+        User GET
+
+        @note What the fuck is this for? Just GET requests or something richer?
+        Why is it doing a pre_save()?
+    '''
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsAuthenticated,)
 
     slug_field = slug_url_kwarg = 'username'
     model = Hacker
-    serializer_class = HackerSerializer
+    serializer_class = HackerGetSerializer
 
     @csrf_exempt
     def dispatch(self, request, *args, **kwargs):
@@ -49,9 +55,12 @@ class HackerDetail(generics.RetrieveUpdateAPIView):
 
 
 class HackerAdd(generics.CreateAPIView):
+    '''
+        User Add
+    '''
 
     model = Hacker
-    serializer_class = HackerSerializer
+    serializer_class = HackerAddSerializer
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsAuthenticated,)
 
@@ -65,16 +74,12 @@ class HackerAdd(generics.CreateAPIView):
 
     # Auth
     def post(self, request, *args, **kwargs):
-        from pprint import pprint
         # If the user exists, error out.
-        print(self)
-        print(request.DATA)
 
         # serializer = self.get_serializer(
         #     data=request.DATA, files=request.FILES)
 
         serializer = self.get_serializer(data=request.DATA)
-        pprint(dir(serializer))
 
         if serializer.is_valid():
             password = serializer.init_data.get(

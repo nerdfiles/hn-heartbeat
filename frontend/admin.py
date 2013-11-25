@@ -12,9 +12,9 @@ class ItemAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': (
-                'title', 'type',
-                'points',
-                'posted_date',)}),
+                'item_title', 'item_type',
+                'item_karma', 'item_date',)
+        }),
     )
 
 

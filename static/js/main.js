@@ -14970,7 +14970,17 @@ _.extend(Marionette.Module, {
         this.loading = true;
         msgBus.events.trigger('lookup:start');
         hckr = new Hacker({
-          username: username
+          username: username,
+          heartbeat: {
+            items: [
+              {
+                title: "Show HN: Something new",
+                type: "post",
+                points: "25",
+                posted_date: "2013-11-21T23:51:54"
+              }
+            ]
+          }
         });
         return hckr.save(null, {
           success: function(res) {

@@ -63,6 +63,16 @@ define [
       # query = "q=" + username + more_query + "&filter[fields][create_ts]=" + @create_ts
       hckr = new Hacker
         username: username
+        heartbeat: {
+          items: [
+            {
+              title: "Show HN: Something new",
+              type: "post",
+              points: "25",
+              posted_date: "2013-11-21T23:51:54"
+            }
+          ]
+        }
       hckr.save null,
         # url: 'http://localhost:8000/api/hacker/create/'
         # method: 'POST'

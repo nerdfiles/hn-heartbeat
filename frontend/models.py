@@ -10,12 +10,20 @@ _ = lambda s: s
 
 import logging
 
+'''
+Logging Configuration
+'''
 l = logging.getLogger('django.db.backends')
 l.setLevel(logging.DEBUG)
 l.addHandler(logging.StreamHandler())
 
 
 class HackerManager(BaseUserManager):
+    '''
+    User Manager
+
+    For creation of users.
+    '''
 
     def create_user(self, username, password=None, **extra_fields):
         if not username:
@@ -43,6 +51,13 @@ class HackerManager(BaseUserManager):
 
 
 class Hacker(AbstractBaseUser, PermissionsMixin):
+    '''
+    User
+
+    Collected from Social Networking APIs.
+    '''
+
+    # Model Properties
     username = models.CharField(max_length=50, unique=True)
     added_at = models.DateTimeField(auto_now_add=True)
     email = models.EmailField(null=True, blank=True)
@@ -57,7 +72,7 @@ class Hacker(AbstractBaseUser, PermissionsMixin):
                                             Unselect this instead of deleting \
                                             accounts.'))
 
-    heartbeat = models.OneToOneField('Heartbeat', null=True)
+    heartbeat = models.OneToOneField('Heartbeat', null=True, blank=True)
 
     USERNAME_FIELD = 'username'
 
@@ -85,14 +100,18 @@ class Item(models.Model):
 
     '''
         Consumes Hacker News API.
+
+        And perhaps various other APIs!
     '''
 
-    title = models.CharField(max_length=100, null=True)
-    type = models.CharField(max_length=10, null=True)
-    posted_date = models.DateTimeField(null=True, blank=True)
+    # Model Properties
+    item_title = models.CharField(max_length=100, null=True)
+    item_type = models.CharField(max_length=10, null=True)
+    item_date = models.DateTimeField(null=True, blank=True)
+    item_karma = models.IntegerField(null=True)
     added_at = models.DateTimeField(auto_now_add=True)
-    points = models.IntegerField(null=True)
 
+    # URL Configuration
     def __unicode__(self):
         return unicode(self.id)
 
@@ -104,38 +123,14 @@ class Heartbeat(models.Model):
         Collect all days and karma points per day.
     '''
 
-    ''' JSON POST Example:
-
-    {
-        "heartbeat": {
-            "items": [
-                {
-                    "title": "this title",
-                    "type": "comment",
-                    "karma": "4",
-                    "date_posted": "2013-05-01T00:00:00Z"
-                },
-                {
-                    "title": "another title",
-                    "type": "post",
-                    "karma": "30",
-                    "date_posted": "2013-05-01T00:00:00Z"
-                },
-                {
-                    "title": "another title",
-                    "type": "comment",
-                    "karma": "2",
-                    "date_posted": "2013-05-01T00:00:00Z"
-                }
-            ]
-        }
-    }
-
-    '''
-
-    items = models.ManyToManyField(Item, related_name="item", null=True, blank=True)
+    # Model Properties
+    items = models.ManyToManyField(Item,
+                                   related_name="beats",
+                                   null=True,
+                                   blank=True)
     added_at = models.DateTimeField(auto_now_add=True)
 
+    # URL Configuration
     def __unicode__(self):
         if hasattr(self, 'hacker'):
             return unicode(self.hacker)

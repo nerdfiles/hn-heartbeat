@@ -12,7 +12,7 @@ django-extensions==1.1.1
 django-filter==0.7
 django-sekizai==0.7
 django-toolbelt==0.0.1
-djangorestframework==2.3.6
+djangorestframework==2.3.9
 gunicorn==0.17.4
 hamlpy==0.82.2
 psycopg2==2.5.1
