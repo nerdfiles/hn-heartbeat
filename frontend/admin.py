@@ -13,7 +13,7 @@ class ItemAdmin(admin.ModelAdmin):
         (None, {
             'fields': (
                 'item_title', 'item_type',
-                'item_karma', 'item_date',)
+                'item_karma', 'item_date', )
         }),
     )
 
@@ -26,18 +26,18 @@ class HackerAdmin(admin.ModelAdmin):
         (None, {
             'fields': (
                 'username', 'password',
-                'email', 'heartbeat',)}),
+                'email', 'heartbeat', )}),
         (_('Permissions'), {
             'fields': (
                 'is_active', 'is_staff',
                 'is_superuser', 'groups',
-                'user_permissions'),
+                'user_permissions', ),
             'classes': ['collapse']}),
         (_('Important dates'), {
             'fields': (
-                'last_login',)}),
+                'last_login', )}),
     )
-    filter_horizontal = ('groups', 'user_permissions')
+    filter_horizontal = ('groups', 'user_permissions', )
 
 
 class HeartbeatAdmin(admin.ModelAdmin):
@@ -47,7 +47,7 @@ class HeartbeatAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': (
-                'items',)}),
+                'items', )}),
     )
 
 admin.site.register(Item, ItemAdmin)

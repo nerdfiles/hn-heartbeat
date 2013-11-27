@@ -125,7 +125,7 @@ class Heartbeat(models.Model):
 
     # Model Properties
     items = models.ManyToManyField(Item,
-                                   related_name="beats",
+                                   related_name="items",
                                    null=True,
                                    blank=True)
     added_at = models.DateTimeField(auto_now_add=True)

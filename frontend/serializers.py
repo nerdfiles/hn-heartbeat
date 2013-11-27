@@ -2,9 +2,11 @@
 
 from rest_framework import serializers
 from models import Hacker, Heartbeat, Item
+from django.core.exceptions import ValidationError
 
 
-class ItemSerializer(serializers.Serializer):
+# class ItemSerializer(serializers.RelatedField):
+class ItemSerializer(serializers.ModelSerializer):
     '''
         Item Serializer
 
@@ -12,29 +14,50 @@ class ItemSerializer(serializers.Serializer):
         made available from the Web or Internet via REST consumed endpoints or
         Websites which have been scraped.
     '''
-    # pk = serializers.Field()
-    item_title = serializers.CharField(max_length=100, required=True)
-    item_type = serializers.CharField(max_length=10, required=True)
-    item_date = serializers.DateTimeField(required=True)
-    item_karma = serializers.IntegerField(required=True)
 
-    # def restore_object(self, attrs, instance=None):
-    #     '''
-    #     If given a dict of serialized values, create or update model.
-    #     '''
-    #     if instance is not None:
-    #         instance.item_title = attrs.get('item_title', instance.item_title)
-    #         instance.item_karma = attrs.get('item_karma', instance.item_karma)
-    #         instance.item_type = attrs.get('item_type', instance.item_type)
-    #         instance.item_date = attrs.get('item_date', instance.item_date)
-    #         return instance
+    # read_only = False
 
-    #     return Item(**attrs)
+    # def from_native(self, data):
+    #     new_item = Item(data)
+    #     import pdb; pdb.set_trace()  # XXX BREAKPOINT
+
+    def field_from_native(self, data, files, field_name, into):
+        try:
+            if self.use_files:
+                _files = files[field_name]
+            else:
+                _data = data[field_name]
+        except KeyError:
+            if getattr(self, 'default', None):
+                _data = self.default
+            else:
+                if getattr(self, 'required', None):
+                    raise ValidationError(self.error_messages['required'])
+                return
+
+        if type(_data) is list:
+            into[field_name] = []
+            for item in _data:
+                into[field_name].append(self._custom_from_native(item))
+        else:
+            into[field_name] = self._custom_from_native(_data)
+
+    def _custom_from_native(self, data):
+        self._errors = {}
+        if data is not None:
+            import pdb; pdb.set_trace()  # XXX BREAKPOINT
+            attrs = self.restore_fields(data, None)
+            attrs = self.perform_validation(attrs)
+        else:
+            self._errors['non_field_errors'] = ['No input provided']
+
+        if not self._errors:
+            return self.restore_object(attrs,
+                                       instance=getattr(self, 'object', None))
 
     class Meta:
         model = Item
-        fields = ('item_title', 'item_karma',
-                  'item_type', 'item_date', )
+        fields = ('id', 'item_title', 'item_karma', 'item_date', 'item_type', )
 
 
 class HeartbeatSerializer(serializers.ModelSerializer):
@@ -45,22 +68,30 @@ class HeartbeatSerializer(serializers.ModelSerializer):
         to consolidate normalized User-generated Interactions (USI).
     '''
 
-    items_queryset = Item.objects.all()
-    items = ItemSerializer(items_queryset, many=True)
-    # items = serializers.SerializerMethodField('get_items')
+    # items = ItemSerializer(many=True)
+    items = ItemSerializer()
 
-    # def get_items(self, obj):
-    #     items = obj.items
-    #     serializer_context = {
-    #         'request': self.context.get('request'),
-    #         'heartbeat_id': obj.id
-    #     }
-    #     serializer = ItemSerializer(items, context=serializer_context)
-    #     return serializer.data
+    def restore_object(self, attrs, instance=None):
+        for (obj, model) in self.opts.model._meta.get_all_related_objects_with_model():
+            field_name = obj.field.related_query_name()
+            if field_name in attrs:
+                self.init_data[field_name] = attrs.pop(field_name)
+
+        return super(HeartbeatSerializer, self).restore_object(attrs, instance)
+
+    def save(self, save_m2m=True):
+        super(HeartbeatSerializer, self).save()
+
+        if getattr(self, 'init_data', None):
+            for accessor_name, object_list in self.init_data.items():
+                setattr(self.object, accessor_name, object_list)
+            self.init_data = {}
+
+        return self.object
 
     class Meta:
         model = Heartbeat
-        fields = ('items',)
+        fields = ('id', 'items', )
         depth = 1
 
 
@@ -74,18 +105,7 @@ class HackerAddSerializer(serializers.ModelSerializer):
         generated and analyzed.
     '''
 
-    # heartbeat_queryset = Heartbeat.objects.all()
     heartbeat = HeartbeatSerializer()
-
-    # def restore_object(self, attrs, instance=None):
-    #     '''
-    #     If given a dict of serialized values, create or update model.
-    #     '''
-    #     if instance is not None:
-    #         instance.username = attrs.get('username', instance.username)
-
-    #         return instance
-    #     return Hacker(**attrs)
 
     def _save_heartbeat_data(self):
         heartbeat_data = self.init_data.get('heartbeat', None)
@@ -93,7 +113,6 @@ class HackerAddSerializer(serializers.ModelSerializer):
             hs = HeartbeatSerializer(instance=self.object.heartbeat,
                                      data=heartbeat_data)
             if hs.is_valid():
-                # import pdb; pdb.set_trace()  # XXX BREAKPOINT
                 self.object.heartbeat = hs.object
                 hs.save()
             else:
@@ -115,7 +134,7 @@ class HackerAddSerializer(serializers.ModelSerializer):
         exclude = ['last_login', 'password',
                    'is_superuser', 'is_staff',
                    'is_active', 'user_permissions',
-                   'groups', 'heartbeat', ]
+                   'groups', ]
 
 
 class HackerGetSerializer(serializers.ModelSerializer):
@@ -127,8 +146,7 @@ class HackerGetSerializer(serializers.ModelSerializer):
         We store users such that subsets of user behavior through USG can be
         generated and analyzed.
     '''
-    heartbeat_queryset = Heartbeat.objects.all()
-    heartbeat = HeartbeatSerializer(heartbeat_queryset)
+    heartbeat = HeartbeatSerializer()
 
     class Meta:
         model = Hacker

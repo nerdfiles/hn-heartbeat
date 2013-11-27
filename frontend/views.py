@@ -9,9 +9,11 @@ from django.template import RequestContext
 # from django.template import TemplateDoesNotExist
 
 from rest_framework import generics, status
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 
 # from rest_framework.response import Response
 from models import Hacker
@@ -22,6 +24,14 @@ from serializers import HackerAddSerializer, HackerGetSerializer
 def render_response(request, *args, **kwargs):
     kwargs['context_instance'] = RequestContext(request)
     return render_to_response(*args, **kwargs)
+
+
+class HackerViewSet(viewsets.ModelViewSet):
+    '''
+    '''
+    queryset = Hacker.objects.all()
+    serializer_class = HackerAddSerializer
+    permission_classes = [IsAuthenticated]
 
 
 class HackerDetail(generics.RetrieveUpdateAPIView):
