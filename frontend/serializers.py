@@ -5,7 +5,26 @@ from models import Hacker, Heartbeat, Item
 from django.core.exceptions import ValidationError
 
 
-# class ItemSerializer(serializers.RelatedField):
+class NestedManyToManyField(serializers.WritableField):
+    '''
+        For writing nested, deserialized JSON to items.
+
+        @see http://stackoverflow.com/a/18842609/412244
+    '''
+
+    def to_native(self, value):
+        serializer = self.Meta.serializer(value.all(), many=True, context=self.context)
+        return serializer.data
+
+    def from_native(self, data):
+        serializer = self.Meta.serializer(data=data, many=True, context=self.context)
+        serializer.is_valid()
+        serializer.save()
+        return serializer.object
+
+    class Meta:
+        serializer = None
+
 class ItemSerializer(serializers.ModelSerializer):
     '''
         Item Serializer
@@ -15,49 +34,18 @@ class ItemSerializer(serializers.ModelSerializer):
         Websites which have been scraped.
     '''
 
-    # read_only = False
-
-    # def from_native(self, data):
-    #     new_item = Item(data)
-    #     import pdb; pdb.set_trace()  # XXX BREAKPOINT
-
-    def field_from_native(self, data, files, field_name, into):
-        try:
-            if self.use_files:
-                _files = files[field_name]
-            else:
-                _data = data[field_name]
-        except KeyError:
-            if getattr(self, 'default', None):
-                _data = self.default
-            else:
-                if getattr(self, 'required', None):
-                    raise ValidationError(self.error_messages['required'])
-                return
-
-        if type(_data) is list:
-            into[field_name] = []
-            for item in _data:
-                into[field_name].append(self._custom_from_native(item))
-        else:
-            into[field_name] = self._custom_from_native(_data)
-
-    def _custom_from_native(self, data):
-        self._errors = {}
-        if data is not None:
-            import pdb; pdb.set_trace()  # XXX BREAKPOINT
-            attrs = self.restore_fields(data, None)
-            attrs = self.perform_validation(attrs)
-        else:
-            self._errors['non_field_errors'] = ['No input provided']
-
-        if not self._errors:
-            return self.restore_object(attrs,
-                                       instance=getattr(self, 'object', None))
-
     class Meta:
         model = Item
         fields = ('id', 'item_title', 'item_karma', 'item_date', 'item_type', )
+
+
+class ItemNestedSerializer(NestedManyToManyField):
+    '''
+        Subclass of NestedManyToManyField to be used with ItemSerializer.
+    '''
+
+    class Meta:
+        serializer = ItemSerializer
 
 
 class HeartbeatSerializer(serializers.ModelSerializer):
@@ -68,26 +56,7 @@ class HeartbeatSerializer(serializers.ModelSerializer):
         to consolidate normalized User-generated Interactions (USI).
     '''
 
-    # items = ItemSerializer(many=True)
-    items = ItemSerializer()
-
-    def restore_object(self, attrs, instance=None):
-        for (obj, model) in self.opts.model._meta.get_all_related_objects_with_model():
-            field_name = obj.field.related_query_name()
-            if field_name in attrs:
-                self.init_data[field_name] = attrs.pop(field_name)
-
-        return super(HeartbeatSerializer, self).restore_object(attrs, instance)
-
-    def save(self, save_m2m=True):
-        super(HeartbeatSerializer, self).save()
-
-        if getattr(self, 'init_data', None):
-            for accessor_name, object_list in self.init_data.items():
-                setattr(self.object, accessor_name, object_list)
-            self.init_data = {}
-
-        return self.object
+    items = ItemNestedSerializer()
 
     class Meta:
         model = Heartbeat
@@ -112,6 +81,7 @@ class HackerAddSerializer(serializers.ModelSerializer):
         if heartbeat_data:
             hs = HeartbeatSerializer(instance=self.object.heartbeat,
                                      data=heartbeat_data)
+
             if hs.is_valid():
                 self.object.heartbeat = hs.object
                 hs.save()
