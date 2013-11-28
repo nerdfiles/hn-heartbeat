@@ -7,13 +7,11 @@ define [
   "use strict"
 
   class Hacker extends Backbone.Model
-    initialize: (x, y, z) ->
-      console.log x
-      console.log y
-      console.log z
+    initialize: (x) ->
       @username = x.username
     url: () ->
-      url = if @isNew() then '/api/create/' else '/api/hacker/' + @username
+      # if not saved to server
+      url = if not @isNew() then '/api/hacker/' else '/api/hacker/' + @username + '/'
 
   class HackerCollection extends Backbone.Collection
 
@@ -27,6 +25,9 @@ define [
       @create_ts = '[2013-05-01T00:00:00Z+TO+*]'
       @contextResults = 40 # Initialize view of item (submission|comment) results
 
+    reset: (username) =>
+      console.log @
+
     lookup: (username) ->
       @previousLookup = username
       @fetchUser username, (user) =>
@@ -35,97 +36,52 @@ define [
         else
           @reset user
 
-    createUser: (username, callback) ->
-      return true if @loading
-      @loading = true
-      msgBus.events.trigger 'create:start'
-      data = {}
-      hckr = new Hacker
-        username: username
-      hckr.save null,
-        # url: 'http://localhost:8000/api/hacker/create/'
-        # method: 'POST'
-        # dataType: 'json'
-        # data: data
-        success: (res) ->
-          console.log res
-        error: (err) ->
-          console.log err
+    createUser: (hckr) ->
 
-    fetchUser: (username, callback) ->
       return true if @loading
-      # defer = Q.defer()
+
       @loading = true
-      msgBus.events.trigger 'lookup:start'
       # http://api.thriftdb.com/api.hnsearch.com/items/_search?q=thenerdfiles&weights[title]=1.1&weights[text]=0.7&weights[domain]=2.0&weights[username]=0.1&weights[type]=0.0&boosts[fields][points]=0.15&boosts[fields][num_comments]=0.15&boosts[functions][pow(2,div(div(ms(create_ts,NOW),3600000),72))]=200.0&pretty_print=true
       # http://api.thriftdb.com/api.hnsearch.com/items/_search?pretty_print=true&q=thenerdfiles&weights[title]=1.1&weights[text]=0.7&weights[domain]=2.0&weights[username]=0.1&weights[type]=0.0&boosts[fields][points]=0.15&boosts[fields][num_comments]=0.15&boosts[functions][pow(2,div(div(ms(create_ts,NOW),3600000),72))]=200.0&filter[fields][create_ts]=[2013-05-01T00:00:00Z + TO + *]
       # more_query = "&weights[title]=1.1&weights[text]=0.7&weights[domain]=2.0&weights[username]=0.1&weights[type]=0.0&boosts[fields][points]=0.15&boosts[fields][num_comments]=0.15&boosts[functions][pow(2,div(div(ms(create_ts,NOW),3600000),72))]=200.0"
       # query = "q=" + username + more_query + "&filter[fields][create_ts]=" + @create_ts
+
+      msgBus.events.trigger 'create:start'
+
+      api_data =
+        heartbeat:
+          items: [
+            {"item_date": "2013-11-24T05:08:12Z", "item_title": "disagreeing post", "item_type": "post", "item_karma": 25},
+            {"item_date": "2013-11-24T05:08:12Z", "item_title": "disagreeing post", "item_type": "post", "item_karma": 25},
+            {"item_date": "2013-11-24T05:08:12Z", "item_title": "disagreeing post", "item_type": "post", "item_karma": 25}
+          ]
+
+      hckr.save api_data,
+        success: (model, response, options) ->
+          console.log "create", response
+        error: (model, xhr, options) ->
+          console.log "create:error", xhr
+
+    fetchUser: (username, callback) ->
+
+      return true if @loading
+      # No id attribute
+      msgBus.events.trigger 'lookup:start'
+
       hckr = new Hacker
         username: username
-        heartbeat: {
-          items: [
-            {
-              title: "Show HN: Something new",
-              type: "post",
-              points: "25",
-              posted_date: "2013-11-21T23:51:54"
-            }
-          ]
-        }
-      hckr.save null,
-        # url: 'http://localhost:8000/api/hacker/create/'
-        # method: 'POST'
-        # dataType: 'json'
-        # data: data
-        success: (res) =>
-          console.log res
-          @loading = false
-        error: (err) =>
-          console.log err
-          @loading = false
-      # Need to use Promises here
-      # $.ajax
-      #   # url: 'http://api.thriftdb.com/api.hnsearch.com/items/_search'
-      #   # url: 'http://localhost:8000/api/hacker/' + username + '/'
-      #   url: 'http://localhost:8000/api/create/'
-      #   # dataType: 'jsonp'
-      #   dataType: 'json'
-      #   method: 'POST'
-      #   # data: "#{query}"
-      #   success: (res) =>
-      #     hackerList = []
-      #     msgBus.events.trigger 'lookup:stop'
-      #     hckr = new Hacker
-      #       username: res.username
-      #     hackerList = [hckr]
-      #     console.log hckr
-      #     @loading = false
-      #     # if res.results.length
-      #     #   lookupResults = []
-      #     #   user = new Hacker
-      #     #     username: username
-      #     #     items: res.results
 
-      #     # defer.resolve res
-      #   #     # items
-      #   #     _.each res.results, (item) ->
-      #   #       # console.log item
-      #   #       # Model
-      #   #       # lookupResults[lookupResults.length] = new Item
-      #   #       #   title: title
-      #   #       #   karma: karma
-      #   #       #   date: date
-      #   #     callback lookupResults
-      #   #     @loading = false
-      #   #     lookupResults
-      #   #   else
-      #   #     msgBus.events.trigger 'lookup:error'
-      #   #     @loading = false
-      #   error: () =>
-      #     msgBus.events.trigger 'lookup:error'
-      #     @loading = false
-      # defer.promise
+      hckr.fetch
+        success: (model, response, options) =>
+          console.log 'grabbed', username
+          @loading = false
+
+        error: (model, xhr, options) =>
+          statusText = xhr.statusText
+          @loading = false
+          @reset username
+          if statusText == 'NOT FOUND'
+            @createUser hckr
 
   # Specify frontend data API service handlersck
   msgBus.reqres.setHandler 'hacker:entities', () ->

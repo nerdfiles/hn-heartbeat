@@ -31,11 +31,7 @@ require.config
 require [
   "config/_base"
   "app"
-  "modules/access/module"
   "modules/graph/module"
-  "modules/overview/module"
-  "modules/login/module"
-  "modules/user/module"
 ], (_config, HNHeartbeat) ->
 
   "use strict"

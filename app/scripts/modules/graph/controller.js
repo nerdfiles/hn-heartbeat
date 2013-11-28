@@ -1,15 +1,20 @@
 (function() {
-  define(["msgbus", "modules/graph/views"], function(msgBus, Views) {
+  define(["msgbus", "modules/graph/views", "modules/access/views"], function(msgBus, Views, CommonViews) {
     "use strict";
     return {
       showGraph: function(hacker) {
         var _this = this;
         this.layout = this.getLayout();
+        this.accessLayout = this.getAccessLayout();
         this.layout.on("show", function() {
           _this.showLookupView();
           return _this.showGlobalGraphView();
         });
-        return msgBus.events.trigger("app:show", this.layout);
+        this.accessLayout.on("show", function() {
+          return _this.showAccessView();
+        });
+        msgBus.events.trigger("app:show", this.layout);
+        return msgBus.events.trigger("app:show:access", this.accessLayout);
       },
       showGlobalGraphView: function() {
         var data, view, __json;
@@ -57,11 +62,16 @@
       showUserGraph: function(hacker) {
         var _this = this;
         this.layout = this.getLayout();
+        this.accessLayout = this.getAccessLayout();
         this.layout.on("show", function() {
           _this.showLookupView();
           return _this.showUserGraphView(hacker);
         });
-        return msgBus.events.trigger("app:show", this.layout);
+        this.accessLayout.on("show", function() {
+          return _this.showAccessView();
+        });
+        msgBus.events.trigger("app:show", this.layout);
+        return msgBus.events.trigger("app:show:access", this.accessLayout);
       },
       showUserGraphView: function(hacker) {
         var data, view, __json;
@@ -109,6 +119,17 @@
         return new Views.UserGraph({
           model: hacker
         });
+      },
+      showAccessView: function() {
+        var accessView;
+        accessView = this.getAccessView();
+        return this.accessLayout.layout.show(accessView);
+      },
+      getAccessView: function() {
+        return new CommonViews.Access;
+      },
+      getAccessLayout: function() {
+        return new CommonViews.AccessLayout;
       },
       showLookupView: function() {
         var lookupView;

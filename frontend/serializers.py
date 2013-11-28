@@ -2,7 +2,6 @@
 
 from rest_framework import serializers
 from models import Hacker, Heartbeat, Item
-from django.core.exceptions import ValidationError
 
 
 class NestedManyToManyField(serializers.WritableField):
@@ -13,17 +12,22 @@ class NestedManyToManyField(serializers.WritableField):
     '''
 
     def to_native(self, value):
-        serializer = self.Meta.serializer(value.all(), many=True, context=self.context)
+        serializer = self.Meta.serializer(value.all(),
+                                          many=True,
+                                          context=self.context)
         return serializer.data
 
     def from_native(self, data):
-        serializer = self.Meta.serializer(data=data, many=True, context=self.context)
+        serializer = self.Meta.serializer(data=data,
+                                          many=True,
+                                          context=self.context)
         serializer.is_valid()
         serializer.save()
         return serializer.object
 
     class Meta:
         serializer = None
+
 
 class ItemSerializer(serializers.ModelSerializer):
     '''
@@ -110,4 +114,4 @@ class HackerGetSerializer(serializers.ModelSerializer):
         exclude = ['last_login', 'password',
                    'is_superuser', 'is_staff',
                    'is_active', 'user_permissions',
-                   'groups', 'heartbeat', ]
+                   'groups', ]

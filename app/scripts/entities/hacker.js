@@ -1,6 +1,7 @@
 (function() {
   var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   define(["backbone", "msgbus", "Q"], function(Backbone, msgBus, Q) {
     "use strict";
@@ -13,16 +14,13 @@
         return _ref;
       }
 
-      Hacker.prototype.initialize = function(x, y, z) {
-        console.log(x);
-        console.log(y);
-        console.log(z);
+      Hacker.prototype.initialize = function(x) {
         return this.username = x.username;
       };
 
       Hacker.prototype.url = function() {
         var url;
-        return url = this.isNew() ? '/api/create/' : '/api/hacker/' + this.username;
+        return url = !this.isNew() ? '/api/hacker/' : '/api/hacker/' + this.username + '/';
       };
 
       return Hacker;
@@ -32,6 +30,7 @@
       __extends(HackerCollection, _super);
 
       function HackerCollection() {
+        this.reset = __bind(this.reset, this);
         _ref1 = HackerCollection.__super__.constructor.apply(this, arguments);
         return _ref1;
       }
@@ -49,6 +48,10 @@
         return this.contextResults = 40;
       };
 
+      HackerCollection.prototype.reset = function(username) {
+        return console.log(this);
+      };
+
       HackerCollection.prototype.lookup = function(username) {
         var _this = this;
         this.previousLookup = username;
@@ -61,23 +64,41 @@
         });
       };
 
-      HackerCollection.prototype.createUser = function(username, callback) {
-        var data, hckr;
+      HackerCollection.prototype.createUser = function(hckr) {
+        var api_data;
         if (this.loading) {
           return true;
         }
         this.loading = true;
         msgBus.events.trigger('create:start');
-        data = {};
-        hckr = new Hacker({
-          username: username
-        });
-        return hckr.save(null, {
-          success: function(res) {
-            return console.log(res);
+        api_data = {
+          heartbeat: {
+            items: [
+              {
+                "item_date": "2013-11-24T05:08:12Z",
+                "item_title": "disagreeing post",
+                "item_type": "post",
+                "item_karma": 25
+              }, {
+                "item_date": "2013-11-24T05:08:12Z",
+                "item_title": "disagreeing post",
+                "item_type": "post",
+                "item_karma": 25
+              }, {
+                "item_date": "2013-11-24T05:08:12Z",
+                "item_title": "disagreeing post",
+                "item_type": "post",
+                "item_karma": 25
+              }
+            ]
+          }
+        };
+        return hckr.save(api_data, {
+          success: function(model, response, options) {
+            return console.log("create", response);
           },
-          error: function(err) {
-            return console.log(err);
+          error: function(model, xhr, options) {
+            return console.log("create:error", xhr);
           }
         });
       };
@@ -88,29 +109,23 @@
         if (this.loading) {
           return true;
         }
-        this.loading = true;
         msgBus.events.trigger('lookup:start');
         hckr = new Hacker({
-          username: username,
-          heartbeat: {
-            items: [
-              {
-                title: "Show HN: Something new",
-                type: "post",
-                points: "25",
-                posted_date: "2013-11-21T23:51:54"
-              }
-            ]
-          }
+          username: username
         });
-        return hckr.save(null, {
-          success: function(res) {
-            console.log(res);
+        return hckr.fetch({
+          success: function(model, response, options) {
+            console.log('grabbed', username);
             return _this.loading = false;
           },
-          error: function(err) {
-            console.log(err);
-            return _this.loading = false;
+          error: function(model, xhr, options) {
+            var statusText;
+            statusText = xhr.statusText;
+            _this.loading = false;
+            _this.reset(username);
+            if (statusText === 'NOT FOUND') {
+              return _this.createUser(hckr);
+            }
           }
         });
       };

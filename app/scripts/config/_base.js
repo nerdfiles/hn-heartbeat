@@ -8,7 +8,6 @@
         var crsf_token, meta_token$;
         meta_token$ = $("meta[name='x-csrf-token']");
         crsf_token = meta_token$.attr('content');
-        console.log(crsf_token);
         return xhr.setRequestHeader('X-CSRFToken', crsf_token);
       };
       return oldSync(method, model, options);

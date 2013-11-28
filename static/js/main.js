@@ -12412,7 +12412,6 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
         var crsf_token, meta_token$;
         meta_token$ = $("meta[name='x-csrf-token']");
         crsf_token = meta_token$.attr('content');
-        console.log(crsf_token);
         return xhr.setRequestHeader('X-CSRFToken', crsf_token);
       };
       return oldSync(method, model, options);
@@ -14872,147 +14871,10 @@ _.extend(Marionette.Module, {
     msgBus.events.on("app:show", function(view) {
       return HNHeartbeat.graphRegion.show(view);
     });
-    return HNHeartbeat;
-  });
-
-}).call(this);
-
-(function() {
-  var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  define('entities/hacker',["backbone", "msgbus", "Q"], function(Backbone, msgBus, Q) {
-    "use strict";
-    var API, Hacker, HackerCollection, _ref, _ref1;
-    Hacker = (function(_super) {
-      __extends(Hacker, _super);
-
-      function Hacker() {
-        _ref = Hacker.__super__.constructor.apply(this, arguments);
-        return _ref;
-      }
-
-      Hacker.prototype.initialize = function(x, y, z) {
-        console.log(x);
-        console.log(y);
-        console.log(z);
-        return this.username = x.username;
-      };
-
-      Hacker.prototype.url = function() {
-        var url;
-        return url = this.isNew() ? '/api/create/' : '/api/hacker/' + this.username;
-      };
-
-      return Hacker;
-
-    })(Backbone.Model);
-    HackerCollection = (function(_super) {
-      __extends(HackerCollection, _super);
-
-      function HackerCollection() {
-        _ref1 = HackerCollection.__super__.constructor.apply(this, arguments);
-        return _ref1;
-      }
-
-      HackerCollection.prototype.model = Hacker;
-
-      HackerCollection.prototype.initialize = function() {
-        var _this = this;
-        msgBus.events.on('lookup:user', function(username) {
-          return _this.lookup(username);
-        });
-        this.loading = false;
-        this.previousLookup = null;
-        this.create_ts = '[2013-05-01T00:00:00Z+TO+*]';
-        return this.contextResults = 40;
-      };
-
-      HackerCollection.prototype.lookup = function(username) {
-        var _this = this;
-        this.previousLookup = username;
-        return this.fetchUser(username, function(user) {
-          if (user.length < 1) {
-            return msgBus.events.trigger('lookup:noUsername');
-          } else {
-            return _this.reset(user);
-          }
-        });
-      };
-
-      HackerCollection.prototype.createUser = function(username, callback) {
-        var data, hckr;
-        if (this.loading) {
-          return true;
-        }
-        this.loading = true;
-        msgBus.events.trigger('create:start');
-        data = {};
-        hckr = new Hacker({
-          username: username
-        });
-        return hckr.save(null, {
-          success: function(res) {
-            return console.log(res);
-          },
-          error: function(err) {
-            return console.log(err);
-          }
-        });
-      };
-
-      HackerCollection.prototype.fetchUser = function(username, callback) {
-        var hckr,
-          _this = this;
-        if (this.loading) {
-          return true;
-        }
-        this.loading = true;
-        msgBus.events.trigger('lookup:start');
-        hckr = new Hacker({
-          username: username,
-          heartbeat: {
-            items: [
-              {
-                title: "Show HN: Something new",
-                type: "post",
-                points: "25",
-                posted_date: "2013-11-21T23:51:54"
-              }
-            ]
-          }
-        });
-        return hckr.save(null, {
-          success: function(res) {
-            console.log(res);
-            return _this.loading = false;
-          },
-          error: function(err) {
-            console.log(err);
-            return _this.loading = false;
-          }
-        });
-      };
-
-      return HackerCollection;
-
-    })(Backbone.Collection);
-    msgBus.reqres.setHandler('hacker:entities', function() {
-      return API.getUserEntities();
+    msgBus.events.on("app:show:access", function(view) {
+      return HNHeartbeat.accessRegion.show(view);
     });
-    return API = {
-      getUserEntities: function() {
-        var hackers;
-        return hackers = new HackerCollection;
-      }
-    };
-  });
-
-}).call(this);
-
-(function() {
-  define('modules/access/module',["marionette", "msgbus", "entities/hacker"], function(Marionette, Controller, msgBus) {
-    return "use strict";
+    return HNHeartbeat;
   });
 
 }).call(this);
@@ -18619,18 +18481,95 @@ define('text!modules/graph/templates/layout.html.tmpl',[],function () { return '
 
 }).call(this);
 
+define('text!modules/access/templates/access.html.tmpl',[],function () { return '<ul>\n  <li><a href="#top">Back to Top</a></li>\n</ul>\n';});
+
+define('text!modules/access/templates/layout.html.tmpl',[],function () { return '<div class="access layout">\n</div>\n';});
+
 (function() {
-  define('modules/graph/controller',["msgbus", "modules/graph/views"], function(msgBus, Views) {
+  define('modules/access/templates',['require','text!modules/access/templates/access.html.tmpl','text!modules/access/templates/layout.html.tmpl'],function(require) {
+    return {
+      "access": require("text!modules/access/templates/access.html.tmpl"),
+      "layout": require("text!modules/access/templates/layout.html.tmpl")
+    };
+  });
+
+}).call(this);
+
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  define('modules/access/views',["modules/access/templates", "views/_base", "msgbus"], function(Templates, AppViews, msgBus) {
+    "use strict";
+    var Layout, View, _ref, _ref1;
+    return {
+      AccessLayout: Layout = (function(_super) {
+        __extends(Layout, _super);
+
+        function Layout() {
+          _ref = Layout.__super__.constructor.apply(this, arguments);
+          return _ref;
+        }
+
+        Layout.prototype.template = _.template(Templates.layout);
+
+        Layout.prototype.regions = {
+          layout: ".access"
+        };
+
+        return Layout;
+
+      })(AppViews.Layout),
+      Access: View = (function(_super) {
+        __extends(View, _super);
+
+        function View() {
+          _ref1 = View.__super__.constructor.apply(this, arguments);
+          return _ref1;
+        }
+
+        View.prototype.template = _.template(Templates.access);
+
+        View.prototype.events = {
+          'click #access': 'reveal'
+        };
+
+        View.prototype.initialize = function() {
+          var _this = this;
+          return msgBus.events.on('access:reveal', function() {
+            return _this.$('#access').hide();
+          });
+        };
+
+        View.prototype.reveal = function() {
+          return msgBus.events.trigger('access:reveal');
+        };
+
+        return View;
+
+      })(AppViews.ItemView)
+    };
+  });
+
+}).call(this);
+
+(function() {
+  define('modules/graph/controller',["msgbus", "modules/graph/views", "modules/access/views"], function(msgBus, Views, CommonViews) {
     "use strict";
     return {
       showGraph: function(hacker) {
         var _this = this;
         this.layout = this.getLayout();
+        this.accessLayout = this.getAccessLayout();
         this.layout.on("show", function() {
           _this.showLookupView();
           return _this.showGlobalGraphView();
         });
-        return msgBus.events.trigger("app:show", this.layout);
+        this.accessLayout.on("show", function() {
+          return _this.showAccessView();
+        });
+        msgBus.events.trigger("app:show", this.layout);
+        return msgBus.events.trigger("app:show:access", this.accessLayout);
       },
       showGlobalGraphView: function() {
         var data, view, __json;
@@ -18678,11 +18617,16 @@ define('text!modules/graph/templates/layout.html.tmpl',[],function () { return '
       showUserGraph: function(hacker) {
         var _this = this;
         this.layout = this.getLayout();
+        this.accessLayout = this.getAccessLayout();
         this.layout.on("show", function() {
           _this.showLookupView();
           return _this.showUserGraphView(hacker);
         });
-        return msgBus.events.trigger("app:show", this.layout);
+        this.accessLayout.on("show", function() {
+          return _this.showAccessView();
+        });
+        msgBus.events.trigger("app:show", this.layout);
+        return msgBus.events.trigger("app:show:access", this.accessLayout);
       },
       showUserGraphView: function(hacker) {
         var data, view, __json;
@@ -18731,6 +18675,17 @@ define('text!modules/graph/templates/layout.html.tmpl',[],function () { return '
           model: hacker
         });
       },
+      showAccessView: function() {
+        var accessView;
+        accessView = this.getAccessView();
+        return this.accessLayout.layout.show(accessView);
+      },
+      getAccessView: function() {
+        return new CommonViews.Access;
+      },
+      getAccessLayout: function() {
+        return new CommonViews.AccessLayout;
+      },
       showLookupView: function() {
         var lookupView;
         lookupView = this.getLookupView();
@@ -18741,6 +18696,154 @@ define('text!modules/graph/templates/layout.html.tmpl',[],function () { return '
       },
       getLayout: function() {
         return new Views.Layout;
+      }
+    };
+  });
+
+}).call(this);
+
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
+  define('entities/hacker',["backbone", "msgbus", "Q"], function(Backbone, msgBus, Q) {
+    "use strict";
+    var API, Hacker, HackerCollection, _ref, _ref1;
+    Hacker = (function(_super) {
+      __extends(Hacker, _super);
+
+      function Hacker() {
+        _ref = Hacker.__super__.constructor.apply(this, arguments);
+        return _ref;
+      }
+
+      Hacker.prototype.initialize = function(x) {
+        return this.username = x.username;
+      };
+
+      Hacker.prototype.url = function() {
+        var url;
+        return url = !this.isNew() ? '/api/hacker/' : '/api/hacker/' + this.username + '/';
+      };
+
+      return Hacker;
+
+    })(Backbone.Model);
+    HackerCollection = (function(_super) {
+      __extends(HackerCollection, _super);
+
+      function HackerCollection() {
+        this.reset = __bind(this.reset, this);
+        _ref1 = HackerCollection.__super__.constructor.apply(this, arguments);
+        return _ref1;
+      }
+
+      HackerCollection.prototype.model = Hacker;
+
+      HackerCollection.prototype.initialize = function() {
+        var _this = this;
+        msgBus.events.on('lookup:user', function(username) {
+          return _this.lookup(username);
+        });
+        this.loading = false;
+        this.previousLookup = null;
+        this.create_ts = '[2013-05-01T00:00:00Z+TO+*]';
+        return this.contextResults = 40;
+      };
+
+      HackerCollection.prototype.reset = function(username) {
+        return console.log(this);
+      };
+
+      HackerCollection.prototype.lookup = function(username) {
+        var _this = this;
+        this.previousLookup = username;
+        return this.fetchUser(username, function(user) {
+          if (user.length < 1) {
+            return msgBus.events.trigger('lookup:noUsername');
+          } else {
+            return _this.reset(user);
+          }
+        });
+      };
+
+      HackerCollection.prototype.createUser = function(hckr) {
+        var api_data;
+        if (this.loading) {
+          return true;
+        }
+        this.loading = true;
+        msgBus.events.trigger('create:start');
+        api_data = {
+          heartbeat: {
+            items: [
+              {
+                "item_date": "2013-11-24T05:08:12Z",
+                "item_title": "disagreeing post",
+                "item_type": "post",
+                "item_karma": 25
+              }, {
+                "item_date": "2013-11-24T05:08:12Z",
+                "item_title": "disagreeing post",
+                "item_type": "post",
+                "item_karma": 25
+              }, {
+                "item_date": "2013-11-24T05:08:12Z",
+                "item_title": "disagreeing post",
+                "item_type": "post",
+                "item_karma": 25
+              }
+            ]
+          }
+        };
+        return hckr.save(api_data, {
+          success: function(model, response, options) {
+            return console.log("create", response);
+          },
+          error: function(model, xhr, options) {
+            return console.log("create:error", xhr);
+          }
+        });
+      };
+
+      HackerCollection.prototype.fetchUser = function(username, callback) {
+        var hckr,
+          _this = this;
+        if (this.loading) {
+          return true;
+        }
+        msgBus.events.trigger('lookup:start');
+        hckr = new Hacker({
+          username: username
+        });
+        return hckr.fetch({
+          success: function(model, response, options) {
+            console.log('grabbed', username);
+            return _this.loading = false;
+          },
+          error: function(model, xhr, options) {
+            var statusText;
+            statusText = xhr.statusText;
+            _this.loading = false;
+            _this.reset(username);
+            if (statusText === 'NOT FOUND') {
+              return _this.createUser(hckr);
+            }
+          }
+        });
+      };
+
+      return HackerCollection;
+
+    })(Backbone.Collection);
+    msgBus.reqres.setHandler('hacker:entities', function() {
+      return API.getUserEntities();
+    });
+    return API = {
+      getUserEntities: function() {
+        var hackers;
+        return hackers = new HackerCollection;
       }
     };
   });
@@ -18796,168 +18899,6 @@ define('text!modules/graph/templates/layout.html.tmpl',[],function () { return '
 }).call(this);
 
 (function() {
-
-
-}).call(this);
-
-define("modules/overview/module", function(){});
-
-define('text!modules/login/templates/base.html.tmpl',[],function () { return '<div class="m--login" id="login">\n  <div class="bosom">\n    <h1>Hacker News Heartbeat</h1>\n    <form \n      id="login" \n      class="login" \n      method="post">\n\n      <fieldset>\n        <legend>Login</legend>\n        <div class="form-row">\n          <input \n            id="__username__" \n            name="username" \n            type="text" \n            placeholder="Give us yr Hacker News handle!" />\n        </div>\n      </fieldset>\n\n    </form>\n  </div>\n</div>\n\n';});
-
-(function() {
-  define('modules/login/templates',['require','text!modules/login/templates/base.html.tmpl'],function(require) {
-    return {
-      "login.view": require("text!modules/login/templates/base.html.tmpl")
-    };
-  });
-
-}).call(this);
-
-(function() {
-  define('msgBus',["backbone.wreqr"], function(Wreqr) {
-    return {
-      reqres: new Wreqr.RequestResponse(),
-      commands: new Wreqr.Commands(),
-      events: new Wreqr.EventAggregator()
-    };
-  });
-
-}).call(this);
-
-(function() {
-  var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  define('modules/login/views',["modules/login/templates", "views/_base", "msgBus"], function(Templates, AppViews, msgBus) {
-    "use strict";
-    var View, _ref;
-    return {
-      Login: View = (function(_super) {
-        __extends(View, _super);
-
-        function View() {
-          _ref = View.__super__.constructor.apply(this, arguments);
-          return _ref;
-        }
-
-        View.prototype.template = _.template(Templates["login.view"]);
-
-        View.prototype.className = "m--login";
-
-        return View;
-
-      })(AppViews.ItemView)
-    };
-  });
-
-}).call(this);
-
-(function() {
-  define('modules/login/controller',["modules/login/views", "msgBus"], function(Views, msgBus) {
-    "use strict";
-    return {
-      "app.login": function() {
-        var view;
-        view = new Views.Login;
-        return msgBus.events.trigger("app:show:login", view);
-      }
-    };
-  });
-
-}).call(this);
-
-(function() {
-  var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  define('modules/login/module',["backbone", "modules/login/controller", "msgBus"], function(Backbone, Controller, msgBus) {
-    "use strict";
-    var API, Router, _ref;
-    Router = (function(_super) {
-      __extends(Router, _super);
-
-      function Router() {
-        _ref = Router.__super__.constructor.apply(this, arguments);
-        return _ref;
-      }
-
-      Router.prototype.appRoutes = {
-        "app.login": "start"
-      };
-
-      return Router;
-
-    })(Backbone.Marionette.AppRouter);
-    msgBus.commands.setHandler("login:route", function() {
-      return new Router({
-        controller: API
-      });
-    });
-    return API = {
-      start: function() {
-        return Controller["app.login"]();
-      }
-    };
-  });
-
-}).call(this);
-
-(function() {
-  define('modules/user/templates',['require'],function(require) {});
-
-}).call(this);
-
-(function() {
-  define('modules/user/views',["d3", "rickshaw", "modules/user/templates", "views/_base", "msgbus"], function(D3, rickshaw, Templates, AppViews, msgBus) {
-    return "use strict";
-  });
-
-}).call(this);
-
-(function() {
-  define('modules/user/controller',["msgbus", "modules/user/views"], function(msgBus, Views) {
-    return "use strict";
-  });
-
-}).call(this);
-
-(function() {
-  var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  define('modules/user/module',["backbone", "modules/user/controller", "msgBus"], function(Backbone, Controller, msgBus) {
-    "use strict";
-    var API, Router, _ref;
-    Router = (function(_super) {
-      __extends(Router, _super);
-
-      function Router() {
-        _ref = Router.__super__.constructor.apply(this, arguments);
-        return _ref;
-      }
-
-      Router.prototype.appRoutes = {
-        "user/login": "start"
-      };
-
-      return Router;
-
-    })(Backbone.Marionette.AppRouter);
-    msgBus.commands.setHandler("login:route", function() {
-      return new Router({
-        controller: API
-      });
-    });
-    return API = {
-      start: function() {
-        return Controller["login"]();
-      }
-    };
-  });
-
-}).call(this);
-
-(function() {
   require.config({
     enforceDefine: true,
     paths: {
@@ -18990,7 +18931,7 @@ define('text!modules/login/templates/base.html.tmpl',[],function () { return '<d
     }
   });
 
-  require(["config/_base", "app", "modules/access/module", "modules/graph/module", "modules/overview/module", "modules/login/module", "modules/user/module"], function(_config, HNHeartbeat) {
+  require(["config/_base", "app", "modules/graph/module"], function(_config, HNHeartbeat) {
     "use strict";
     return HNHeartbeat.start();
   });

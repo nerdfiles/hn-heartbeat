@@ -21,6 +21,9 @@
     msgBus.events.on("app:show", function(view) {
       return HNHeartbeat.graphRegion.show(view);
     });
+    msgBus.events.on("app:show:access", function(view) {
+      return HNHeartbeat.accessRegion.show(view);
+    });
     return HNHeartbeat;
   });
 
