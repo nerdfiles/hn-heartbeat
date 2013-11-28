@@ -76,9 +76,6 @@
       showUserGraphView: function(hacker) {
         var data, view, __json;
         view = this.getUserGraphView(hacker);
-        console.log('---showUserGraphView---');
-        console.log(hacker);
-        console.log('---showUserGraphView---');
         __json = {
           JSON_from_where: {
             json__: {}

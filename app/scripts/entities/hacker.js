@@ -1,7 +1,6 @@
 (function() {
   var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define(["backbone", "msgbus", "Q"], function(Backbone, msgBus, Q) {
     "use strict";
@@ -14,13 +13,14 @@
         return _ref;
       }
 
-      Hacker.prototype.initialize = function(x) {
-        return this.username = x.username;
+      Hacker.prototype.initialize = function(model) {
+        return this.username = model.username;
       };
 
       Hacker.prototype.url = function() {
         var url;
-        return url = !this.isNew() ? '/api/hacker/' : '/api/hacker/' + this.username + '/';
+        this.creating = this.get('creating');
+        return url = !this.isNew() || this.creating === true ? '/api/hacker/' : '/api/hacker/' + this.username + '/';
       };
 
       return Hacker;
@@ -30,7 +30,6 @@
       __extends(HackerCollection, _super);
 
       function HackerCollection() {
-        this.reset = __bind(this.reset, this);
         _ref1 = HackerCollection.__super__.constructor.apply(this, arguments);
         return _ref1;
       }
@@ -122,7 +121,9 @@
             var statusText;
             statusText = xhr.statusText;
             _this.loading = false;
-            _this.reset(username);
+            hckr.set({
+              creating: true
+            });
             if (statusText === 'NOT FOUND') {
               return _this.createUser(hckr);
             }

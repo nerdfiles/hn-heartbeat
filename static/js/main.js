@@ -18417,13 +18417,11 @@ define('text!modules/graph/templates/layout.html.tmpl',[],function () { return '
         View.prototype.className = "m--global-graph";
 
         View.prototype.onBeforeRender = function() {
-          console.log("onBeforeRender");
-          return console.log(this.ui);
+          return console.log("onBeforeRender");
         };
 
         View.prototype.onRender = function() {
-          console.log("onRender");
-          return console.log(this.ui);
+          return console.log("onRender");
         };
 
         return View;
@@ -18446,13 +18444,11 @@ define('text!modules/graph/templates/layout.html.tmpl',[],function () { return '
         View.prototype.className = "m--user-graph";
 
         View.prototype.onBeforeRender = function() {
-          console.log("onBeforeRender");
-          return console.log(this.ui);
+          return console.log("onBeforeRender");
         };
 
         View.prototype.onRender = function() {
-          console.log("onRender");
-          return console.log(this.model);
+          return console.log("onRender");
         };
 
         return View;
@@ -18631,9 +18627,6 @@ define('text!modules/access/templates/layout.html.tmpl',[],function () { return 
       showUserGraphView: function(hacker) {
         var data, view, __json;
         view = this.getUserGraphView(hacker);
-        console.log('---showUserGraphView---');
-        console.log(hacker);
-        console.log('---showUserGraphView---');
         __json = {
           JSON_from_where: {
             json__: {}
@@ -18704,8 +18697,7 @@ define('text!modules/access/templates/layout.html.tmpl',[],function () { return 
 
 (function() {
   var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define('entities/hacker',["backbone", "msgbus", "Q"], function(Backbone, msgBus, Q) {
     "use strict";
@@ -18718,13 +18710,14 @@ define('text!modules/access/templates/layout.html.tmpl',[],function () { return 
         return _ref;
       }
 
-      Hacker.prototype.initialize = function(x) {
-        return this.username = x.username;
+      Hacker.prototype.initialize = function(model) {
+        return this.username = model.username;
       };
 
       Hacker.prototype.url = function() {
         var url;
-        return url = !this.isNew() ? '/api/hacker/' : '/api/hacker/' + this.username + '/';
+        this.creating = this.get('creating');
+        return url = !this.isNew() || this.creating === true ? '/api/hacker/' : '/api/hacker/' + this.username + '/';
       };
 
       return Hacker;
@@ -18734,7 +18727,6 @@ define('text!modules/access/templates/layout.html.tmpl',[],function () { return 
       __extends(HackerCollection, _super);
 
       function HackerCollection() {
-        this.reset = __bind(this.reset, this);
         _ref1 = HackerCollection.__super__.constructor.apply(this, arguments);
         return _ref1;
       }
@@ -18826,7 +18818,9 @@ define('text!modules/access/templates/layout.html.tmpl',[],function () { return 
             var statusText;
             statusText = xhr.statusText;
             _this.loading = false;
-            _this.reset(username);
+            hckr.set({
+              creating: true
+            });
             if (statusText === 'NOT FOUND') {
               return _this.createUser(hckr);
             }
@@ -18887,9 +18881,6 @@ define('text!modules/access/templates/layout.html.tmpl',[],function () { return 
         return Controller.showGraph();
       },
       graphUser: function(username) {
-        console.log('---entities---');
-        console.log(hacker);
-        console.log('---entities---');
         Controller.showUserGraph(hacker);
         return msgBus.events.trigger("lookup:user", username);
       }

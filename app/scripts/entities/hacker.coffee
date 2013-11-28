@@ -7,11 +7,12 @@ define [
   "use strict"
 
   class Hacker extends Backbone.Model
-    initialize: (x) ->
-      @username = x.username
+    initialize: (model) ->
+      @username = model.username
     url: () ->
       # if not saved to server
-      url = if not @isNew() then '/api/hacker/' else '/api/hacker/' + @username + '/'
+      @creating = @get 'creating'
+      url = if not @isNew() or @creating is true then '/api/hacker/' else '/api/hacker/' + @username + '/'
 
   class HackerCollection extends Backbone.Collection
 
@@ -25,7 +26,7 @@ define [
       @create_ts = '[2013-05-01T00:00:00Z+TO+*]'
       @contextResults = 40 # Initialize view of item (submission|comment) results
 
-    reset: (username) =>
+    reset: (username) ->
       console.log @
 
     lookup: (username) ->
@@ -79,7 +80,8 @@ define [
         error: (model, xhr, options) =>
           statusText = xhr.statusText
           @loading = false
-          @reset username
+          hckr.set
+            creating: true
           if statusText == 'NOT FOUND'
             @createUser hckr
 
