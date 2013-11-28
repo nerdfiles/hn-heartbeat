@@ -90,9 +90,6 @@ define [
   # User Graph View
   showUserGraphView: (hacker) ->
     view = @getUserGraphView hacker
-    console.log '---showUserGraphView---'
-    console.log hacker
-    console.log '---showUserGraphView---'
 
     # could pass in hackers here after cached serialized data
     # sd:10 09 2013.23.01.30

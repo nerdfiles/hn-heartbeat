@@ -30,16 +30,14 @@ define [
 
   # Declare internal API to be used across apps/modules
   API =
+
     # Overview Graph
     graphOverview: () ->
+
       Controller.showGraph()
 
     # User Graph Lookup
     graphUser: (username) ->
-
-      console.log '---entities---'
-      console.log hacker
-      console.log '---entities---'
 
       Controller.showUserGraph hacker
 
