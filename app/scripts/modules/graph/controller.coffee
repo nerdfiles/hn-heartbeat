@@ -2,15 +2,24 @@
 define [
   "msgbus"
   "modules/graph/views"
-], (msgBus, Views) ->
+  "modules/access/views"
+], (msgBus, Views, CommonViews) ->
   "use strict"
 
   showGraph: (hacker) ->
+
     @layout = @getLayout()
+    @accessLayout = @getAccessLayout()
+
     @layout.on "show", () =>
       @showLookupView()
       @showGlobalGraphView()
+
+    @accessLayout.on "show", () =>
+      @showAccessView()
+
     msgBus.events.trigger "app:show", @layout
+    msgBus.events.trigger "app:show:access", @accessLayout
 
   # Global Graph View
   showGlobalGraphView: () ->
@@ -65,21 +74,22 @@ define [
 
   # User Graph View
   showUserGraph: (hacker) ->
-
     @layout = @getLayout()
+    @accessLayout = @getAccessLayout()
 
     @layout.on "show", () =>
       @showLookupView()
       @showUserGraphView hacker
 
+    @accessLayout.on "show", () =>
+      @showAccessView()
+
     msgBus.events.trigger "app:show", @layout
+    msgBus.events.trigger "app:show:access", @accessLayout
 
   # User Graph View
   showUserGraphView: (hacker) ->
     view = @getUserGraphView hacker
-    console.log '---showUserGraphView---'
-    console.log hacker
-    console.log '---showUserGraphView---'
 
     # could pass in hackers here after cached serialized data
     # sd:10 09 2013.23.01.30
@@ -130,6 +140,16 @@ define [
   getUserGraphView: (hacker) ->
     new Views.UserGraph
       model: hacker
+
+  showAccessView: () ->
+    accessView = @getAccessView()
+    @accessLayout.layout.show accessView
+
+  getAccessView: () ->
+    new CommonViews.Access
+
+  getAccessLayout: () ->
+    new CommonViews.AccessLayout
 
   showLookupView: () ->
     lookupView = @getLookupView()

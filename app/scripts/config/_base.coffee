@@ -16,8 +16,6 @@ define [
 
       crsf_token = meta_token$.attr 'content'
 
-      console.log crsf_token
-
       xhr.setRequestHeader 'X-CSRFToken', crsf_token
 
     oldSync(method, model, options)

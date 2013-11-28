@@ -13,16 +13,14 @@
         return _ref;
       }
 
-      Hacker.prototype.initialize = function(x, y, z) {
-        console.log(x);
-        console.log(y);
-        console.log(z);
-        return this.username = x.username;
+      Hacker.prototype.initialize = function(model) {
+        return this.username = model.username;
       };
 
       Hacker.prototype.url = function() {
         var url;
-        return url = this.isNew() ? '/api/create/' : '/api/hacker/' + this.username;
+        this.creating = this.get('creating');
+        return url = !this.isNew() || this.creating === true ? '/api/hacker/' : '/api/hacker/' + this.username + '/';
       };
 
       return Hacker;
@@ -49,6 +47,10 @@
         return this.contextResults = 40;
       };
 
+      HackerCollection.prototype.reset = function(username) {
+        return console.log(this);
+      };
+
       HackerCollection.prototype.lookup = function(username) {
         var _this = this;
         this.previousLookup = username;
@@ -61,43 +63,70 @@
         });
       };
 
-      HackerCollection.prototype.createUser = function(username, callback) {
-        var data, hckr;
+      HackerCollection.prototype.createUser = function(hckr) {
+        var api_data;
         if (this.loading) {
           return true;
         }
         this.loading = true;
         msgBus.events.trigger('create:start');
-        data = {};
-        hckr = new Hacker({
-          username: username
-        });
-        return hckr.save(null, {
-          success: function(res) {
-            return console.log(res);
+        api_data = {
+          heartbeat: {
+            items: [
+              {
+                "item_date": "2013-11-24T05:08:12Z",
+                "item_title": "disagreeing post",
+                "item_type": "post",
+                "item_karma": 25
+              }, {
+                "item_date": "2013-11-24T05:08:12Z",
+                "item_title": "disagreeing post",
+                "item_type": "post",
+                "item_karma": 25
+              }, {
+                "item_date": "2013-11-24T05:08:12Z",
+                "item_title": "disagreeing post",
+                "item_type": "post",
+                "item_karma": 25
+              }
+            ]
+          }
+        };
+        return hckr.save(api_data, {
+          success: function(model, response, options) {
+            return console.log("create", response);
           },
-          error: function(err) {
-            return console.log(err);
+          error: function(model, xhr, options) {
+            return console.log("create:error", xhr);
           }
         });
       };
 
       HackerCollection.prototype.fetchUser = function(username, callback) {
-        var hckr;
+        var hckr,
+          _this = this;
         if (this.loading) {
           return true;
         }
-        this.loading = true;
         msgBus.events.trigger('lookup:start');
         hckr = new Hacker({
           username: username
         });
-        return hckr.save(null, {
-          success: function(res) {
-            return console.log(res);
+        return hckr.fetch({
+          success: function(model, response, options) {
+            console.log('grabbed', username);
+            return _this.loading = false;
           },
-          error: function(err) {
-            return console.log(err);
+          error: function(model, xhr, options) {
+            var statusText;
+            statusText = xhr.statusText;
+            _this.loading = false;
+            hckr.set({
+              creating: true
+            });
+            if (statusText === 'NOT FOUND') {
+              return _this.createUser(hckr);
+            }
           }
         });
       };

@@ -34,10 +34,8 @@ define [
     className: "m--global-graph"
     onBeforeRender: () ->
       console.log "onBeforeRender"
-      console.log @ui
     onRender: () ->
       console.log "onRender"
-      console.log @ui
 
   UserGraph: class View extends AppViews.ItemView
     template: _.template Templates.graph
@@ -46,13 +44,11 @@ define [
     className: "m--user-graph"
     onBeforeRender: () ->
       console.log "onBeforeRender"
-      console.log @ui
     onRender: () ->
       console.log "onRender"
-      console.log @model
 
   Layout: class Layout extends AppViews.Layout
     template: _.template Templates.layout
     regions:
-      lookup: ".r--lookup"
+      lookup: ".r--lookup" # There are elements inside the region for which these selectors apply.
       global: ".r--graph"

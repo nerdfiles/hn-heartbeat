@@ -35,9 +35,6 @@
         return Controller.showGraph();
       },
       graphUser: function(username) {
-        console.log('---entities---');
-        console.log(hacker);
-        console.log('---entities---');
         Controller.showUserGraph(hacker);
         return msgBus.events.trigger("lookup:user", username);
       }

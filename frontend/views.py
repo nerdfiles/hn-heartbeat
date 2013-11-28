@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# from django.conf import settings
-from django.contrib import auth
+# from django.contrib import auth
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -10,13 +9,15 @@ from django.template import RequestContext
 # from django.template import TemplateDoesNotExist
 
 from rest_framework import generics, status
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 
 # from rest_framework.response import Response
 from models import Hacker
-from serializers import HackerSerializer
+from serializers import HackerAddSerializer, HackerGetSerializer
 # from permissions import UserPermissions
 
 
@@ -25,13 +26,27 @@ def render_response(request, *args, **kwargs):
     return render_to_response(*args, **kwargs)
 
 
+class HackerViewSet(viewsets.ModelViewSet):
+    '''
+    '''
+    queryset = Hacker.objects.all()
+    serializer_class = HackerAddSerializer
+    permission_classes = [IsAuthenticated]
+
+
 class HackerDetail(generics.RetrieveUpdateAPIView):
+    '''
+        User GET
+
+        @note What the fuck is this for? Just GET requests or something richer?
+        Why is it doing a pre_save()?
+    '''
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsAuthenticated,)
 
     slug_field = slug_url_kwarg = 'username'
     model = Hacker
-    serializer_class = HackerSerializer
+    serializer_class = HackerGetSerializer
 
     @csrf_exempt
     def dispatch(self, request, *args, **kwargs):
@@ -50,9 +65,12 @@ class HackerDetail(generics.RetrieveUpdateAPIView):
 
 
 class HackerAdd(generics.CreateAPIView):
+    '''
+        User Add
+    '''
 
     model = Hacker
-    serializer_class = HackerSerializer
+    serializer_class = HackerAddSerializer
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsAuthenticated,)
 
@@ -67,14 +85,11 @@ class HackerAdd(generics.CreateAPIView):
     # Auth
     def post(self, request, *args, **kwargs):
         # If the user exists, error out.
-        print(self)
-        print(request.DATA)
 
         # serializer = self.get_serializer(
         #     data=request.DATA, files=request.FILES)
 
-        serializer = self.get_serializer(
-            data=request.DATA)
+        serializer = self.get_serializer(data=request.DATA)
 
         if serializer.is_valid():
             password = serializer.init_data.get(
@@ -85,13 +100,18 @@ class HackerAdd(generics.CreateAPIView):
             self.object = serializer.save()
             self.post_save(self.object, created=True)
 
-            _user = auth.authenticate(
-                username=self.object.username, password=password)
+            # If we authenticate and log in here, we're assuming the user
+            # likely wishes to see their own HN profile.
+            # We just want to add a new HN user with their data.
 
-            auth.login(request, _user)
+            # _user = auth.authenticate(
+            #     username=self.object.username, password=password)
+
+            # auth.login(request, _user)
 
             headers = self.get_success_headers(serializer.data)
-            return Response(serializer.data, status=status.HTTP_201_CREATED,
+            return Response(serializer.data,
+                            status=status.HTTP_201_CREATED,
                             headers=headers)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

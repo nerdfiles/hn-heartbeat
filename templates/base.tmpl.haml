@@ -101,12 +101,6 @@
   %body{:class => "app--hn-heartbeat"}
 
     %section{:class => "r--access"}
-      %ul.menu
-        %li
-          %a{:href => "#content"} Skip to Content
-        %li
-          %a{:href => "#login"} Skip to Login
-          -# Show skip to the form itself, and should trigger navigate()
 
     %section{:class => "s--header"}
       %div{:class => "r--login"}
@@ -117,20 +111,19 @@
       %ul
         %li
           %a{:href => "#home", :title => "socialbeat.io"} socialbeat.io
-
         {% if user.is_authenticated %}
-          %li
-            %a{:href => "{% url 'admin:index' %}", :title => "Django backend"} Dashboard
-          %li
-            %a{:href => "{% url 'admin:logout' %}", :title => "Log out"} Log out
+        %li
+          %a{:href => "{% url 'admin:index' %}", :title => "Django backend"} Dashboard
+        %li
+          %a{:href => "{% url 'admin:logout' %}", :title => "Log out"} Log out
         {% else %}
-          %form{:action => "{% url 'admin:index' %}", :method => "POST"}
-            {% csrf_token %}
-            %input{:id => "username-field", :name => "username", :type => "text"}
-            %input{:id =>"password-field", :name => "password", :type => "password"}
-            %input{:name => "this_is_the_login_form", :value => "1", :type => "hidden"}
-            %input{:type => "hidden", :name => "next", :value => "{% url 'admin:index' %}"}
-            %button{:type => "submit"} Login
+        %form{:action => "{% url 'admin:index' %}", :method => "POST"}
+          {% csrf_token %}
+          %input{:id => "username-field", :name => "username", :type => "text"}
+          %input{:id =>"password-field", :name => "password", :type => "password"}
+          %input{:name => "this_is_the_login_form", :value => "1", :type => "hidden"}
+          %input{:type => "hidden", :name => "next", :value => "{% url 'admin:index' %}"}
+          %button{:type => "submit"} Login
         {% endif %}
 
     /[if lt IE 7]

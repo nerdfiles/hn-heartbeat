@@ -57,13 +57,11 @@
         View.prototype.className = "m--global-graph";
 
         View.prototype.onBeforeRender = function() {
-          console.log("onBeforeRender");
-          return console.log(this.ui);
+          return console.log("onBeforeRender");
         };
 
         View.prototype.onRender = function() {
-          console.log("onRender");
-          return console.log(this.ui);
+          return console.log("onRender");
         };
 
         return View;
@@ -86,13 +84,11 @@
         View.prototype.className = "m--user-graph";
 
         View.prototype.onBeforeRender = function() {
-          console.log("onBeforeRender");
-          return console.log(this.ui);
+          return console.log("onBeforeRender");
         };
 
         View.prototype.onRender = function() {
-          console.log("onRender");
-          return console.log(this.model);
+          return console.log("onRender");
         };
 
         return View;
