@@ -14,11 +14,11 @@ define [
   Access: class View extends AppViews.ItemView
     template: _.template Templates.access
     events:
-      'click #access': 'reveal'
+      'click .menu': 'conceal'
 
     initialize: () ->
-      msgBus.events.on 'access:reveal', () =>
-        @.$('#access').hide()
+      msgBus.events.on 'access:conceal', () =>
+        @.$('.menu').hide()
 
-    reveal: () ->
-      msgBus.events.trigger 'access:reveal'
+    conceal: () ->
+      msgBus.events.trigger 'access:conceal'

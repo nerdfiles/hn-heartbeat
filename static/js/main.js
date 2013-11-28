@@ -18531,18 +18531,18 @@ define('text!modules/access/templates/layout.html.tmpl',[],function () { return 
         View.prototype.template = _.template(Templates.access);
 
         View.prototype.events = {
-          'click #access': 'reveal'
+          'click .menu': 'conceal'
         };
 
         View.prototype.initialize = function() {
           var _this = this;
-          return msgBus.events.on('access:reveal', function() {
-            return _this.$('#access').hide();
+          return msgBus.events.on('access:conceal', function() {
+            return _this.$('.menu').hide();
           });
         };
 
-        View.prototype.reveal = function() {
-          return msgBus.events.trigger('access:reveal');
+        View.prototype.conceal = function() {
+          return msgBus.events.trigger('access:conceal');
         };
 
         return View;
