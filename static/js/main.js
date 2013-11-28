@@ -18481,7 +18481,7 @@ define('text!modules/graph/templates/layout.html.tmpl',[],function () { return '
 
 }).call(this);
 
-define('text!modules/access/templates/access.html.tmpl',[],function () { return '<ul>\n  <li><a href="#top">Back to Top</a></li>\n</ul>\n';});
+define('text!modules/access/templates/access.html.tmpl',[],function () { return '<ul class="menu">\n  <li>\n    <a href="#top">Back to Top</a>\n  </li>\n  <li>\n    <a href="#content">Skip to Content</a>\n  </li>\n  <li>\n    <a href="#login">Skip to Login</a>\n  </li>\n</ul>\n';});
 
 define('text!modules/access/templates/layout.html.tmpl',[],function () { return '<div class="access layout">\n</div>\n';});
 
