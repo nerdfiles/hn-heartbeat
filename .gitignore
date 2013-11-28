@@ -10,6 +10,7 @@ local.py
 
 tags
 .sass-cache
+static
 
 .start
 npm-debug.log
