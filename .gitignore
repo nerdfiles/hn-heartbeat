@@ -3,6 +3,7 @@ node_modules
 test/temp
 .tmp
 test/bower_components/
+app/bower_components/
 venv
 *.pyc
 *.swp
