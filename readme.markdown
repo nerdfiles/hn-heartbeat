@@ -46,7 +46,7 @@ Please review ``Gruntfile.js`` for available tasks.
 
 1. ``bower update`` and ``grunt update`` are your friends.
 2. ``bower install [library_name] --save-dev`` for new frontend components/packages.
-3. ``grunt watch`` to watch LESS and CoffeeScript directories.
+3. ``grunt install; grunt watch`` to watch LESS and CoffeeScript directories.
 
 ##Official HN API (or the "blessed" API)
 
@@ -64,6 +64,15 @@ See ``https://www.hnsearch.com/api``.
 
 See ``requirements.txt``.
 
-##Seed Notes
+    $ pip install -r requirements.txt
 
-Seeded from https://github.com/BeshoyLouka/Zincify.
+###For OS X
+
+####Pillow
+
+    $ export CPPFLAGS=-Qunused-arguments
+    $ export CFLAGS=-Qunused-arguments
+
+####PostgreSQL
+
+    $ brew install postgresql
